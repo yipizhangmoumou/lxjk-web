@@ -98,3 +98,19 @@ body {
   text-overflow: ellipsis;
   word-break: break-all;
 }
+
+body {
+  .el-scrollbar__view {
+    position: relative;
+    height: 100%;
+  }
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+  .el-scrollbar__bar.is-horizontal {
+    display: none;
+  }
+  .el-scrollbar__bar.is-vertical {
+    z-index: 2001;
+  }
+}

@@ -7,10 +7,13 @@ module.exports = {
       port: 8088,
       open: false, // 启动后是否自动打开浏览器
       proxy: {
-        'api': {
-          target: 'http://192.168.50.250:8011',
+        '/api': {
+          target: 'https://www.risesin.com/api',
           secure: false,
-          changeOrigin: true
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          }
         }
       }
     }

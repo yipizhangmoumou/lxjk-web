@@ -17,11 +17,11 @@ axios.interceptors.request.use(
 // 干预每次的返回
 axios.interceptors.response.use(
   (response) => {
-    const SUCCESS_CODE = 'OK'
+    const SUCCESS_CODE = 0
     // 如果请求头里的 header 有个 needReturnAll 则直接返回 response
     if (response.config.headers.needReturnAll) return response
     // 如果有数据而且状态码为成功，则返回数据
-    if (response.data && response.data.result === SUCCESS_CODE) return response.data
+    if (response.data && response.data.code === SUCCESS_CODE) return response.data
     // __isFulFilled 字段用来区分是接口返回的错误（true），还是接口根本就没有通（非 true）
     if (process.env.NODE_ENV !== 'production') {
       console.log(`%c【开发日志】%s %s 返回成功，但 data.result !== ${SUCCESS_CODE}， res=%o`, ERROR_STYLE, response.config.method.toUpperCase(), response.config.url, response.data)
