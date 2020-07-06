@@ -439,7 +439,7 @@ export default {
     this.getDic('corporate_age', 'corporate_age')
     this.getDic('year_revenue', 'year_revenue')
     this.getDic('last_year_revenue', 'last_year_revenue')
-    this.getDic('fee', 'charge_items')
+    this.getDic('charge_items', 'charge_items')
     this.getFinancingTypeTree()
     this.getAreaTree()
     this.getIndustryTree()
