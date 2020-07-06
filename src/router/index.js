@@ -8,6 +8,7 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Main',
+    redirect: '/Product',
     component: () => import('../views/Main/Main.vue'),
     children: [
       {

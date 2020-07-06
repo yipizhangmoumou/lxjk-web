@@ -225,29 +225,29 @@ export default {
 </script>
 
 <style lang="less">
-.c--ms-ui-table {
-  &.el-table--border {
-    border: none;
+/*.c--ms-ui-table {*/
+/*  &.el-table--border {*/
+/*    border: none;*/
 
-    &::after {
-      background-color: transparent;
-    }
+/*    &::after {*/
+/*      background-color: transparent;*/
+/*    }*/
 
-    td,
-    th {
-      border-right: none;
-    }
-  }
+/*    td,*/
+/*    th {*/
+/*      border-right: none;*/
+/*    }*/
+/*  }*/
 
-  .el-table__header-wrapper {
-    th {
-      border-bottom: none;
-      &.ms-show-table-dragable-border {
-        .cell {
-          border-right: 1px solid rgba(56, 75, 92, 0.4);
-        }
-      }
-    }
-  }
-}
+/*  .el-table__header-wrapper {*/
+/*    th {*/
+/*      border-bottom: none;*/
+/*      &.ms-show-table-dragable-border {*/
+/*        .cell {*/
+/*          border-right: 1px solid rgba(56, 75, 92, 0.4);*/
+/*        }*/
+/*      }*/
+/*    }*/
+/*  }*/
+/*}*/
 </style>

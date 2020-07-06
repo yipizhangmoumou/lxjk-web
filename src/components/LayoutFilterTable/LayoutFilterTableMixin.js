@@ -37,8 +37,8 @@ export default {
       this.$axios.post(this.listApiUrl, this.searchForm)
         .then(res => {
           console.log(res)
-          this.listData = res.data
-          this.listPage.total = res.data.length
+          this.listData = res.data[this.dataKey]
+          this.listPage.total = res.data.totalSize
           this.isLoading = false
           this.scrollContentToTop()
         })

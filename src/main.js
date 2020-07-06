@@ -1,5 +1,6 @@
 import './assets/style/common.less'
 import 'element-ui/lib/theme-chalk/index.css'
+import mixin from './assets/js/mixin/dicMixin'
 
 import ElementUI from 'element-ui'
 import axiosInit from './assets/js/axiosInit.js'
@@ -11,6 +12,8 @@ import store from './store'
 
 Vue.use(ElementUI)
 Vue.axios = Vue.prototype.$axios = axiosInit
+
+Vue.mixin(mixin)
 
 Vue.config.productionTip = false
 

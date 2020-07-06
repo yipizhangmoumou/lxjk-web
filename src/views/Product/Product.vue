@@ -15,6 +15,11 @@
             <template v-slot:createTime="{row}">
                 {{row.createTime}}
             </template>
+            <template v-slot:action="{row}">
+                <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>
+                <el-button type="primary" @click.native="handleChangeStatus(row)" size="small">{{row.status === '上架' ? '下架' : '上架'}}</el-button>
+                <el-button type="danger" @click.native="handleDelete(row)" size="small">删除</el-button>
+            </template>
         </MsUiTable>
     </LayoutFilterTable>
 </template>
@@ -27,7 +32,8 @@ export default {
   name: 'Product',
   data () {
     return {
-      listApiUrl: '/api/mgm/product/list',
+      listApiUrl: '/api/mgm/product/listData',
+      dataKey: 'mgmProductList',
       columns: [
         {
           label: '创建时间',
@@ -45,12 +51,52 @@ export default {
         {
           label: '状态',
           field: 'status'
+        },
+        {
+          label: '操作',
+          field: 'action',
+          needSlot: true,
+          fixed: true,
+          fixedPos: 'right',
+          width: 260
         }
       ]
     }
   },
   mixins: [LayoutFilterTableMixin],
   methods: {
+    handleEdit (row) {
+      this.$router.push({
+        path: '/ProductEdit',
+        query: {
+          id: row.id
+        }
+      })
+    },
+    handleDelete (row) {
+      this.$confirm('确认删除这条数据吗', '确认').then(()=>{
+        this.$axios.post(`/api/mgm/product/delete/${row.id}`)
+        .then(() => {
+          this.$message.success('成功')
+          this.getTableData()
+        })
+      }).catch((err)=>{console.log(err)})
+    },
+    handleChangeStatus (row) {
+      this.$axios.post(`/api/mgm/product/update`, {
+        product: {
+          pkId: row.id,
+          status: row.status === '上架' ? -1 : 0
+        }
+      })
+        .then(() => {
+          this.$message.success('成功')
+          this.getTableData()
+        })
+        .catch((err) =>{
+          this.$message.error(err.message)
+        })
+    },
     handleAddNew () {
       this.$router.push('/ProductEdit')
     }

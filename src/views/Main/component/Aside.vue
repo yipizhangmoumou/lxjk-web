@@ -21,22 +21,24 @@ export default {
   data () {
     return {
       menus: [
+        // {
+        //   index: '/User',
+        //   name: '用户管理'
+        // },
         {
-          index: '/User',
-          name: '用户管理'
-        },{
           index: '/Product',
           name: '产品管理'
-        },{
-          index: '/Product',
-          name: '助贷机构管理'
-        },{
-          index: '/Product',
-          name: '融资评估管理'
-        },{
-          index: '/Product',
-          name: '融资方案管理'
         }
+        // ,{
+        //   index: '/Product',
+        //   name: '助贷机构管理'
+        // },{
+        //   index: '/Product',
+        //   name: '融资评估管理'
+        // },{
+        //   index: '/Product',
+        //   name: '融资方案管理'
+        // }
       ]
     }
   },
