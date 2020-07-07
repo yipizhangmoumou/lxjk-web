@@ -3,7 +3,7 @@
     <div class="main-box full-height">
         <Header></Header>
         <section class="sys-section">
-            <Aside></Aside>
+            <Aside class="sys-aside"></Aside>
             <router-view class="full-height full-width" />
         </section>
     </div>
@@ -36,11 +36,14 @@ export default {
 <style scoped lang="less">
 .main-box{
     .sys-section{
-        border-top: 1px solid #e8e8e8;
+        /*border-top: 1px solid #e8e8e8;*/
         height: calc(100% - 80px);
         display: flex;
         >div{
-            height: 100%s;
+            height: 100%;
+        }
+        .sys-aside{
+            flex: 0 0 180px;
         }
     }
 }

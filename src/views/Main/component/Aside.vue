@@ -4,6 +4,7 @@
         <el-scrollbar class="full-height">
             <el-menu
                     class="full-height"
+                    active-text-color="#409EFF"
                     :default-active="$route.path"
                     router>
                 <el-menu-item v-for="(v, i) in menus" :key="i" :index="v.index">
@@ -60,6 +61,38 @@ export default {
 
 <style scoped lang="less">
 .aside-box{
-    width: 200px;
+    transition: width 0.28s;
+    width: @sideBarWidth !important;
+    background-color: @menuBg;
+    overflow: hidden;
+
+    /deep/.el-menu {
+        border: none;
+        background-color: inherit;
+        .submenu-title-noDropdown,
+        .el-submenu__title {
+            &:hover {
+                background-color: @menuHover !important;
+            }
+        }
+        .el-menu-item {
+            &:hover {
+                // you can use $subMenuHover
+                background-color: @menuHover !important;
+            }
+        }
+        .is-active>.el-submenu__title {
+            color: @subMenuActiveText !important;
+        }
+
+        .el-menu-item {
+            min-width: @sideBarWidth !important;
+            background-color: @subMenuBg !important;
+
+            &:hover {
+                background-color: @subMenuHover !important;
+            }
+        }
+    }
 }
 </style>
