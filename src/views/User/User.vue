@@ -29,7 +29,7 @@ import LayoutFilterTable from '../../components/LayoutFilterTable/LayoutFilterTa
 import MsUiTable from '../../components/MsUiTable/MsUiTable'
 import LayoutFilterTableMixin from '../../components/LayoutFilterTable/LayoutFilterTableMixin'
 export default {
-  name: 'Product',
+  name: 'User',
   data () {
     return {
       listApiUrl: '/api/mgm/product/listData',
