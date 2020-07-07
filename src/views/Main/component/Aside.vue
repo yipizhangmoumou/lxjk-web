@@ -76,6 +76,7 @@ export default {
             }
         }
         .el-menu-item {
+            color: #FFFFFF;
             &:hover {
                 // you can use $subMenuHover
                 background-color: @menuHover !important;

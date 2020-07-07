@@ -164,8 +164,8 @@
                 <div class="pro-title">准入条件--法人信息</div>
                 <div>
                     <div class="pro-row">
-                        <el-form-item label="法人年龄" prop="age">
-                            <el-select v-model="form.productApplyCondition.age" placeholder="" class="pro-input-width">
+                        <el-form-item label="法人年龄" prop="applicantAge">
+                            <el-select v-model="form.productApplyCondition.applicantAge" placeholder="" class="pro-input-width">
                                 <el-option
                                         v-for="item in corporate_age"
                                         :key="item.key"
@@ -304,7 +304,7 @@ export default {
           "vatMoney": 0,//增值税实际纳税
           "whetherPledgeAmount": 0,//质押应收款
           "yearInvoiced": 0,//本年度开票收入
-          "age": undefined //法人年龄
+          "applicantAge": undefined //法人年龄
         }
       },
       rules: {
@@ -328,7 +328,7 @@ export default {
         currentYearRevenue: [{required: true, message: ' '}],
         lastYearRevenue: [{required: true, message: ' '}],
         yearInvoiced: [{required: true, validator: validateNum}],
-        age: [{required: true, message: ' '}],
+        applicantAge: [{required: true, message: ' '}],
         excludeIndustry: [{required: true, message: ' '}]
       },
       // 还款方式
@@ -386,7 +386,7 @@ export default {
         obj.productApplyCondition.area = obj.productApplyCondition.area.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
         obj.product.chargeItems = obj.product.chargeItems.toString()
-        let url = this.form.pkId ? '/api/mgm/product/update' : '/api/mgm/product/add'
+        let url = this.form.product.pkId ? '/api/mgm/product/update' : '/api/mgm/product/add'
           this.$axios.post(url, obj)
             .then(()=>{
               this.loading = false
