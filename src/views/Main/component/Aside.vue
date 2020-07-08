@@ -36,24 +36,24 @@ export default {
           index: '/Product',
           name: '产品管理'
         }
-        // ,
-        // {
-        //   index: '/User',
-        //   name: '用户管理'
-        // },
-        // {
-        //   index: '/LoanAssistanceInstitutions',
-        //   name: '助贷管理',
-        //   children: [
-        //     {
-        //       index: '/LoanAssistanceInstitutions',
-        //       name: '助贷机构管理'
-        //     },{
-        //       index: '/LoanAssistanceInstitutionsUser',
-        //       name: '助贷机构员工管理'
-        //     }
-        //   ]
-        // }
+        ,
+        {
+          index: '/User',
+          name: '用户管理'
+        },
+        {
+          index: '/LoanAssistanceInstitutions',
+          name: '助贷管理',
+          children: [
+            {
+              index: '/LoanAssistanceInstitutions',
+              name: '助贷机构管理'
+            },{
+              index: '/LoanAssistanceInstitutionsUser',
+              name: '助贷机构员工管理'
+            }
+          ]
+        }
         // {
         //   index: '/Product',
         //   name: '融资评估管理'

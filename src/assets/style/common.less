@@ -18,6 +18,7 @@ body {
   }
   .el-button{
     border-radius: 0;
+    //padding: 9px 20px;
   }
   .el-button.el-button--primary{
     background-color: @sys-blue;
@@ -144,6 +145,49 @@ body {
   text-overflow: ellipsis;
   word-break: break-all;
 }
+
+// 公共样式
+// edit页面公共样式
+.edit-content{
+  padding: 20px 0;
+  .edit-scrollbar{
+    height: calc(100% - 40px - 20px);
+  }
+  .edit-form{
+    padding: 0 20px;
+    max-width: 1440px;
+  }
+  .edit-title{
+    font-size: 22px;
+    line-height: 48px;
+    font-weight: bold;
+  }
+  .edit-row{
+    display: flex;
+    justify-content: space-between;
+    >div{
+      width: 100%;
+    }
+    >div+div{
+      margin-left: 20px;
+    }
+  }
+  .edit-input-width{
+    max-width: 420px;
+  }
+  .action-box{
+    max-width: 1440px;
+    padding: 10px 20px;
+    text-align: right;
+  }
+  /deep/ .el-select, .el-input-number, .el-cascader{
+    width: 100%;
+    .el-input__inner{
+      text-align: left;
+    }
+  }
+}
+
 html,
 body {
   margin: 0;

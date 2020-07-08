@@ -1,19 +1,19 @@
 <template>
     <!---->
-    <div class="product-edit-box full-height" v-loading="loading">
-        <el-scrollbar class="full-height" style="height: calc(100% - 40px)">
-            <el-form ref="form" :model="form.product" :rules="rules" label-width="160px" label-position="left" class="pro-form">
-                <div class="pro-title">产品信息</div>
+    <div class="edit-content full-height" v-loading="loading">
+        <el-scrollbar class="edit-scrollbar">
+            <el-form ref="form" :model="form.product" :rules="rules" label-width="160px" label-position="left" class="edit-form">
+                <div class="edit-title">产品信息</div>
                 <div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="产品名称" prop="productName">
-                            <el-input v-model="form.product.productName" placeholder="" class="pro-input-width"></el-input>
+                            <el-input v-model="form.product.productName" placeholder="" class="edit-input-width"></el-input>
                         </el-form-item>
                         <el-form-item label="产品描述" prop="productDescribe">
-                            <el-input v-model="form.product.productDescribe" placeholder="" class="pro-input-width"></el-input>
+                            <el-input v-model="form.product.productDescribe" placeholder="" class="edit-input-width"></el-input>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="产品类型" prop="type">
                             <el-radio-group v-model="form.product.type">
                               <el-radio :label="1">短期</el-radio>
@@ -34,33 +34,33 @@
                                     }"
                                     collapse-tags
                                     :show-all-levels="false"
-                                    class="pro-input-width"
+                                    class="edit-input-width"
                             ></el-cascader>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="审批最小额度(万元)" prop="loanInterestMin">
                             <el-input-number v-model="form.product.loanInterestMin" :min="0"
-                                             :controls="false" class="pro-input-width"></el-input-number>
+                                             :controls="false" class="edit-input-width"></el-input-number>
                         </el-form-item>
                         <el-form-item label="审批最大额度(万元)" prop="loanInterestMax">
                             <el-input-number v-model="form.product.loanInterestMax" :min="0"
-                                             :controls="false" class="pro-input-width"></el-input-number>
+                                             :controls="false" class="edit-input-width"></el-input-number>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="最小借款周期(期)" prop="loanPeriodMin">
                             <el-input-number v-model="form.product.loanPeriodMin" :min="0"
-                                             :controls="false" class="pro-input-width"></el-input-number>
+                                             :controls="false" class="edit-input-width"></el-input-number>
                         </el-form-item>
                         <el-form-item label="最大借款周期(期)" prop="loanPeriodMax">
                             <el-input-number v-model="form.product.loanPeriodMax" :min="0"
-                                             :controls="false" class="pro-input-width"></el-input-number>
+                                             :controls="false" class="edit-input-width"></el-input-number>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="还款方式" prop="repaymentMethod">
-                            <el-select v-model="form.product.repaymentMethod" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.product.repaymentMethod" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in repayment_method"
                                         :key="item.key"
@@ -70,7 +70,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="担保方式" prop="guaranteeMethod">
-                            <el-select v-model="form.product.guaranteeMethod" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.product.guaranteeMethod" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in guarantee_method"
                                         :key="item.key"
@@ -80,9 +80,9 @@
                             </el-select>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="申请方式" prop="applicationMethod">
-                            <el-select v-model="form.product.applicationMethod" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.product.applicationMethod" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in application_method"
                                         :key="item.key"
@@ -99,10 +99,10 @@
                     </div>
                 </div>
             </el-form>
-            <el-form ref="form1" :model="form.productApplyCondition" :rules="rules1" label-width="160px" label-position="left" class="pro-form">
-                <div class="pro-title">准入条件--企业信息</div>
+            <el-form ref="form1" :model="form.productApplyCondition" :rules="rules1" label-width="160px" label-position="left" class="edit-form">
+                <div class="edit-title">准入条件--企业信息</div>
                 <div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="排除行业" prop="excludeIndustry">
                             <el-cascader
                                     v-model="form.productApplyCondition.excludeIndustry"
@@ -117,7 +117,7 @@
                                     }"
                                     collapse-tags
                                     :show-all-levels="false"
-                                    class="pro-input-width"
+                                    class="edit-input-width"
                             ></el-cascader>
                         </el-form-item>
                         <el-form-item label="排除地区" prop="excludeArea">
@@ -134,13 +134,13 @@
                                     }"
                                     collapse-tags
                                     :show-all-levels="false"
-                                    class="pro-input-width"
+                                    class="edit-input-width"
                             ></el-cascader>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="可选企业性质" prop="enterpriseNature">
-                            <el-select v-model="form.productApplyCondition.enterpriseNature" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.productApplyCondition.enterpriseNature" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in enterprise_nature"
                                         :key="item.key"
@@ -151,21 +151,21 @@
                         </el-form-item>
                         <el-form-item label="(不低于)公司注册资本" prop="registeredCapital">
                             <el-input-number v-model="form.productApplyCondition.registeredCapital" :min="0"
-                                             :controls="false" placeholder="" class="pro-input-width"></el-input-number>
+                                             :controls="false" placeholder="" class="edit-input-width"></el-input-number>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="(不低于)公司注册年限" prop="operateTime">
                             <el-input-number v-model="form.productApplyCondition.operateTime" :min="0"
-                                             :controls="false" placeholder="" class="pro-input-width"></el-input-number>
+                                             :controls="false" placeholder="" class="edit-input-width"></el-input-number>
                         </el-form-item>
                     </div>
                 </div>
-                <div class="pro-title">准入条件--法人信息</div>
+                <div class="edit-title">准入条件--法人信息</div>
                 <div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="法人年龄" prop="applicantAge">
-                            <el-select v-model="form.productApplyCondition.applicantAge" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.productApplyCondition.applicantAge" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in corporate_age"
                                         :key="item.key"
@@ -176,11 +176,11 @@
                         </el-form-item>
                     </div>
                 </div>
-                <div class="pro-title">准入条件--企业经营</div>
+                <div class="edit-title">准入条件--企业经营</div>
                 <div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="本年度销售收入" prop="currentYearRevenue">
-                            <el-select v-model="form.productApplyCondition.currentYearRevenue" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.productApplyCondition.currentYearRevenue" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in year_revenue"
                                         :key="item.key"
@@ -190,7 +190,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="上年度销售收入" prop="lastYearRevenue">
-                            <el-select v-model="form.productApplyCondition.lastYearRevenue" placeholder="" class="pro-input-width">
+                            <el-select v-model="form.productApplyCondition.lastYearRevenue" placeholder="" class="edit-input-width">
                                 <el-option
                                         v-for="item in last_year_revenue"
                                         :key="item.key"
@@ -200,10 +200,10 @@
                             </el-select>
                         </el-form-item>
                     </div>
-                    <div class="pro-row">
+                    <div class="edit-row">
                         <el-form-item label="上年度开票收入" prop="yearInvoiced">
                             <el-input-number v-model="form.productApplyCondition.yearInvoiced" :min="0"
-                                             :controls="false" placeholder="" class="pro-input-width"></el-input-number>
+                                             :controls="false" placeholder="" class="edit-input-width"></el-input-number>
                         </el-form-item>
                     </div>
                 </div>
@@ -242,7 +242,7 @@ export default {
           "guaranteeMethod": "", // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
           "isCreditInvestigation": true,// 是否上征信
-          "lenders": "string",// 贷款机构
+          "lenders": "string",// 贷款机构 TODO 助贷机构做好后要加入
           "loanInterestMax": undefined,// 最高贷款利息
           "loanInterestMin": undefined,// 最低贷款利息
           "loanPeriodMax": undefined,// 借款最大周期(月)
@@ -462,40 +462,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-.product-edit-box{
-    padding: 20px 0;
-    .pro-form{
-        padding: 0 20px;
-        max-width: 1440px;
-    }
-    .pro-title{
-        font-size: 22px;
-        line-height: 48px;
-        font-weight: bold;
-    }
-    .pro-row{
-        display: flex;
-        justify-content: space-between;
-        >div{
-            width: 100%;
-        }
-        >div+div{
-            margin-left: 20px;
-        }
-    }
-    .pro-input-width{
-        max-width: 420px;
-    }
-    .action-box{
-        max-width: 1440px;
-        padding: 0 20px;
-        text-align: right;
-    }
-    /deep/ .el-select, .el-input-number, .el-cascader{
-        width: 100%;
-        .el-input__inner{
-            text-align: left;
-        }
-    }
-}
+
 </style>

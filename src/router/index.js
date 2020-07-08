@@ -28,6 +28,10 @@ Vue.use(VueRouter)
         name: 'LoanAssistanceInstitutions',
         component: () => import('../views/LoanAssistanceInstitutions/LoanAssistanceInstitutions.vue')
       }, {
+        path: '/LoanAssistanceInstitutionsEdit',
+        name: 'LoanAssistanceInstitutionsEdit',
+        component: () => import('../views/LoanAssistanceInstitutions/LoanAssistanceInstitutionsEdit.vue')
+      }, {
         path: '/LoanAssistanceInstitutionsUser',
         name: 'LoanAssistanceInstitutionsUser',
         component: () => import('../views/LoanAssistanceInstitutionsUser/LoanAssistanceInstitutionsUser.vue')
