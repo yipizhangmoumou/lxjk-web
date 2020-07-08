@@ -28,7 +28,7 @@
                                     :options="typeTree"
                                     :props="{
                                       expandTrigger: 'hover',
-                                      value: 'code',
+                                      value: 'pkId',
                                       label: 'name',
                                       emitPath: false
                                     }"
@@ -363,9 +363,10 @@ export default {
           .then(res => {
             if (res.data) {
               let data = res.data
-              data.product.chargeItems = data.product.chargeItems.split(',')
-              data.productApplyCondition.area = data.productApplyCondition.area.split(',')
-              data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry.split(',')
+              data.product.chargeItems = data.product.chargeItems ? data.product.chargeItems.split(',') : []
+              data.productApplyCondition.area = data.productApplyCondition.area ? data.productApplyCondition.area.split(',') : []
+              data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry ? data.productApplyCondition.excludeIndustry.split(',') : []
+              data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
               this.form.product = Object.assign(this.form.product, data.product)
               this.form.productApplyCondition = Object.assign(this.form.productApplyCondition, data.productApplyCondition)
             }
@@ -386,6 +387,9 @@ export default {
         obj.productApplyCondition.area = obj.productApplyCondition.area.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
         obj.product.chargeItems = obj.product.chargeItems.toString()
+        if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
+          obj.product.financingMethodJson = obj.product.financingMethodJson.toString()
+        }
         let url = this.form.product.pkId ? '/api/mgm/product/update' : '/api/mgm/product/add'
           this.$axios.post(url, obj)
             .then(()=>{
@@ -482,7 +486,9 @@ export default {
         max-width: 420px;
     }
     .action-box{
-        padding-left: 20px;
+        max-width: 1440px;
+        padding: 0 20px;
+        text-align: right;
     }
     /deep/ .el-select, .el-input-number, .el-cascader{
         width: 100%;

@@ -5,12 +5,22 @@
             <el-menu
                     class="full-height"
                     active-text-color="#409EFF"
+                    text-color="#FFFFFF"
                     :default-active="$route.path"
                     router>
-                <el-menu-item v-for="(v, i) in menus" :key="i" :index="v.index">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">{{v.name}}</span>
-                </el-menu-item>
+                <template v-for="(v, i) in menus">
+                    <el-submenu v-if="v.children && v.children.length" :key="i" :index="v.index">
+    <!--                    <i class="el-icon-menu"></i>-->
+                        <span slot="title">{{v.name}}</span>
+                        <el-menu-item :index="x.index" v-for="(x,y) in v.children" :key="y">
+                            <span slot="title">{{x.name}}</span>
+                        </el-menu-item>
+                    </el-submenu>
+                    <el-menu-item v-else :key="i" :index="v.index">
+                        <!--                    <i class="el-icon-menu"></i>-->
+                        <span slot="title">{{v.name}}</span>
+                    </el-menu-item>
+                </template>
             </el-menu>
         </el-scrollbar>
     </aside>
@@ -22,18 +32,25 @@ export default {
   data () {
     return {
       menus: [
-        // {
-        //   index: '/User',
-        //   name: '用户管理'
-        // },
         {
           index: '/Product',
           name: '产品管理'
+        },
+        {
+          index: '/User',
+          name: '用户管理'
+        },
+        {
+          index: '/Product',
+          name: '助贷管理',
+          children: [
+            {
+              index: '/Product',
+              name: '助贷机构管理'
+            }
+          ]
         }
-        // ,{
-        //   index: '/Product',
-        //   name: '助贷机构管理'
-        // },{
+        // {
         //   index: '/Product',
         //   name: '融资评估管理'
         // },{
@@ -76,7 +93,6 @@ export default {
             }
         }
         .el-menu-item {
-            color: #FFFFFF;
             &:hover {
                 // you can use $subMenuHover
                 background-color: @menuHover !important;

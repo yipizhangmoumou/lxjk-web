@@ -19,6 +19,10 @@ Vue.use(VueRouter)
         path: '/ProductEdit',
         name: 'ProductEdit',
         component: () => import('../views/Product/ProductEdit.vue')
+      }, {
+        path: '/User',
+        name: 'User',
+        component: () => import('../views/User/User.vue')
       }
     ]
   },

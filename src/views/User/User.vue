@@ -5,7 +5,7 @@
         @onPageIndexChange="onPageIndexChange"
     >
         <div slot="action" class="action-box">
-            <el-button type="primary" @click.native="handleAddNew">新建产品</el-button>
+            <el-button type="primary" @click.native="handleAddNew">新建用户</el-button>
         </div>
         <MsUiTable
                 :columns="columns"
@@ -21,6 +21,7 @@
                 <el-button type="danger" @click.native="handleDelete(row)" size="small">删除</el-button>
             </template>
         </MsUiTable>
+        <EditUser v-model="editObj.visible" :data="editObj.data"></EditUser>
     </LayoutFilterTable>
 </template>
 
@@ -28,6 +29,7 @@
 import LayoutFilterTable from '../../components/LayoutFilterTable/LayoutFilterTable'
 import MsUiTable from '../../components/MsUiTable/MsUiTable'
 import LayoutFilterTableMixin from '../../components/LayoutFilterTable/LayoutFilterTableMixin'
+import EditUser from './component/EditUser'
 export default {
   name: 'User',
   data () {
@@ -36,20 +38,28 @@ export default {
       dataKey: 'mgmProductList',
       columns: [
         {
-          label: '创建时间',
+          label: '用户编号',
           field: 'createTime',
           needSlot: true
         },
         {
-          label: '类型',
+          label: '用户账号',
           field: 'financingType'
         },
         {
-          label: '名称',
+          label: '用户名',
           field: 'name'
         },
         {
           label: '状态',
+          field: 'status'
+        },
+        {
+          label: '创建人',
+          field: 'status'
+        },
+        {
+          label: '创建时间',
           field: 'status'
         },
         {
@@ -60,7 +70,11 @@ export default {
           fixedPos: 'right',
           width: 260
         }
-      ]
+      ],
+      editObj: {
+        visible: false,
+        data: {}
+      }
     }
   },
   mixins: [LayoutFilterTableMixin],
@@ -98,7 +112,8 @@ export default {
         })
     },
     handleAddNew () {
-      this.$router.push('/ProductEdit')
+      this.editObj.data = {}
+      this.editObj.visible = true
     }
   },
   created () {
@@ -112,7 +127,7 @@ export default {
   },
   computed: {},
   watch: {},
-  components: {LayoutFilterTable, MsUiTable}
+  components: {LayoutFilterTable, MsUiTable, EditUser}
 }
 </script>
 
