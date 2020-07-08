@@ -13,6 +13,24 @@ import store from './store'
 Vue.use(ElementUI)
 Vue.axios = Vue.prototype.$axios = axiosInit
 
+Vue.msgSuccess = Vue.prototype.$msgSuccess = function (message) {
+  Vue.prototype.$message({
+    message: message || '成 功',
+    type: 'success'
+    // ,
+    // center: true
+  })
+}
+
+Vue.msgError = Vue.prototype.$msgError = function (message) {
+  Vue.prototype.$message({
+    message: message || '失 败',
+    type: 'error'
+    // ,
+    // center: true
+  })
+}
+
 Vue.mixin(mixin)
 
 Vue.config.productionTip = false

@@ -120,9 +120,9 @@
                                     class="pro-input-width"
                             ></el-cascader>
                         </el-form-item>
-                        <el-form-item label="可选地区" prop="area">
+                        <el-form-item label="排除地区" prop="excludeArea">
                             <el-cascader
-                                    v-model="form.productApplyCondition.area"
+                                    v-model="form.productApplyCondition.excludeArea"
                                     placeholder=""
                                     :options="areaTree"
                                     :props="{
@@ -259,7 +259,7 @@ export default {
           "applicableCareer": "",// 适用职业： 1 公务员或企事业单位 2 世界五百强企业 3 其他
           "applicantAgeMax": 0,// 申请人最大年龄
           "applicantAgeMin": 0,// 申请人最小年龄
-          "area": [],// 可选地区
+          "excludeArea": [],// 排除地区
           "businessRegistrationPlace": "",// 企业注册地
           "citizenInternational": "",//公民国籍
           "corporateDebt": 0,//企业负债率
@@ -321,7 +321,7 @@ export default {
         applicationMethod: [{required: true, message: ' '}]
       },
       rules1: {
-        area: [{required: true, message: ' '}],
+        excludeArea: [{required: true, message: ' '}],
         enterpriseNature: [{required: true, message: ' '}],
         registeredCapital: [{required: true, validator: validateNum}],
         operateTime: [{required: true, validator: validateNum}],
@@ -364,7 +364,7 @@ export default {
             if (res.data) {
               let data = res.data
               data.product.chargeItems = data.product.chargeItems ? data.product.chargeItems.split(',') : []
-              data.productApplyCondition.area = data.productApplyCondition.area ? data.productApplyCondition.area.split(',') : []
+              data.productApplyCondition.excludeArea = data.productApplyCondition.excludeArea ? data.productApplyCondition.excludeArea.split(',') : []
               data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry ? data.productApplyCondition.excludeIndustry.split(',') : []
               data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
               this.form.product = Object.assign(this.form.product, data.product)
@@ -373,7 +373,7 @@ export default {
             this.loading = false
           })
         .catch(err => {
-          this.$message.error(err.message)
+          this.$msgError(err.message)
           this.loading = false
         })
       }
@@ -384,7 +384,8 @@ export default {
       Promise.all([form, form1]).then(() =>{
         this.loading = true
         let obj = JSON.parse(JSON.stringify(this.form))
-        obj.productApplyCondition.area = obj.productApplyCondition.area.toString()
+        obj.product.chargeItems = obj.product.chargeItems.toString()
+        obj.productApplyCondition.excludeArea = obj.productApplyCondition.excludeArea.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
         obj.product.chargeItems = obj.product.chargeItems.toString()
         if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
@@ -394,13 +395,13 @@ export default {
           this.$axios.post(url, obj)
             .then(()=>{
               this.loading = false
-              this.$message.success('成功')
+              this.$msgSuccess()
               this.handleCancel()
             })
           .catch(err => {
             console.log(err)
             this.loading = false
-            this.$message.error(err.message)
+            this.$msgError(err.message)
           })
       }).catch((err) =>{
         console.log(err)

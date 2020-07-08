@@ -13,7 +13,7 @@
                 :is-allow-save-view="true"
         >
             <template v-slot:createTime="{row}">
-                {{row.createTime}}
+                {{row.createTime | timeFilter}}
             </template>
             <template v-slot:action="{row}">
                 <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>
@@ -64,6 +64,12 @@ export default {
     }
   },
   mixins: [LayoutFilterTableMixin],
+  filters: {
+    timeFilter (timeStr) {
+      if (!timeStr) return ''
+      return timeStr.replace('T', ' ')
+    }
+  },
   methods: {
     handleEdit (row) {
       this.$router.push({
@@ -77,7 +83,7 @@ export default {
       this.$confirm('确认删除这条数据吗', '确认').then(()=>{
         this.$axios.post(`/api/mgm/product/delete/${row.id}`)
         .then(() => {
-          this.$message.success('成功')
+          this.$msgSuccess()
           this.getTableData()
         })
       }).catch((err)=>{console.log(err)})
@@ -90,11 +96,11 @@ export default {
         }
       })
         .then(() => {
-          this.$message.success('成功')
+          this.$msgSuccess()
           this.getTableData()
         })
         .catch((err) =>{
-          this.$message.error(err.message)
+          this.$msgError(err.message)
         })
     },
     handleAddNew () {

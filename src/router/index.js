@@ -23,6 +23,14 @@ Vue.use(VueRouter)
         path: '/User',
         name: 'User',
         component: () => import('../views/User/User.vue')
+      }, {
+        path: '/LoanAssistanceInstitutions',
+        name: 'LoanAssistanceInstitutions',
+        component: () => import('../views/LoanAssistanceInstitutions/LoanAssistanceInstitutions.vue')
+      }, {
+        path: '/LoanAssistanceInstitutionsUser',
+        name: 'LoanAssistanceInstitutionsUser',
+        component: () => import('../views/LoanAssistanceInstitutionsUser/LoanAssistanceInstitutionsUser.vue')
       }
     ]
   },

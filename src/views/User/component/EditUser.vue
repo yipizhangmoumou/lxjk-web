@@ -13,17 +13,25 @@
                 <el-input v-model="form.userAccount" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="用户类型" prop="userType">
-                <el-input v-model="form.userType" placeholder=""></el-input>
+                <el-select v-model="form.userType" placeholder="" class="full-width">
+                    <el-option
+                            v-for="item in userTypeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
+        <el-button type="primary" :loading="loading" @click="handleSave">确 定</el-button>
         <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="handleSave">确 定</el-button>
       </span>
     </el-dialog>
 </template>
 
 <script>
+import cfg from './cfg'
 export default {
   name: 'EditUser',
   model: {
@@ -44,19 +52,18 @@ export default {
   },
   data () {
     return {
+      loading: false,
       isNew: true,
       form: {
+        pkId: null,
         phone: '',
         userAccount: '',
         userType: undefined
       },
       rules: {
-        phone: [
-          {required: true, message: ' '},
-          {type: 'phone', message: ' '}
-        ],
-        userAccount: [{required: true, message: ' '}],
-        userType: [{required: true, message: ' '}]
+        phone: [{required: true, message: ' ', trigger: 'blur'}],
+        userAccount: [{required: true, message: ' ', trigger: 'blur'}],
+        userType: [{required: true, message: ' ', trigger: 'blur'}]
       }
     }
   },
@@ -66,7 +73,16 @@ export default {
     },
     handleSave () {
       this.$refs.form.validate().then(()=>{
-
+        this.loading = true
+        let url = this.form.pkId ? '/api/mgm/user/updateUser' : '/api/mgm/user/add'
+        this.$axios.post(url, this.form).then(() => {
+          this.loading = false
+          this.$msgSuccess()
+          this.handleClose()
+        }).catch((err)=>{
+          this.loading = false
+          this.$msgError(err.message)
+        })
       }).catch(err => {
         console.log(err)
       })
@@ -84,6 +100,13 @@ export default {
   computed: {
     dialogTitle () {
       return this.isNew ? '新建用户' : '编辑用户'
+    },
+    userTypeList () {
+      let list = []
+      cfg.USER_TYPE_MAP.forEach(v => {
+        list.push(v)
+      })
+      return list
     }
   },
   watch: {
@@ -95,11 +118,13 @@ export default {
         } else {
           this.isNew = true
           this.form = {
+            pkId: null,
             phone: '',
             userAccount: '',
             userType: undefined
           }
         }
+        this.$refs.form && this.$refs.form.clearValidate()
       }
     }
   },
