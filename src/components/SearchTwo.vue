@@ -4,7 +4,7 @@
 -->
 
 <template>
-  <div id="SearchOne">
+  <div id="SearchTwo">
     <div class="search-header">
       <div class="title head-item">数据筛选</div>
       <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>
@@ -12,16 +12,12 @@
     <div class="search-form">
       <el-form ref="search" :model="search" label-width="80px">
         <el-form-item label="输入查询">
-          <el-input placeholder="机构编号/名称/联系人" v-model="search.name"></el-input>
+          <el-input placeholder="用户ID/手机号/姓名" v-model="search.name"></el-input>
         </el-form-item>
-        <el-form-item label="所在地区">
-          <el-select placeholder="全部" v-model="search.region">
-            <el-option label="全部" value></el-option>
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+        <el-form-item label="机构">
+          <el-input placeholder="机构名称/编号" v-model="search.name"></el-input>
         </el-form-item>
-        <el-form-item label="级别">
+        <el-form-item label="岗位">
           <el-select placeholder="全部" v-model="search.jb">
             <el-option label="全部" value></el-option>
             <el-option label="区域一" value="shanghai"></el-option>
@@ -41,7 +37,7 @@
           <el-form-item label="输入查询：">
             <el-input v-model="form.name" placeholder="机构名称/联系人"></el-input>
           </el-form-item>
-          <el-form-item label="机构级别：">
+          <el-form-item label="前台权限：">
             <el-select v-model="form.jg" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
@@ -49,10 +45,10 @@
           </el-form-item>
         </div>
         <div class="input-line">
-          <el-form-item label="机构编号：">
-            <el-input v-model="form.num" placeholder="机构编号"></el-input>
+          <el-form-item label="所属机构：">
+            <el-input v-model="form.num" placeholder="所属机构"></el-input>
           </el-form-item>
-          <el-form-item label="账期类型：">
+          <el-form-item label="员工岗位：">
             <el-select v-model="form.zqtype" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
@@ -60,26 +56,14 @@
           </el-form-item>
         </div>
         <div class="input-line">
-          <el-form-item label="所在地区：">
+          <el-form-item label="账号状态：">
             <el-select v-model="form.address" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间：">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
-          </el-form-item>
-        </div>
-        <div class="input-line">
-          <el-form-item label="特殊资源：">
-            <el-radio-group v-model="form.resource">
-              <el-radio
-                v-for="(item, index) in radioList"
-                :data-type="item.type"
-                :label="item.name"
-                :key="index"
-              ></el-radio>
-            </el-radio-group>
+          <el-form-item label="注册时间：">
+            <el-date-picker v-model="form.date" type="date" placeholder="选择注册时间"></el-date-picker>
           </el-form-item>
         </div>
       </el-form>
@@ -94,7 +78,7 @@
 
 <script>
 export default {
-  name: "SearchOne",
+  name: "SearchTwo",
   data() {
     return {
       search: {
@@ -154,7 +138,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-#SearchOne
+#SearchTwo
   background-color #fff
   width 1100px
   margin 20px auto 20px
@@ -181,7 +165,7 @@ export default {
           margin-left 16px !important
   .dialog-from
     >>> .el-dialog__body
-      padding 30px 40px !important
+      padding 0 40px !important
     .input-line
       display flex
       justify-content space-between

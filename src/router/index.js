@@ -33,6 +33,24 @@ const routes = [
         name: 'CheckEmployee',
         meta: { name: '待审核员工' },
         component: () => import("views/LoansHelp/CheckEmployee.vue")
+      },
+      {
+        path:'/addOrganization',
+        name: 'addOrganization',
+        meta: { name: '新增助贷机构' },
+        component: () => import("views/AddOrganization.vue")
+      },
+      {
+        path:'/addAndEditEmployee/:type',
+        name: 'addAndEditEmployee',
+        meta: { name: '机构自行新增员工' },
+        component: () => import("views/AddAndEditEmployee.vue")
+      },
+      {
+        path:'/log',
+        name: 'log',
+        meta: { name: '日志' },
+        component: () => import("views/Log.vue")
       }
     ]
   },

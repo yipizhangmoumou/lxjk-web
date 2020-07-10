@@ -5,8 +5,8 @@
                 <p>{{title}}</p>
             </div>
             <div class="title-btn">
-                <el-button plain size="small" icon="el-icon-refresh">刷新</el-button>
-                <el-button plain size="small" icon="el-icon-arrow-left">返回</el-button>
+                <el-button plain size="small" icon="el-icon-refresh" @click="reload">刷新</el-button>
+                <el-button plain size="small" icon="el-icon-arrow-left" @click="$router.go(-1)">返回</el-button>
             </div>
         </div>
     </div>
@@ -18,6 +18,11 @@
         data() {
             return {
                 title: ''
+            }
+        },
+        methods: {
+            reload() {
+                window.location.reload();
             }
         },
         watch: {
