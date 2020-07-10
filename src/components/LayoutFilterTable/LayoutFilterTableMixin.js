@@ -36,7 +36,6 @@ export default {
       this.isLoading = true
       this.$axios.post(this.listApiUrl, this.searchForm)
         .then(res => {
-          console.log(res)
           this.listData = res.data[this.dataKey]
           this.listPage.total = res.data.totalSize
           this.isLoading = false
@@ -48,10 +47,9 @@ export default {
     },
     // 拼接参数
     getFilterParams () {
-      let params = {}
-      let output = {}
-      Object.assign(params, this.listPage)
-      delete params.total
+      let output ={}
+      let params = Object.assign({}, this.queryObj || {}, this.listPage)
+      delete output.total
       // 过滤掉空值
       Object.keys(params).forEach(key => {
         if (params[key]) {
