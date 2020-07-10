@@ -23,6 +23,8 @@ export default {
 <style lang="stylus" scoped>
 #Home
   .router-child
+    overflow auto
+    height 100vh
     padding 70px 0 0 240px
     background-color #f0f2f5
 </style>

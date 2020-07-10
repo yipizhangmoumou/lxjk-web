@@ -16,12 +16,14 @@
         </el-form-item>
         <el-form-item label="所在地区">
           <el-select placeholder="全部" v-model="search.region">
+            <el-option label="全部" value=""></el-option>
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="级别">
           <el-select placeholder="全部" v-model="search.jb">
+            <el-option label="全部" value=""></el-option>
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
