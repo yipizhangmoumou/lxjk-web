@@ -3,6 +3,7 @@
         :is-loading="isLoading"
         :page="listPage"
         @onPageIndexChange="onPageIndexChange"
+        @onPageSizeChange="onPageSizeChange"
     >
         <div slot="action" class="action-box">
             <el-button type="primary" @click.native="handleAddNew">新建产品</el-button>

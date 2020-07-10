@@ -35,6 +35,10 @@ Vue.use(VueRouter)
         path: '/LoanAssistanceInstitutionsUser',
         name: 'LoanAssistanceInstitutionsUser',
         component: () => import('../views/LoanAssistanceInstitutionsUser/LoanAssistanceInstitutionsUser.vue')
+      }, {
+        path: '/DataDictionary',
+        name: 'DataDictionary',
+        component: () => import('../views/DataDictionary/DataDictionary.vue')
       }
     ]
   },

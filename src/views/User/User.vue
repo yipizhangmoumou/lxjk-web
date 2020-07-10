@@ -3,6 +3,7 @@
         :is-loading="isLoading"
         :page="listPage"
         @onPageIndexChange="onPageIndexChange"
+        @onPageSizeChange="onPageSizeChange"
     >
         <div slot="action" class="action-box ms-flex row just-between">
             <div class="query-box">

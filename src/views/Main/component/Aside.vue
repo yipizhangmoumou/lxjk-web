@@ -35,11 +35,14 @@ export default {
         {
           index: '/Product',
           name: '产品管理'
-        }
-        ,
+        },
         {
           index: '/User',
           name: '用户管理'
+        },
+        {
+          index: '/DataDictionary',
+          name: '数据字典'
         },
         {
           index: '/LoanAssistanceInstitutions',

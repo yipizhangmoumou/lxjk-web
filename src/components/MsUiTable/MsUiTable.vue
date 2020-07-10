@@ -22,7 +22,9 @@
     <el-table-column
       v-if="needIndex"
       type="index"
-      width="30"
+      label="序号"
+      width="50"
+      align="center"
       fixed
     />
     <!--复选-->

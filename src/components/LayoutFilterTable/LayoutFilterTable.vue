@@ -80,7 +80,7 @@ export default {
   .l--filter-table {
     display: flex;
     height: 100%;
-    padding: 40px;
+    padding: 30px;
     flex-direction: column;
     align-items: stretch;
   }
