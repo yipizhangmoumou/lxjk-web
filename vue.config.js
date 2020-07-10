@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-        port: 80,
+        port: 8080,
         open: true,
         overlay:{
             errors: true,

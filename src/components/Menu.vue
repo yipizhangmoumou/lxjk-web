@@ -40,19 +40,19 @@ export default {
                 name: '助贷管理',
                 childrenList: [
                     {
-                        path: '/login',
+                        path: '/organizationAdmin',
                         name:'助贷机构管理'
                     },
                     {
-                        path: '/login',
+                        path: '/postAdmin',
                         name:'机构岗位管理'
                     },
                     {
-                        path: '/login',
+                        path: '/employeeAdmin',
                         name:'助贷机构员工管理'
                     },
                     {
-                        path: '/login',
+                        path: '/checkEmployee',
                         name:'待审核员工'
                     }
                 ]
@@ -99,6 +99,7 @@ export default {
         left 0
         bottom 0
         background-color #001529
+        z-index 9
         h1
             line-height 70px
             text-align center

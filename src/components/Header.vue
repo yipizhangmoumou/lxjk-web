@@ -42,6 +42,7 @@ export default {
 
 <style lang="stylus" scoped>
 #Header
+  background-color #fff
   height 70px
   position fixed
   top 0
