@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import routes from "../router/routes"
     export default {
         name: "GlobalTitle",
         data() {
@@ -30,6 +31,20 @@
                 this.title = name ? name : '';
             }
         },
+        created() {
+            const currentPath = window.location.hash.split('#')[1];
+            if(currentPath.indexOf("addAndEditEmployee") != -1) {
+                this.title = "机构自行新增员工"
+                return;
+            }
+
+            routes[0].children.forEach(el => {
+                if(el.path == currentPath) {
+                    this.title = el.meta.name
+                    return;
+                }
+            })
+        }
     }
 </script>
 
