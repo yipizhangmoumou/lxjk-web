@@ -45,6 +45,10 @@ export default {
           name: '数据字典'
         },
         {
+          index: '/LendingInstitutions',
+          name: '产品贷款机构管理'
+        },
+        {
           index: '/LoanAssistanceInstitutions',
           name: '助贷管理',
           children: [

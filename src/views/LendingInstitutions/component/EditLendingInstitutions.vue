@@ -6,21 +6,8 @@
             width="30%"
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
-            <el-form-item label="手机号码" prop="phone">
-                <el-input v-model="form.phone" placeholder=""></el-input>
-            </el-form-item>
-            <el-form-item label="用户账户(登陆账号)" prop="userAccount">
-                <el-input v-model="form.userAccount" placeholder=""></el-input>
-            </el-form-item>
-            <el-form-item label="用户类型" prop="userType">
-                <el-select v-model="form.userType" placeholder="" class="full-width">
-                    <el-option
-                            v-for="item in userTypeList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
+            <el-form-item label="产品贷款机构名称" prop="name">
+                <el-input v-model="form.name" placeholder=""></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -31,9 +18,8 @@
 </template>
 
 <script>
-import cfg from './cfg'
 export default {
-  name: 'EditUser',
+  name: 'EditLendingInstitutions',
   model: {
     prop: 'visible',
     event: 'changeVisible'
@@ -55,15 +41,12 @@ export default {
       loading: false,
       isNew: true,
       form: {
-        pkId: null,
-        phone: '',
-        userAccount: '',
-        userType: undefined
+        "id": null,
+        "name": "",
+        "status": 0
       },
       rules: {
-        phone: [{required: true, message: ' ', trigger: 'blur'}],
-        userAccount: [{required: true, message: ' ', trigger: 'blur'}],
-        userType: [{required: true, message: ' ', trigger: 'blur'}]
+        name: [{required: true, message: ' ', trigger: 'blur'}]
       }
     }
   },
@@ -74,8 +57,8 @@ export default {
     handleSave () {
       this.$refs.form.validate().then(()=>{
         this.loading = true
-        let url = this.form.pkId ? '/api/mgm/user/updateUser' : '/api/mgm/user/add'
-        this.$axios.post(url, this.form).then(() => {
+        let url = this.form.id ? '/api/mgm/productLendingProvider/update' : '/api/mgm/productLendingProvider/add'
+        this.$axios.post(url, { productLendingProvider: this.form }).then(() => {
           this.loading = false
           this.$msgSuccess()
           this.handleClose()
@@ -100,29 +83,20 @@ export default {
   },
   computed: {
     dialogTitle () {
-      return this.isNew ? '新建用户' : '编辑用户'
-    },
-    userTypeList () {
-      let list = []
-      cfg.USER_TYPE_MAP.forEach(v => {
-        list.push(v)
-      })
-      return list
+      return this.isNew ? '新建产品贷款机构' : '编辑产品贷款机构'
     }
   },
   watch: {
     visible (val) {
       if(val) {
-        if(this.data.pkId) {
+        if(this.data.id) {
           this.isNew = false
           this.form = Object.assign({}, this.data)
         } else {
           this.isNew = true
           this.form = {
-            pkId: null,
-            phone: '',
-            userAccount: '',
-            userType: undefined
+            "id": null,
+            "name": ""
           }
         }
         this.$refs.form && this.$refs.form.clearValidate()

@@ -28,8 +28,8 @@
       <slot name="page" />
       <el-pagination
         layout="total, prev, pager, next, jumper"
-        :current-page="page.curPageNo"
-        :page-size="page.pageSize"
+        :current-page="page.page"
+        :page-size="page.size"
         :total="page.total"
         @size-change="$emit('onPageSizeChange', $event)"
         @current-change="$emit('onPageIndexChange', $event)"
@@ -51,8 +51,8 @@ export default {
       default () {
         return {
           total: 0,
-          curPageNo: 1,
-          pageSize: 60
+          page: 1,
+          size: 60
         }
       }
     }

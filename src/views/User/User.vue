@@ -1,13 +1,14 @@
 <template>
     <LayoutFilterTable
-        :is-loading="isLoading"
-        :page="listPage"
-        @onPageIndexChange="onPageIndexChange"
-        @onPageSizeChange="onPageSizeChange"
+            :is-loading="isLoading"
+            :page="listPage"
+            @onPageIndexChange="onPageIndexChange"
+            @onPageSizeChange="onPageSizeChange"
     >
         <div slot="action" class="action-box ms-flex row just-between">
             <div class="query-box">
-                <el-input v-model="queryObj.userAccount" placeholder="用户账号" clearable class="query-input-width"></el-input>
+                <el-input v-model="queryObj.userAccount" placeholder="用户账号" clearable
+                          class="query-input-width"></el-input>
                 <el-date-picker
                         v-model="dateList"
                         type="daterange"
@@ -50,9 +51,16 @@
                 {{row.userType | typeFilter}}
             </template>
             <template v-slot:action="{row}">
-                <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>
-                <el-button type="primary" @click.native="handleChangeStatus(row)" size="small">{{row.status === '上架' ? '下架' : '上架'}}</el-button>
-                <el-button type="danger" @click.native="handleDelete(row)" size="small">删除</el-button>
+                <el-button type="primary" @click.native="handleChangeStatus(row, 'active')" size="small"
+                           v-if="[CFG.USER_STATUS.INACTIVE, CFG.USER_STATUS.ACTIVE].includes(row.status)">
+                    {{row.status === 0 ? '停用' : '启用'}}
+                </el-button>
+                <el-button type="success" @click.native="handleChangeStatus(row, 'pend')" size="small"
+                           v-if="row.status === CFG.USER_STATUS.APPLYING">审核
+                </el-button>
+<!--                <el-button type="danger" @click.native="handleChangeStatus(row, 'black')" size="small"-->
+<!--                           v-if="![CFG.USER_STATUS.BLACKLIST, CFG.USER_STATUS.CANCELLATION].includes(row.status)">加入黑名单-->
+<!--                </el-button>-->
             </template>
         </MsUiTable>
         <EditUser v-model="editObj.visible" :data="editObj.data" @query="getTableData"></EditUser>
@@ -65,10 +73,12 @@ import MsUiTable from '../../components/MsUiTable/MsUiTable'
 import LayoutFilterTableMixin from '../../components/LayoutFilterTable/LayoutFilterTableMixin'
 import EditUser from './component/EditUser'
 import cfg from './component/cfg'
+
 export default {
   name: 'User',
   data () {
     return {
+      CFG: cfg,
       dateList: ['', ''],
       queryObj: {
         userAccount: '',
@@ -144,9 +154,9 @@ export default {
         endDate: '',
         status: null,
         userType: null
-      };
-      this.dateList = ['', ''];
-      this.getTableData();
+      }
+      this.dateList = ['', '']
+      this.getTableData()
     },
     handleEdit (row) {
       this.$router.push({
@@ -157,26 +167,39 @@ export default {
       })
     },
     handleDelete (row) {
-      this.$confirm('确认删除这条数据吗', '确认').then(()=>{
+      this.$confirm('确认删除这条数据吗', '确认').then(() => {
         this.$axios.post(`/api/mgm/product/delete/${row.id}`)
-        .then(() => {
-          this.$msgSuccess()
-          this.getTableData()
-        })
-      }).catch((err)=>{console.log(err)})
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+      }).catch((err) => {console.log(err)})
     },
-    handleChangeStatus (row) {
-      this.$axios.post(`/api/mgm/product/update`, {
-        product: {
-          pkId: row.id,
-          status: row.status === '上架' ? -1 : 0
-        }
-      })
+    handleChangeStatus (row, key) {
+      let status = null
+      switch (key) {
+        case 'active':
+          status = row.status === cfg.USER_STATUS.ACTIVE ? cfg.USER_STATUS.INACTIVE : cfg.USER_STATUS.ACTIVE
+          this.changeStatus({pkId: row.pkId, status})
+          break
+        case 'pend':
+          return false
+        // break;
+        case 'black':
+          this.$confirm('确认将该用户加入黑名单', ' ').then(() => {
+            status = cfg.USER_STATUS.BLACKLIST
+            this.changeStatus({pkId: row.pkId, status})
+          })
+          break
+      }
+    },
+    changeStatus (obj) {
+      this.$axios.post(`/api/mgm/user/updateUserStatus`, obj)
         .then(() => {
           this.$msgSuccess()
           this.getTableData()
         })
-        .catch((err) =>{
+        .catch((err) => {
           this.$msgError(err.message)
         })
     },
@@ -214,7 +237,7 @@ export default {
     dateList: {
       deep: true,
       handler (val) {
-        if(val && val.length) {
+        if (val && val.length) {
           this.queryObj.startDate = val[0]
           this.queryObj.endDate = val[1]
         }
@@ -226,16 +249,18 @@ export default {
 </script>
 
 <style scoped lang="less">
-    .action-box{
+    .action-box {
         padding-bottom: 20px;
         text-align: right;
-        .query-box{
-            >div + div {
+
+        .query-box {
+            > div + div {
                 margin-left: 10px;
             }
         }
     }
-    .query-input-width{
+
+    .query-input-width {
         width: 180px;
     }
 </style>

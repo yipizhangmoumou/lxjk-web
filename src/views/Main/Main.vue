@@ -43,7 +43,7 @@ export default {
             height: 100%;
         }
         .sys-aside{
-            flex: 0 0 180px;
+            flex: 0 0 @sideBarWidth;
         }
     }
 }

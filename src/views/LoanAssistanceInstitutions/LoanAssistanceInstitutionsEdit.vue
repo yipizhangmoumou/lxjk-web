@@ -5,8 +5,8 @@
             <el-form ref="form" :model="form" label-position="top" :rules="rules" class="edit-form">
                 <div class="edit-title">基础信息</div>
                 <div class="edit-row">
-                    <el-form-item label="机构名称" prop="field1">
-                        <el-input v-model="form.field1" placeholder="请填写营业执照上完整的公司名称" class="edit-input-width"></el-input>
+                    <el-form-item label="机构名称" prop="name">
+                        <el-input v-model="form.name" placeholder="请填写营业执照上完整的公司名称" class="edit-input-width"></el-input>
                     </el-form-item>
                     <el-form-item label="行业类型" prop="field2">
                         <el-select v-model="form.field2" placeholder="" class="edit-input-width">
@@ -112,23 +112,17 @@ export default {
       loading: false,
       optionsList: [{value:1, label: 1}],
       form: {
-        field1: '',
-        field2: '',
-        field3: '',
-        field4: '',
-        field5: '',
-        field6: '',
-        field7: '',
-        field8: '',
-        field9: '',
-        field10: '',
-        field11: '',
-        field12: '',
-        field13: '',
-        field14: '',
-        field15: '',
-        field16: '',
-        field17: ''
+        "address": "",
+        "area": "",
+        "description": "",
+        "leader": "", // 负责人
+        "name": "",
+        "orgCode": "", // 公司代码
+        "phone": "", // 联系电话
+        "pkId": null,
+        "regCapital": 0, // 注册资本
+        "regTime": "", // 公司注册时间
+        "status": 0
       },
       rules: {
         field1: [{required: true, message: ' '}]

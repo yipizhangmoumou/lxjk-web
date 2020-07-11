@@ -23,7 +23,7 @@ const USER_STATUS = {
 const USER_STATUS_MAP = new Map([
   [USER_STATUS.INACTIVE, { value: USER_STATUS.INACTIVE, label: '停用' }],
   [USER_STATUS.ACTIVE, { value: USER_STATUS.ACTIVE, label: '启用' }],
-  [USER_STATUS.BLACKLIST, { value: USER_STATUS.BLACKLIST, label: '黑名单' }],
+  // [USER_STATUS.BLACKLIST, { value: USER_STATUS.BLACKLIST, label: '黑名单' }],
   [USER_STATUS.CANCELLATION, { value: USER_STATUS.CANCELLATION, label: '注销' }],
   [USER_STATUS.APPLYING, { value: USER_STATUS.APPLYING, label: '申请中' }]
 ])

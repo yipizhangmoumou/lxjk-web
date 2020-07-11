@@ -89,9 +89,21 @@
                         </el-form-item>
                     </div>
                     <div class="edit-row">
+                        <el-form-item label="贷款机构" prop="lendingProviderId">
+                            <el-select v-model="form.product.lendingProviderId" placeholder="" class="edit-input-width">
+                                <el-option
+                                        v-for="item in lendingList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item label="产品描述">
                             <el-input v-model="form.product.productDescribe" placeholder="" class="edit-input-width"></el-input>
                         </el-form-item>
+                    </div>
+                    <div class="edit-row">
                         <el-form-item label="产品收费项" prop="chargeItems">
                             <el-checkbox-group v-model="form.product.chargeItems">
                               <el-checkbox v-for="(v,i) in charge_items" :label="v.key" :key="i">{{v.value}}</el-checkbox>
@@ -243,7 +255,7 @@ export default {
           "guaranteeMethod": "", // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
           "isCreditInvestigation": true,// 是否上征信
-          "lenders": "string",// 贷款机构 TODO 助贷机构做好后要加入
+          "lendingProviderId": undefined,// 贷款机构 TODO 贷款机构做好后要加入
           "loanInterestMax": undefined,// 最高贷款利息
           "loanInterestMin": undefined,// 最低贷款利息
           "loanPeriodMax": undefined,// 借款最大周期(月)
@@ -319,7 +331,8 @@ export default {
         loanPeriodMax: [{required: true, validator: validateNum}],
         repaymentMethod: [{required: true, message: ' '}],
         guaranteeMethod: [{required: true, message: ' '}],
-        applicationMethod: [{required: true, message: ' '}]
+        applicationMethod: [{required: true, message: ' '}],
+        lendingProviderId: [{required: true, message: ' '}]
       },
       rules1: {
         excludeArea: [{required: true, message: ' '}],
@@ -353,7 +366,9 @@ export default {
       // 行业树形数据
       industryTree: [],
       // 收费项
-      charge_items: []
+      charge_items: [],
+      // 贷款机构
+      lendingList: []
     }
   },
   methods: {
@@ -411,6 +426,11 @@ export default {
     handleCancel () {
       this.$router.push('/Product')
     },
+    getLendingList() {
+      this.$axios.post('/api/mgm/productLendingProvider/listActiveData').then(res => {
+        this.lendingList = res.data
+      })
+    },
     getFinancingTypeTree () {
       this.$axios.post('/api/mgm/financingType/getFinancingTypeTree').then(res => {
         this.typeTree = this.deleteEmpty(res.data.typeTree)
@@ -449,6 +469,7 @@ export default {
     this.getFinancingTypeTree()
     this.getAreaTree()
     this.getIndustryTree()
+    this.getLendingList()
   },
   mounted () {
     this.initData()
