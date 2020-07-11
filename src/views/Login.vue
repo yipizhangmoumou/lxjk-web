@@ -7,12 +7,12 @@
             <div class="login-item">
                 <h1 class="title">链信金科</h1>
                 <el-form :model="user" ref="user" class="form-item">
-                    <el-form-item prop="username"
+                    <el-form-item prop="userAccount"
                         :rules="[
                             { required: true, message: '请输入用户名', trigger: 'blur' }
                         ]"
                     >
-                        <el-input v-model="user.username" placeholder="请输入用户名"></el-input>
+                        <el-input v-model="user.userAccount" placeholder="请输入用户名"></el-input>
                     </el-form-item>
                     <el-form-item prop="password"
                         :rules="[
@@ -23,7 +23,7 @@
                         <el-input type="password" v-model="user.password" placeholder="请输入登录密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('user')">登录</el-button>
+                        <el-button type="primary" @click="submitForm('user')" :loading="loading">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -38,9 +38,10 @@
         data() {
             return {
                 user: {
-                    username: '',
+                    userAccount: '',
                     password: ''
-                }
+                },
+              loading: false
             }
         },
         methods: {
@@ -48,7 +49,15 @@
                 this.$refs[formName].validate((valid) => {
                 if (valid) {
                     // 登录调试
-                    this.$router.push("/");
+                  this.loading = true
+                    this.$axios.post('/api/mgm/index/login', this.user).then(res => {
+                      window.sessionStorage.setItem('token', res.data.token)
+                      this.$router.push("/");
+                      this.loading = false
+                    }).catch(() => {
+                      this.$msgError('账号或者密码错误')
+                      this.loading = false
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;

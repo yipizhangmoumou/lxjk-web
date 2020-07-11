@@ -81,6 +81,10 @@ export default {
               {
                 path: '/Product',
                 name:'产品管理'
+              },
+              {
+                path: '/LendingInstitutions',
+                name:'产品贷款机构管理'
               }
             ]
           }

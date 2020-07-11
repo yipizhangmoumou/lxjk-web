@@ -1,13 +1,14 @@
 import axios from 'axios'
+// import store from '../../store/index'
 
 const ERROR_STYLE = 'background-color:red;color:#fff;'
 
 axios.interceptors.request.use(
   (config) => {
-    // const AUTH = window.sessionStorage.getItem('auth')
-    // if (AUTH) {
-    //   config.headers.Authorization = AUTH
-    // }
+    const TOKEN = window.sessionStorage.getItem('token')
+    if (TOKEN) {
+      config.headers['R-Token'] = TOKEN
+    }
     return config
   },
   (error) => {
@@ -18,6 +19,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const SUCCESS_CODE = 0
+    // const NOT_LOGIN = 100
     // 如果请求头里的 header 有个 needReturnAll 则直接返回 response
     if (response.config.headers.needReturnAll) return response
     // 如果有数据而且状态码为成功，则返回数据

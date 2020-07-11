@@ -35,7 +35,7 @@ export default {
           this.listData = res.data[this.dataKey]
           this.listPage.total = res.data.totalSize
           this.isLoading = false
-          this.scrollContentToTop()
+          // this.scrollContentToTop()
         })
         .catch(() => {
           this.listData = []

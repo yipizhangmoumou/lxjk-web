@@ -76,6 +76,18 @@ const routes = [
           name: 'Product',
           meta: { name: '产品管理' },
           component: () => import("views/Product/Product")
+        },
+        {
+          path: '/ProductEdit',
+          name: 'ProductEdit',
+          meta: { name: '新增编辑产品' },
+          component: () => import("views/Product/ProductEdit")
+        },
+        {
+          path: '/LendingInstitutions',
+          name: 'LendingInstitutions',
+          meta: { name: '产品贷款机构管理' },
+          component: () => import("views/Product/LendingInstitutions")
         }
       ]
     },

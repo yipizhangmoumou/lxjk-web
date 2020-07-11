@@ -19,12 +19,6 @@
           :border="true"
         >
 <!--          <el-table-column type="selection" width="55"></el-table-column>-->
-          <el-table-column label="创建时间">
-            <template slot-scope="{row}">
-                {{row.createTime | timeFilter}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="financingType" label="类型"></el-table-column>
           <el-table-column prop="name" label="名称"></el-table-column>
           <el-table-column prop="status" label="状态"></el-table-column>
           <el-table-column label="操作" width="240" fixed="right">
@@ -36,7 +30,7 @@
                     </div>
                     <div @click="handleChangeStatus(row)">
                         <i class="el-icon-remove"></i>
-                        {{row.status === '上架' ? '下架' : '上架'}}
+                        {{row.status === 0 ? '停用' : '启用'}}
                     </div>
                     <div @click="handleDelete(row)">
                         <i class="el-icon-delete-solid"></i>
@@ -71,27 +65,33 @@
       </div>
     </div>
     <CopyRight />
+      <EditLendingInstitutions v-model="editObj.visible" :data="editObj.data" @query="getTableData"/>
   </div>
 </template>
 
 <script>
 import CopyRight from "components/CopyRight"
 import tableMixin from '../../assets/js/tableMixin'
+import EditLendingInstitutions from './component/EditLendingInstitutions'
 export default {
-  name: "Product",
+  name: "LendingInstitutions",
   data() {
     return {
-      listApiUrl: '/api/mgm/product/listData',
-      dataKey: 'mgmProductList',
+      listApiUrl: '/api/mgm/productLendingProvider/listData',
+      dataKey: 'mgmProductProviderList',
       listData: [],
       multipleSelection: [],
+      value: '',
+      editObj: {
+        visible: false,
+        data: {}
+      },
       options: [
         {
           value: "选项1",
           label: "黄金糕"
         }
       ],
-      value: ""
     };
   },
   filters: {
@@ -103,39 +103,47 @@ export default {
   mixins: [tableMixin],
   methods: {
     handleEdit (row) {
-      this.$router.push({
-        path: '/ProductEdit',
-        query: {
-          id: row.id
-        }
-      })
+      this.editObj.data = JSON.parse(JSON.stringify(row))
+      this.editObj.visible = true
     },
     handleDelete (row) {
-      this.$confirm('确认删除这条数据吗', '确认').then(()=>{
-        this.$axios.post(`/api/mgm/product/delete/${row.id}`)
-                .then(() => {
-                  this.$msgSuccess()
-                  this.getTableData()
-                })
-      }).catch((err)=>{console.log(err)})
+      this.$confirm('确认删除这条数据吗', '确认').then(() => {
+        this.$axios.post(`/api/mgm/productLendingProvider/delete/${row.id}`)
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+      }).catch((err) => {console.log(err)})
     },
     handleChangeStatus (row) {
-      this.$axios.post(`/api/mgm/product/update`, {
-        product: {
-          pkId: row.id,
-          status: row.status === '上架' ? -1 : 0
+      let status = row.status === 0 ? -1 : 0
+      this.$axios.post(`/api/mgm/productLendingProvider/update`, {
+        productLendingProvider: {
+          id: row.id,
+          status
         }
       })
-      .then(() => {
-        this.$msgSuccess()
-        this.getTableData()
-      })
-      .catch((err) =>{
-        this.$msgError(err.message)
-      })
+        .then(() => {
+          this.$msgSuccess()
+          this.getTableData()
+        })
+        .catch((err) => {
+          this.$msgError(err.message)
+        })
+    },
+    changeStatus (obj) {
+      this.$axios.post(`/api/mgm/user/updateUserStatus`, obj)
+        .then(() => {
+          this.$msgSuccess()
+          this.getTableData()
+        })
+        .catch((err) => {
+          this.$msgError(err.message)
+        })
     },
     handleAddNew () {
-      this.$router.push('/ProductEdit')
+      this.editObj.data = {}
+      this.editObj.visible = true
     },
     /**
      * @dir 全选
@@ -199,7 +207,8 @@ export default {
     }
   },
   components: {
-    CopyRight
+    CopyRight,
+    EditLendingInstitutions
   },
   created() {
     this.getTableData()
