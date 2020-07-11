@@ -84,9 +84,9 @@
             <el-select v-model="form.product.lendingProviderId" placeholder="">
               <el-option
                       v-for="item in lendingList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -239,7 +239,7 @@ export default {
           "guaranteeMethod": "", // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
           "isCreditInvestigation": true,// 是否上征信
-          "lendingProviderId": undefined,// 贷款机构 TODO 贷款机构做好后要加入
+          "lendingProviderId": undefined,// 贷款机构
           "loanInterestMax": undefined,// 最高贷款利息
           "loanInterestMin": undefined,// 最低贷款利息
           "loanPeriodMax": undefined,// 借款最大周期(月)

@@ -88,6 +88,18 @@ const routes = [
           name: 'LendingInstitutions',
           meta: { name: '产品贷款机构管理' },
           component: () => import("views/Product/LendingInstitutions")
+        },
+        {
+          path: '/DataDictionary',
+          name: 'DataDictionary',
+          meta: { name: '数据字典管理' },
+          component: () => import("views/Setting/DataDictionary")
+        },
+        {
+          path: '/User',
+          name: 'User',
+          meta: { name: '用户管理' },
+          component: () => import("views/Setting/User")
         }
       ]
     },

@@ -5,6 +5,7 @@ import store from './store'
 import CopyRight from "components/CopyRight"
 import ElementUI from 'element-ui';
 import "assets/styl/reset.styl"
+import "assets/styl/common.styl"
 import 'element-ui/lib/theme-chalk/index.css';
 
 import axiosInit from './assets/js/axiosInit.js'

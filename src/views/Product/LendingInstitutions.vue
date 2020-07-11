@@ -20,7 +20,11 @@
         >
 <!--          <el-table-column type="selection" width="55"></el-table-column>-->
           <el-table-column prop="name" label="名称"></el-table-column>
-          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column prop="status" label="状态">
+              <template slot-scope="{row}">
+                  {{row.status === 0 ? '启用' : '停用'}}
+              </template>
+          </el-table-column>
           <el-table-column label="操作" width="240" fixed="right">
             <template slot-scope="{row}">
                 <div class="cz">

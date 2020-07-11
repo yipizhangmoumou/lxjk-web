@@ -75,19 +75,32 @@ export default {
                     }
                 ]
             },
-          {
-            name: '产品管理',
-            childrenList: [
-              {
-                path: '/Product',
-                name:'产品管理'
-              },
-              {
-                path: '/LendingInstitutions',
-                name:'产品贷款机构管理'
-              }
-            ]
-          }
+            {
+              name: '产品管理',
+              childrenList: [
+                {
+                  path: '/Product',
+                  name:'产品管理'
+                },
+                {
+                  path: '/LendingInstitutions',
+                  name:'产品贷款机构管理'
+                }
+              ]
+            },
+            {
+              name: '系统设置',
+              childrenList: [
+                {
+                  path: '/User',
+                  name:'用户管理'
+                },
+                {
+                  path: '/DataDictionary',
+                  name:'数据字典管理'
+                }
+              ]
+            }
         ]
       }
   },

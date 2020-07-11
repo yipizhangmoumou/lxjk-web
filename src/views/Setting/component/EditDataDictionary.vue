@@ -6,8 +6,18 @@
             width="30%"
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
-            <el-form-item label="产品贷款机构名称" prop="name">
-                <el-input v-model="form.name" placeholder=""></el-input>
+            <el-form-item label="字典类型">
+                <el-select v-model="parentObj" placeholder="" class="full-width" disabled>
+                    <el-option
+                            v-for="(item, index) in dataCodeList"
+                            :key="index"
+                            :label="item.value"
+                            :value="item">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="字典名称" prop="dictValue">
+                <el-input v-model="form.dictValue" placeholder=""></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -19,7 +29,7 @@
 
 <script>
 export default {
-  name: 'EditLendingInstitutions',
+  name: 'EditDataDictionary',
   model: {
     prop: 'visible',
     event: 'changeVisible'
@@ -34,6 +44,18 @@ export default {
       default () {
         return {}
       }
+    },
+    dataCodeList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    parentObj: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -41,12 +63,13 @@ export default {
       loading: false,
       isNew: true,
       form: {
-        "id": null,
-        "name": "",
-        "status": 0
+          "id": null,
+          "parentId": null,
+          "code": "",
+          "dictValue": ""
       },
       rules: {
-        name: [{required: true, message: ' ', trigger: 'blur'}]
+        dictValue: [{required: true, message: ' ', trigger: 'blur'}]
       }
     }
   },
@@ -57,12 +80,12 @@ export default {
     handleSave () {
       this.$refs.form.validate().then(()=>{
         this.loading = true
-        let url = this.form.id ? '/api/mgm/productLendingProvider/update' : '/api/mgm/productLendingProvider/add'
-        this.$axios.post(url, { productLendingProvider: this.form }).then(() => {
+        let url = this.form.id ? '/api/mgm/dict/update' : '/api/mgm/dict/add'
+        this.$axios.post(url, {dict: this.form}).then(() => {
           this.loading = false
           this.$msgSuccess()
           this.handleClose()
-          this.$emit('query')
+          this.$emit('queryList')
         }).catch((err)=>{
           this.loading = false
           this.$msgError(err.message)
@@ -83,7 +106,7 @@ export default {
   },
   computed: {
     dialogTitle () {
-      return this.isNew ? '新建产品贷款机构' : '编辑产品贷款机构'
+      return this.isNew ? '新建字典' : '编辑字典'
     }
   },
   watch: {
@@ -91,13 +114,19 @@ export default {
       if(val) {
         if(this.data.id) {
           this.isNew = false
-          this.form = Object.assign({}, this.data)
+          this.form = {
+            "id": this.data.id,
+            "parentId": this.parentObj.id,
+            "code": this.data.code,
+            "dictValue": this.data.value
+          }
         } else {
           this.isNew = true
           this.form = {
             "id": null,
-            "name": "",
-            status: 0
+            "parentId": this.parentObj.id,
+            "code": this.parentObj.code,
+            "dictValue": ""
           }
         }
         this.$refs.form && this.$refs.form.clearValidate()

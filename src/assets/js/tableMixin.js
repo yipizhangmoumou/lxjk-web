@@ -70,6 +70,7 @@ export default {
     },
     onPageSizeChange (index) {
       this.listPage.size = index
+      this.listPage.page = 1
       this.getTableData(true)
     }
   }
