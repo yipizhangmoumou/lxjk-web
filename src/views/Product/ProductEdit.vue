@@ -5,22 +5,20 @@
             <el-form ref="form" :model="form.product" :rules="rules" label-width="160px" label-position="left" class="edit-form">
                 <div class="edit-title">产品信息</div>
                 <div>
+<!--                    <div class="edit-row">-->
+<!--                        <el-form-item label="产品名称" prop="productName">-->
+<!--                            <el-input v-model="form.product.productName" placeholder="" class="edit-input-width"></el-input>-->
+<!--                        </el-form-item>-->
+
+<!--                    </div>-->
                     <div class="edit-row">
-                        <el-form-item label="产品名称" prop="productName">
-                            <el-input v-model="form.product.productName" placeholder="" class="edit-input-width"></el-input>
-                        </el-form-item>
-                        <el-form-item label="产品描述" prop="productDescribe">
-                            <el-input v-model="form.product.productDescribe" placeholder="" class="edit-input-width"></el-input>
-                        </el-form-item>
-                    </div>
-                    <div class="edit-row">
-                        <el-form-item label="产品类型" prop="type">
-                            <el-radio-group v-model="form.product.type">
-                              <el-radio :label="1">短期</el-radio>
-                              <el-radio :label="2">中期</el-radio>
-                              <el-radio :label="3">长期</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
+<!--                        <el-form-item label="产品类型" prop="type">-->
+<!--                            <el-radio-group v-model="form.product.type">-->
+<!--                              <el-radio :label="1">短期</el-radio>-->
+<!--                              <el-radio :label="2">中期</el-radio>-->
+<!--                              <el-radio :label="3">长期</el-radio>-->
+<!--                            </el-radio-group>-->
+<!--                        </el-form-item>-->
                         <el-form-item label="融资方式" prop="financingMethodJson">
                             <el-cascader
                                     v-model="form.product.financingMethodJson"
@@ -36,6 +34,16 @@
                                     :show-all-levels="false"
                                     class="edit-input-width"
                             ></el-cascader>
+                        </el-form-item>
+                        <el-form-item label="申请方式" prop="applicationMethod">
+                            <el-select v-model="form.product.applicationMethod" placeholder="" class="edit-input-width">
+                                <el-option
+                                        v-for="item in application_method"
+                                        :key="item.key"
+                                        :label="item.value"
+                                        :value="item.key">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </div>
                     <div class="edit-row">
@@ -81,15 +89,8 @@
                         </el-form-item>
                     </div>
                     <div class="edit-row">
-                        <el-form-item label="申请方式" prop="applicationMethod">
-                            <el-select v-model="form.product.applicationMethod" placeholder="" class="edit-input-width">
-                                <el-option
-                                        v-for="item in application_method"
-                                        :key="item.key"
-                                        :label="item.value"
-                                        :value="item.key">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="产品描述">
+                            <el-input v-model="form.product.productDescribe" placeholder="" class="edit-input-width"></el-input>
                         </el-form-item>
                         <el-form-item label="产品收费项" prop="chargeItems">
                             <el-checkbox-group v-model="form.product.chargeItems">
@@ -253,7 +254,7 @@ export default {
           "productName": "", // 产品名称
           "repaymentMethod": "",// 还款方式，关联数据字典
           "status": 0, //状态：-1 下架 0 上架 2注销（删除）
-          "type": undefined// 产品类型(1.短期 2.中期 3.长期)
+          // "type": undefined// 产品类型(1.短期 2.中期 3.长期)
         },
         "productApplyCondition": {
           "applicableCareer": "",// 适用职业： 1 公务员或企事业单位 2 世界五百强企业 3 其他
@@ -310,7 +311,7 @@ export default {
       rules: {
         productName: [{required: true, message: ' '}],
         productDescribe: [{required: true, message: ' '}],
-        type: [{required: true, message: '请选中产品类型'}],
+        // type: [{required: true, message: '请选中产品类型'}],
         financingMethodJson: [{required: true, message: ' '}],
         loanInterestMin: [{required: true, validator: validateNum}],
         loanInterestMax: [{required: true, validator: validateNum}],

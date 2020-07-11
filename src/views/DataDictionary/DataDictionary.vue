@@ -8,7 +8,7 @@
         <div slot="action" class="action-box ms-flex row just-between">
             <div class="query-box">
                 <span>数据字典类型 : </span>
-                <el-select v-model="codeObj" placeholder="" value-key="code">
+                <el-select v-model="codeObj" filterable  placeholder="" value-key="code">
                     <el-option
                             v-for="(item, index) in dataCodeList"
                             :key="index"
@@ -26,10 +26,13 @@
                 needIndex
         >
             <template v-slot:action="{row}">
-<!--                <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>-->
+                <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>
                 <el-button type="danger" @click.native="handleDelete(row)" size="small">删除</el-button>
             </template>
         </MsUiTable>
+        <EditDataDictionary v-model="editData.visible" :data="editData.data" :dataCodeList="dataCodeList" :parentObj="codeObj"
+            @queryList="getTableData"
+        />
     </LayoutFilterTable>
 </template>
 
@@ -37,6 +40,7 @@
 import LayoutFilterTable from '../../components/LayoutFilterTable/LayoutFilterTable'
 import MsUiTable from '../../components/MsUiTable/MsUiTable'
 import LayoutFilterTableMixin from '../../components/LayoutFilterTable/LayoutFilterTableMixin'
+import EditDataDictionary from './component/EditDataDictionary'
 export default {
   name: 'DataDictionary',
   data () {
@@ -58,7 +62,11 @@ export default {
           fixedPos: 'right',
           width: 260
         }
-      ]
+      ],
+      editData: {
+        visible: false,
+        data: {}
+      }
     }
   },
   mixins: [LayoutFilterTableMixin],
@@ -71,14 +79,21 @@ export default {
        console.log(err)
      })
    },
+    handleEdit (row) {
+      console.log(row)
+      this.editData.data = JSON.parse(JSON.stringify(row))
+      this.editData.visible = true
+    },
     handleDelete (row) {
       this.$confirm('确认删除这条数据吗', '确认').then(()=>{
-        this.$axios.post(`/api/mgm/product/delete/${row.id}`)
+        this.$axios.post(`/api/mgm/dict/delete/${row.id}`)
         .then(() => {
           this.$msgSuccess()
           this.getTableData()
         })
-      }).catch((err)=>{console.log(err)})
+      }).catch((err)=>{
+        this.$msgError(err.message)
+      })
     },
     handleChangeStatus (row) {
       this.$axios.post(`/api/mgm/product/update`, {
@@ -96,8 +111,8 @@ export default {
         })
     },
     handleAddNew () {
-      this.editObj.data = {}
-      this.editObj.visible = true
+      this.editData.data = {}
+      this.editData.visible = true
     }
   },
   created () {
@@ -124,7 +139,7 @@ export default {
       }
     }
   },
-  components: {MsUiTable, LayoutFilterTable}
+  components: {MsUiTable, LayoutFilterTable, EditDataDictionary}
 }
 </script>
 

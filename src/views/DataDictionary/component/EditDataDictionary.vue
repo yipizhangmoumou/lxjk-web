@@ -6,21 +6,18 @@
             width="30%"
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
-            <el-form-item label="手机号码" prop="phone">
-                <el-input v-model="form.phone" placeholder=""></el-input>
-            </el-form-item>
-            <el-form-item label="用户账户(登陆账号)" prop="userAccount">
-                <el-input v-model="form.userAccount" placeholder=""></el-input>
-            </el-form-item>
-            <el-form-item label="用户类型" prop="userType">
-                <el-select v-model="form.userType" placeholder="" class="full-width">
+            <el-form-item label="字典类型">
+                <el-select v-model="parentObj" placeholder="" class="full-width" disabled>
                     <el-option
-                            v-for="item in userTypeList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            v-for="(item, index) in dataCodeList"
+                            :key="index"
+                            :label="item.value"
+                            :value="item">
                     </el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item label="字典名称" prop="dictValue">
+                <el-input v-model="form.dictValue" placeholder=""></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -48,7 +45,13 @@ export default {
         return {}
       }
     },
-    parentData: {
+    dataCodeList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    parentObj: {
       type: Object,
       default () {
         return {}
@@ -60,15 +63,13 @@ export default {
       loading: false,
       isNew: true,
       form: {
-        id: null,
-        phone: '',
-        userAccount: '',
-        userType: undefined
+          "id": null,
+          "parentId": null,
+          "code": "",
+          "dictValue": ""
       },
       rules: {
-        phone: [{required: true, message: ' ', trigger: 'blur'}],
-        userAccount: [{required: true, message: ' ', trigger: 'blur'}],
-        userType: [{required: true, message: ' ', trigger: 'blur'}]
+        dictValue: [{required: true, message: ' ', trigger: 'blur'}]
       }
     }
   },
@@ -79,11 +80,12 @@ export default {
     handleSave () {
       this.$refs.form.validate().then(()=>{
         this.loading = true
-        let url = this.form.pkId ? '/api/mgm/user/updateUser' : '/api/mgm/user/add'
-        this.$axios.post(url, this.form).then(() => {
+        let url = this.form.id ? '/api/mgm/dict/update' : '/api/mgm/dict/add'
+        this.$axios.post(url, {dict: this.form}).then(() => {
           this.loading = false
           this.$msgSuccess()
           this.handleClose()
+          this.$emit('queryList')
         }).catch((err)=>{
           this.loading = false
           this.$msgError(err.message)
@@ -110,16 +112,21 @@ export default {
   watch: {
     visible (val) {
       if(val) {
-        if(this.data.pkId) {
+        if(this.data.id) {
           this.isNew = false
-          this.form = Object.assign({}, this.data)
+          this.form = {
+            "id": this.data.id,
+            "parentId": this.parentObj.id,
+            "code": this.data.code,
+            "dictValue": this.data.value
+          }
         } else {
           this.isNew = true
           this.form = {
-            pkId: null,
-            phone: '',
-            userAccount: '',
-            userType: undefined
+            "id": null,
+            "parentId": this.parentObj.id,
+            "code": this.parentObj.code,
+            "dictValue": ""
           }
         }
         this.$refs.form && this.$refs.form.clearValidate()
