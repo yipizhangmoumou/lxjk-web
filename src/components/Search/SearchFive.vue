@@ -5,7 +5,7 @@
 -->
 
 <template>
-  <div id="SearchFour">
+  <div id="SearchFive">
     <div class="search-header">
       <div class="title head-item">数据筛选</div>
       <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>
@@ -14,17 +14,17 @@
       <el-form ref="search" :model="search" label-width="80px">
         <!-- <slot name="baseSearch"></slot> -->
         <el-form-item label="输入查询：">
-          <el-input placeholder="评估单号" v-model="search.name"></el-input>
+          <el-input placeholder="服务单号/联系人/电话/企业名称" v-model="search.name"></el-input>
         </el-form-item>
-        <el-form-item label="评估结果：">
+        <el-form-item label="服务状态：">
           <el-select placeholder="全部" v-model="search.region">
             <el-option label="全部" value></el-option>
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="评估时间：">
-          <el-date-picker v-model="search.region" type="date" placeholder="选择评估时间-区间"></el-date-picker>
+        <el-form-item label="申请时间：">
+          <el-date-picker v-model="search.region" type="date" placeholder="选择申请时间-区间"></el-date-picker>
         </el-form-item>
         <el-form-item class="btn-box">
           <el-button size="small" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
@@ -39,42 +39,31 @@
           <el-form-item label="输入查询：">
             <el-input v-model="form.name" placeholder="服务单号"></el-input>
           </el-form-item>
-          <el-form-item label="用户账号：">
-            <el-input v-model="form.name" placeholder="账号"></el-input>
+          <el-form-item label="输入联系人：">
+            <el-input v-model="form.name" placeholder="联系人姓名/电话"></el-input>
           </el-form-item>
         </div>
         <div class="input-line">
           <el-form-item label="企业名称：">
             <el-input v-model="form.num" placeholder="企业名称"></el-input>
           </el-form-item>
-          <el-form-item label="申请额度：">
-            <el-select v-model="form.zqtype" placeholder="全部 - 可以设定区间">
+          <el-form-item label="服务状态：">
+            <el-select v-model="form.zqtype" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="input-line">
-          <el-form-item label="评估结果：">
+          <el-form-item label="服务申请时间：">
+            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="融资顾问：">
             <el-select v-model="form.address" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="评估时间：">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择评估时间-区间"></el-date-picker>
-          </el-form-item>
-        </div>
-        <div class="input-line">
-          <el-form-item label="融资申请：">
-            <el-select v-model="form.address" placeholder="全部">
-              <el-option label="全部" value></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="融资申请时间：">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择评估时间-区间"></el-date-picker>
-          </el-form-item>
+          </el-form-item> 
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -88,7 +77,7 @@
 
 <script>
 export default {
-  name: "SearchOne",
+  name: "SearchFive",
   data() {
     return {
       search: {
@@ -131,7 +120,7 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../assets/styl/search.styl'
-#SearchFour 
+#SearchFive 
   .search-form 
     .el-form 
       .btn-box 

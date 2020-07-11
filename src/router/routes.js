@@ -58,6 +58,19 @@ const routes = [
           name: 'serviceAdmin',
           meta: { name: '融资服务管理' },
           component: () => import("views/FinancingService/ServiceAdmin")
+        },
+        {
+          path: '/executiveProgramme',
+          name: 'executiveProgramme',
+          meta: { name: '融资执行方案管理' },
+          component: () => import("views/FinancingService/ExecutiveProgramme")
+        },
+        {
+          path: '/customization',
+          name: 'customization',
+          meta: { name: '服务定制' },
+          component: () => import("views/Customization")
+          
         }
       ]
     },

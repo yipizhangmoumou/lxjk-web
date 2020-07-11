@@ -1,12 +1,27 @@
 <template>
-  <div id="ApplyForAssess">
+  <div id="ExecutiveProgramme">
     <StatusList :ArrayList="arrayList" />
-    <SearchFour />
+    <SearchSix />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-check"
+            type="primary"
+          >机构审核结果确认</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-custom"
+            type="primary"
+          >机构放款结果确认</el-button>
+           <el-button
+            size="small"
+            icon="el-icon-s-custom"
+            type="primary"
+          >收款审核</el-button>
         </div>
       </div>
       <div class="table">
@@ -19,28 +34,38 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="评估单号" prop="number"></el-table-column>
-          <el-table-column prop="name" label="评估时间"></el-table-column>
-          <el-table-column prop="address" label="用户账号"></el-table-column>
-          <el-table-column prop="employee" label="企业名称"></el-table-column>
-          <el-table-column prop="linkman" label="申请额度"></el-table-column>
-          <el-table-column prop="mobile" label="评估结果"></el-table-column>
-          <el-table-column prop="createTime" label="适用产品"></el-table-column>
-          <el-table-column prop="status" label="融资申请"></el-table-column>
-          <el-table-column prop="status" label="申请时间"></el-table-column>
-          <el-table-column prop="address" label="操作">
+          <el-table-column label="执行单号" prop="number"></el-table-column>
+          <el-table-column prop="name" label="产品名称"></el-table-column>
+          <el-table-column prop="address" label="产品类型"></el-table-column>
+          <el-table-column prop="employee" label="申请额度"></el-table-column>
+          <el-table-column prop="linkman" label="期数"></el-table-column>
+          <el-table-column prop="mobile" label="还款方式"></el-table-column>
+          <el-table-column prop="createTime" label="申请方式"></el-table-column>
+          <el-table-column prop="status" label="担保方式"></el-table-column>
+          <el-table-column prop="status" label="申请企业"></el-table-column>
+          <el-table-column prop="status" label="放款机构"></el-table-column>
+          <el-table-column prop="status" label="前置付款项"></el-table-column>
+          <el-table-column prop="status" label="前置付款状态"></el-table-column>
+          <el-table-column prop="status" label="服务费"></el-table-column>
+          <el-table-column prop="status" label="服务费支付状态"></el-table-column>
+          <el-table-column prop="status" label="方案执行时间"></el-table-column>
+          <el-table-column prop="status" label="融资顾问"></el-table-column>
+          <el-table-column prop="status" label="方案执行时间"></el-table-column>
+          <el-table-column prop="status" label="来源"></el-table-column>
+          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column prop="status" label="完成时间"></el-table-column>
+
+          <el-table-column prop="address" label="操作" width="150">
             <template>
               <div class="cz">
-                <div>
-                  评估详情
-                </div>
+                <div>融资服务详情</div>
               </div>
             </template>
           </el-table-column>
         </el-table>
         <div class="page-container">
           <div class="selectBtn">
-            <!-- <el-button size="small" @click="selectAll">全选</el-button>
+            <el-button size="small" @click="selectAll">全选</el-button>
             <el-button size="small" @click="invertSelection(tableData)">反选</el-button>
             <el-select v-model="value" placeholder="批量操作">
               <el-option
@@ -49,7 +74,7 @@
                 :label="item.label"
                 :value="item.value"
               ></el-option>
-            </el-select> -->
+            </el-select>
           </div>
           <!-- 分页 -->
           <el-pagination
@@ -67,43 +92,60 @@
 </template>
 
 <script>
-import CopyRight from "components/CopyRight"
-import SearchFour from "components/Search/SearchFour";
+import CopyRight from "components/CopyRight";
+import SearchSix from "components/Search/SearchSix";
 import StatusList from "components/StatusList";
 export default {
-  name: "ApplyForAssess",
+  name: "ExecutiveProgramme",
   data() {
     return {
       curr: 1,
       tableData: [],
       multipleSelection: [],
-      options: [
+      dialogFormVisible: false,
+      options:{},
+      value:"",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      formLabelWidth: "120px",
+      arrayList: [
         {
-          value: "选项1",
-          label: "黄金糕"
-        }
-      ],
-      value: "",
-      arrayList:[
-        {
-          name:"全部评估申请",
-          count:2000,
+          name: "全部执行单",
+          count: 2000,
           color: "#58A3F7"
         },
         {
-          name:"评估成功",
-          count:2000,
+          name: "前置收款待审核",
+          count: 2000,
           color: "#FEC03D"
         },
         {
-          name:"评估失败",
-          count:2000,
+          name: "待放款机构审核",
+          count: 2000,
           color: "#FEC03D"
         },
         {
-          name:"融资申请",
-          count:2000,
-          color: "#FEC03D"
+          name: "服务收款待审核",
+          count: 2000,
+          color: "#8167F5"
+        },
+        {
+          name: "已完成",
+          count: 2000,
+          color: "#4BCED0"
+        },
+        {
+          name: "已关闭",
+          count: 2000,
+          color: "#FB6260"
         }
       ]
     };
@@ -146,7 +188,7 @@ export default {
     }
   },
   components: {
-    SearchFour,
+    SearchSix,
     CopyRight,
     StatusList
   },
@@ -169,8 +211,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/styl/fn.styl";
-#ApplyForAssess
+@import '../../assets/styl/fn.styl'
+#ExecutiveProgramme
   position relative
   .table-container
     width 1100px

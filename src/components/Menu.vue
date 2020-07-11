@@ -5,7 +5,7 @@
       <el-col>
         <h1>链信金科</h1>
         <el-menu
-          default-active="0-0"
+          :default-active="currPath"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -35,6 +35,7 @@ export default {
   name: "Menu",
   data() {
       return {
+        currPath: '0-0',
         menuList: [
             {
                 name: '助贷管理',
@@ -69,7 +70,7 @@ export default {
                         name:'融资服务管理'
                     },
                      {
-                        path: '/login',
+                        path: '/executiveProgramme',
                         name:'融资执行方案管理'
                     }
                 ]
@@ -84,6 +85,16 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     }
+  },
+  mounted() {
+    this.menuList.forEach((el, index) => {
+      el.childrenList.forEach((item, i) => {
+        if (item.path == this.$route.path) {
+          this.currPath = `${index}-${i}`;
+          return;
+        }
+      })
+    })
   },
   components: {
       Header
