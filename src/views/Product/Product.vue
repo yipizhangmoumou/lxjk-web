@@ -1,48 +1,48 @@
 <template>
-  <div id="CheckEmployee">
+  <div id="product">
 <!--    <SearchThree />-->
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
-          <el-button size="small" icon="el-icon-upload2">导出</el-button>
+<!--          <el-button size="small" icon="el-icon-upload2">导出</el-button>-->
+          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加产品</el-button>
         </div>
       </div>
       <div class="table">
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="listData"
           tooltip-effect="dark"
           style="width: 100%"
           :stripe="true"
           :border="true"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="申请ID">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
+<!--          <el-table-column type="selection" width="55"></el-table-column>-->
+          <el-table-column label="创建时间">
+            <template slot-scope="{row}">
+                {{row.createTime | timeFilter}}
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="address" label="手机号"></el-table-column>
-          <el-table-column prop="employee" label="所属机构" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="申请时间" width="160"></el-table-column>
-          <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
-              <div class="cz">
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
+          <el-table-column prop="financingType" label="类型"></el-table-column>
+          <el-table-column prop="name" label="名称"></el-table-column>
+          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column label="操作" width="240" fixed="right">
+            <template slot-scope="{row}">
+                <div class="cz">
+                    <div @click.native="handleEdit(row)">
+                        <i class="el-icon-success"></i>
+                        编辑
+                    </div>
+                    <div @click.native="handleChangeStatus(row)">
+                        <i class="el-icon-remove"></i>
+                        {{row.status === '上架' ? '下架' : '上架'}}
+                    </div>
+                    <div @click.native="handleDelete(row)">
+                        <i class="el-icon-delete-solid"></i>
+                        删除
+                    </div>
                 </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  开通管理员
-                </div>
-                <div @click="operation(3, scope.row)">
-                  <i class="el-icon-delete-solid"></i>
-                  删除
-                </div>
-              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -61,11 +61,11 @@
           </div>
           <!-- 分页 -->
           <el-pagination
-            :current-page="curr"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+              :current-page="listPage.page"
+              :page-size="listPage.size"
+              :total="listPage.total"
+            :page-sizes="[10, 20, 30, 50]"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
           ></el-pagination>
         </div>
       </div>
@@ -76,13 +76,14 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchThree from "components/SearchThree";
+import tableMixin from '../../assets/js/tableMixin'
 export default {
   name: "Product",
   data() {
     return {
-      curr: 1,
-      tableData: [],
+      listApiUrl: '/api/mgm/product/listData',
+      dataKey: 'mgmProductList',
+      listData: [],
       multipleSelection: [],
       options: [
         {
@@ -93,7 +94,49 @@ export default {
       value: ""
     };
   },
+  filters: {
+    timeFilter (timeStr) {
+      if (!timeStr) return ''
+      return timeStr.replace('T', ' ')
+    }
+  },
+  mixins: [tableMixin],
   methods: {
+    handleEdit (row) {
+      this.$router.push({
+        path: '/ProductEdit',
+        query: {
+          id: row.id
+        }
+      })
+    },
+    handleDelete (row) {
+      this.$confirm('确认删除这条数据吗', '确认').then(()=>{
+        this.$axios.post(`/api/mgm/product/delete/${row.id}`)
+                .then(() => {
+                  this.$msgSuccess()
+                  this.getTableData()
+                })
+      }).catch((err)=>{console.log(err)})
+    },
+    handleChangeStatus (row) {
+      this.$axios.post(`/api/mgm/product/update`, {
+        product: {
+          pkId: row.id,
+          status: row.status === '上架' ? -1 : 0
+        }
+      })
+      .then(() => {
+        this.$msgSuccess()
+        this.getTableData()
+      })
+      .catch((err) =>{
+        this.$msgError(err.message)
+      })
+    },
+    handleAddNew () {
+      this.$router.push('/ProductEdit')
+    },
     /**
      * @dir 全选
      * @param null
@@ -131,55 +174,6 @@ export default {
     },
 
     /**
-     * @dir 表格里面的按钮
-     * @param null
-     * @return null
-     */
-    operation(type, row) {
-      switch (type) {
-        case 1:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请",
-            message: "开通成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 2:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请，且设为管理员",
-            message: "禁用成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 3:
-          this.layer({
-            row,
-            content: "是否确定删除员工申请",
-            message: "删除成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-      }
-    },
-
-    /**
      * @dir 封装的弹层
      * @param null
      * @return null
@@ -205,34 +199,21 @@ export default {
     }
   },
   components: {
-    SearchThree,
     CopyRight
   },
   created() {
-    for (let index = 0; index < 11; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        name: "机构名称" + index,
-        address: "地区" + index,
-        employee: "员工人数" + index,
-        linkman: "联系人" + index,
-        mobile: "联系方式" + index,
-        createTime: "2020-03-09 12:34:23",
-        status: index % 2 == 0 ? "已开通" : "未开通",
-        codeUrl: "http://www.baidu.com"
-      });
-    }
+    this.getTableData()
   }
 };
 </script>
 
 <style lang="stylus" scoped>
 @import "../../assets/styl/fn.styl";
-#CheckEmployee
+#product
   position relative
   .table-container
     width 1100px
-    margin 0 auto 200px
+    margin 50px auto 200px
     background-color #fff
     padding 20px
     box-sizing border-box

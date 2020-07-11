@@ -70,7 +70,12 @@ const routes = [
           name: 'customization',
           meta: { name: '服务定制' },
           component: () => import("views/Customization")
-          
+        },
+        {
+          path: '/Product',
+          name: 'Product',
+          meta: { name: '产品管理' },
+          component: () => import("views/Product/Product")
         }
       ]
     },
@@ -78,7 +83,7 @@ const routes = [
       path: "/login",
       name: "Login",
       component:() => import("views/Login.vue")
-  
+
     },
     {
       path: "*",

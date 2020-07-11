@@ -74,7 +74,16 @@ export default {
                         name:'融资执行方案管理'
                     }
                 ]
-            }
+            },
+          {
+            name: '产品管理',
+            childrenList: [
+              {
+                path: '/Product',
+                name:'产品管理'
+              }
+            ]
+          }
         ]
       }
   },

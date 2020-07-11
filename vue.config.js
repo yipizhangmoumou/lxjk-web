@@ -5,6 +5,16 @@ module.exports = {
         overlay:{
             errors: true,
             wranings: true
+        },
+        proxy: {
+            '/api': {
+                target: 'https://www.risesin.com/api',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
         }
     },
     configureWebpack: {
