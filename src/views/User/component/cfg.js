@@ -1,8 +1,8 @@
 const USER_TYPE = {
-  ADMIN: '0',
-  SYSTEM: '1',
-  LOAN_ASSISTANCE: '2',
-  ENTERPRISE: '3'
+  ADMIN: 0,
+  SYSTEM: 1,
+  LOAN_ASSISTANCE: 2,
+  ENTERPRISE: 3
 }
 
 const USER_TYPE_MAP = new Map([

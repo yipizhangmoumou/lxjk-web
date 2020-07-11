@@ -42,6 +42,8 @@ export default {
           this.scrollContentToTop()
         })
         .catch(() => {
+          this.listData = []
+          this.listPage.total = 0
           this.isLoading = false
         })
     },
@@ -49,7 +51,7 @@ export default {
     getFilterParams () {
       let output ={}
       let params = Object.assign({}, this.queryObj || {}, this.listPage)
-      delete output.total
+      delete params.total
       // 过滤掉空值
       Object.keys(params).forEach(key => {
         if (params[key]) {

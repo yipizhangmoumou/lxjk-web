@@ -47,6 +47,12 @@ export default {
       default () {
         return {}
       }
+    },
+    parentData: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -54,7 +60,7 @@ export default {
       loading: false,
       isNew: true,
       form: {
-        pkId: null,
+        id: null,
         phone: '',
         userAccount: '',
         userType: undefined

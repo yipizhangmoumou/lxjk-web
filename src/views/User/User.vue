@@ -11,7 +11,6 @@
                 <el-date-picker
                         v-model="dateList"
                         type="daterange"
-                        range-separator="至"
                         clearable
                         :editable="false"
                         value-format="yyyy-MM-dd"
@@ -44,8 +43,11 @@
                 :data="listData"
                 :is-allow-save-view="true"
         >
-            <template v-slot:createTime="{row}">
-                {{row.createTime}}
+            <template v-slot:status="{row}">
+                {{row.status | statusFilter}}
+            </template>
+            <template v-slot:userType="{row}">
+                {{row.userType | typeFilter}}
             </template>
             <template v-slot:action="{row}">
                 <el-button type="primary" @click.native="handleEdit(row)" size="small">编辑</el-button>
@@ -79,9 +81,8 @@ export default {
       dataKey: 'mgmUserList',
       columns: [
         {
-          label: '用户编号',
-          field: 'createTime',
-          needSlot: true
+          label: '创建时间',
+          field: 'createTime'
         },
         {
           label: '用户账号',
@@ -93,7 +94,8 @@ export default {
         },
         {
           label: '状态',
-          field: 'status'
+          field: 'status',
+          needSlot: true
         },
         {
           label: '用户类型',
@@ -124,6 +126,16 @@ export default {
     }
   },
   mixins: [LayoutFilterTableMixin],
+  filters: {
+    statusFilter (status) {
+      let obj = cfg.USER_STATUS_MAP.get(status)
+      return obj ? obj.label : '-'
+    },
+    typeFilter (type) {
+      let obj = cfg.USER_TYPE_MAP.get(type)
+      return obj ? obj.label : '-'
+    }
+  },
   methods: {
     handleClearQuery () {
       this.queryObj = {
