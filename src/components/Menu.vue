@@ -5,7 +5,7 @@
       <el-col>
         <h1>链信金科</h1>
         <el-menu
-          default-active="0-0"
+          :default-active="$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -20,7 +20,7 @@
               <span>{{item.name}}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item :route="{path: child.path}" :index="`${index}-${key}`" v-for="(child, key) in item.childrenList" :key="key">{{child.name}}</el-menu-item>
+              <el-menu-item :index="child.path" v-for="(child, key) in item.childrenList" :key="key">{{child.name}}</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

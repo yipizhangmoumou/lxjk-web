@@ -46,6 +46,12 @@ const routes = [
           name: 'log',
           meta: { name: '日志' },
           component: () => import("views/Log.vue")
+        },
+        {
+          path:'/Product',
+          name: 'Product',
+          meta: { name: '日志' },
+          component: () => import("views/Product/Product.vue")
         }
       ]
     },
@@ -53,7 +59,7 @@ const routes = [
       path: "/login",
       name: "Login",
       component:() => import("views/Login.vue")
-  
+
     },
     {
       path: "*",
