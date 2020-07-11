@@ -1,11 +1,23 @@
 <template>
-  <div id="CheckEmployee">
-    <SearchThree />
+  <div id="ServiceAdmin">
+    <StatusList :ArrayList="arrayList" />
+    <SearchFive />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-check"
+            type="primary"
+          >融资服务审核</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-custom"
+            type="primary"
+            @click="dialogFormVisible = true"
+          >分配融资顾问</el-button>
         </div>
       </div>
       <div class="table">
@@ -18,30 +30,24 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="申请ID">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="address" label="手机号"></el-table-column>
-          <el-table-column prop="employee" label="所属机构" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="申请时间" width="160"></el-table-column>
-          <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
+          <el-table-column label="服务单号" prop="number"></el-table-column>
+          <el-table-column prop="name" label="申请时间"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
+          <el-table-column prop="employee" label="联系人"></el-table-column>
+          <el-table-column prop="linkman" label="联系人"></el-table-column>
+          <el-table-column prop="mobile" label="联系人"></el-table-column>
+          <el-table-column prop="createTime" label="申请额度"></el-table-column>
+          <el-table-column prop="status" label="适用产品"></el-table-column>
+          <el-table-column prop="status" label="选择产品"></el-table-column>
+          <el-table-column prop="status" label="申请时间"></el-table-column>
+          <el-table-column prop="status" label="融资顾问"></el-table-column>
+          <el-table-column prop="status" label="状态"></el-table-column>
+
+          <el-table-column prop="address" label="操作" width="150">
+            <template>
               <div class="cz">
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
-                </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  开通管理员
-                </div>
-                <div @click="operation(3, scope.row)">
-                  <i class="el-icon-delete-solid"></i>
-                  删除
-                </div>
+                <div>评估详情</div>
+                <div @click="$router.push('/customization')">定制服务</div>
               </div>
             </template>
           </el-table-column>
@@ -69,28 +75,76 @@
           ></el-pagination>
         </div>
       </div>
+
+
+      <el-dialog title="分配融资顾问" :visible.sync="dialogFormVisible" width="30%">
+        <el-form :model="form">
+          <el-form-item label="活动区域" :label-width="formLabelWidth">
+            <el-select v-model="form.region" placeholder="请选择融资顾问">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <p style="margin-left:52px">当前服务客户数：3人</p>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
+
     </div>
     <CopyRight />
   </div>
 </template>
 
 <script>
-import CopyRight from "components/CopyRight"
-import SearchThree from "components/Search/SearchThree";
+import CopyRight from "components/CopyRight";
+import SearchFive from "components/Search/SearchFive";
+import StatusList from "components/StatusList";
 export default {
-  name: "CheckEmployee",
+  name: "ServiceAdmin",
   data() {
     return {
       curr: 1,
       tableData: [],
       multipleSelection: [],
-      options: [
+      dialogFormVisible: false,
+      options:{},
+      value:"",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      formLabelWidth: "120px",
+      arrayList: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          name: "待融资顾问服务",
+          count: 2000,
+          color: "#58A3F7"
+        },
+        {
+          name: "待服务定制",
+          count: 2000,
+          color: "#FEC03D"
+        },
+        {
+          name: "待服务执行",
+          count: 2000,
+          color: "#FEC03D"
+        },
+        {
+          name: "已完成",
+          count: 2000,
+          color: "#FB6260"
         }
-      ],
-      value: ""
+      ]
     };
   },
   methods: {
@@ -128,85 +182,12 @@ export default {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    },
-
-    /**
-     * @dir 表格里面的按钮
-     * @param null
-     * @return null
-     */
-    operation(type, row) {
-      switch (type) {
-        case 1:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请",
-            message: "开通成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 2:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请，且设为管理员",
-            message: "禁用成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 3:
-          this.layer({
-            row,
-            content: "是否确定删除员工申请",
-            message: "删除成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-      }
-    },
-
-    /**
-     * @dir 封装的弹层
-     * @param null
-     * @return null
-     */
-    layer({ row, content, type, message, suFn, erFn }) {
-      console.log(row, "一些数据");
-      this.$confirm(content, "确认提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: type || "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: message
-          });
-          suFn();
-        })
-        .catch(() => {
-          // 取消操作
-          erFn();
-        });
     }
   },
   components: {
-    SearchThree,
-    CopyRight
+    SearchFive,
+    CopyRight,
+    StatusList
   },
   created() {
     for (let index = 0; index < 11; index++) {
@@ -227,8 +208,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/styl/fn.styl";
-#CheckEmployee
+@import '../../assets/styl/fn.styl'
+#ServiceAdmin
   position relative
   .table-container
     width 1100px

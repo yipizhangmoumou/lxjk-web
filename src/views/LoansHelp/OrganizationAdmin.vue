@@ -94,7 +94,7 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchOne from "components/SearchOne";
+import SearchOne from "components/Search/SearchOne";
 export default {
   name: "OrganizationAdmin",
   data() {

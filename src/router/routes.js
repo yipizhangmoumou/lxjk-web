@@ -48,10 +48,29 @@ const routes = [
           component: () => import("views/Log.vue")
         },
         {
-          path:'/Product',
-          name: 'Product',
-          meta: { name: '日志' },
-          component: () => import("views/Product/Product.vue")
+          path: '/applyForAssess',
+          name: 'applyForAssess',
+          meta: { name: '评估申请管理' },
+          component: () => import("views/FinancingService/ApplyForAssess")
+        },
+        {
+          path: '/serviceAdmin',
+          name: 'serviceAdmin',
+          meta: { name: '融资服务管理' },
+          component: () => import("views/FinancingService/ServiceAdmin")
+        },
+        {
+          path: '/executiveProgramme',
+          name: 'executiveProgramme',
+          meta: { name: '融资执行方案管理' },
+          component: () => import("views/FinancingService/ExecutiveProgramme")
+        },
+        {
+          path: '/customization',
+          name: 'customization',
+          meta: { name: '服务定制' },
+          component: () => import("views/Customization")
+          
         }
       ]
     },
@@ -59,7 +78,7 @@ const routes = [
       path: "/login",
       name: "Login",
       component:() => import("views/Login.vue")
-
+  
     },
     {
       path: "*",

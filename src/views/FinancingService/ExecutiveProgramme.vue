@@ -1,11 +1,27 @@
 <template>
-  <div id="CheckEmployee">
-    <SearchThree />
+  <div id="ExecutiveProgramme">
+    <StatusList :ArrayList="arrayList" />
+    <SearchSix />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-check"
+            type="primary"
+          >机构审核结果确认</el-button>
+          <el-button
+            size="small"
+            icon="el-icon-s-custom"
+            type="primary"
+          >机构放款结果确认</el-button>
+           <el-button
+            size="small"
+            icon="el-icon-s-custom"
+            type="primary"
+          >收款审核</el-button>
         </div>
       </div>
       <div class="table">
@@ -18,30 +34,31 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="申请ID">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="address" label="手机号"></el-table-column>
-          <el-table-column prop="employee" label="所属机构" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="申请时间" width="160"></el-table-column>
-          <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
+          <el-table-column label="执行单号" prop="number"></el-table-column>
+          <el-table-column prop="name" label="产品名称"></el-table-column>
+          <el-table-column prop="address" label="产品类型"></el-table-column>
+          <el-table-column prop="employee" label="申请额度"></el-table-column>
+          <el-table-column prop="linkman" label="期数"></el-table-column>
+          <el-table-column prop="mobile" label="还款方式"></el-table-column>
+          <el-table-column prop="createTime" label="申请方式"></el-table-column>
+          <el-table-column prop="status" label="担保方式"></el-table-column>
+          <el-table-column prop="status" label="申请企业"></el-table-column>
+          <el-table-column prop="status" label="放款机构"></el-table-column>
+          <el-table-column prop="status" label="前置付款项"></el-table-column>
+          <el-table-column prop="status" label="前置付款状态"></el-table-column>
+          <el-table-column prop="status" label="服务费"></el-table-column>
+          <el-table-column prop="status" label="服务费支付状态"></el-table-column>
+          <el-table-column prop="status" label="方案执行时间"></el-table-column>
+          <el-table-column prop="status" label="融资顾问"></el-table-column>
+          <el-table-column prop="status" label="方案执行时间"></el-table-column>
+          <el-table-column prop="status" label="来源"></el-table-column>
+          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column prop="status" label="完成时间"></el-table-column>
+
+          <el-table-column prop="address" label="操作" width="150">
+            <template>
               <div class="cz">
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
-                </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  开通管理员
-                </div>
-                <div @click="operation(3, scope.row)">
-                  <i class="el-icon-delete-solid"></i>
-                  删除
-                </div>
+                <div>融资服务详情</div>
               </div>
             </template>
           </el-table-column>
@@ -75,22 +92,62 @@
 </template>
 
 <script>
-import CopyRight from "components/CopyRight"
-import SearchThree from "components/Search/SearchThree";
+import CopyRight from "components/CopyRight";
+import SearchSix from "components/Search/SearchSix";
+import StatusList from "components/StatusList";
 export default {
-  name: "CheckEmployee",
+  name: "ExecutiveProgramme",
   data() {
     return {
       curr: 1,
       tableData: [],
       multipleSelection: [],
-      options: [
+      dialogFormVisible: false,
+      options:{},
+      value:"",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      formLabelWidth: "120px",
+      arrayList: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          name: "全部执行单",
+          count: 2000,
+          color: "#58A3F7"
+        },
+        {
+          name: "前置收款待审核",
+          count: 2000,
+          color: "#FEC03D"
+        },
+        {
+          name: "待放款机构审核",
+          count: 2000,
+          color: "#FEC03D"
+        },
+        {
+          name: "服务收款待审核",
+          count: 2000,
+          color: "#8167F5"
+        },
+        {
+          name: "已完成",
+          count: 2000,
+          color: "#4BCED0"
+        },
+        {
+          name: "已关闭",
+          count: 2000,
+          color: "#FB6260"
         }
-      ],
-      value: ""
+      ]
     };
   },
   methods: {
@@ -128,85 +185,12 @@ export default {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    },
-
-    /**
-     * @dir 表格里面的按钮
-     * @param null
-     * @return null
-     */
-    operation(type, row) {
-      switch (type) {
-        case 1:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请",
-            message: "开通成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 2:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请，且设为管理员",
-            message: "禁用成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 3:
-          this.layer({
-            row,
-            content: "是否确定删除员工申请",
-            message: "删除成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-      }
-    },
-
-    /**
-     * @dir 封装的弹层
-     * @param null
-     * @return null
-     */
-    layer({ row, content, type, message, suFn, erFn }) {
-      console.log(row, "一些数据");
-      this.$confirm(content, "确认提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: type || "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: message
-          });
-          suFn();
-        })
-        .catch(() => {
-          // 取消操作
-          erFn();
-        });
     }
   },
   components: {
-    SearchThree,
-    CopyRight
+    SearchSix,
+    CopyRight,
+    StatusList
   },
   created() {
     for (let index = 0; index < 11; index++) {
@@ -227,8 +211,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/styl/fn.styl";
-#CheckEmployee
+@import '../../assets/styl/fn.styl'
+#ExecutiveProgramme
   position relative
   .table-container
     width 1100px

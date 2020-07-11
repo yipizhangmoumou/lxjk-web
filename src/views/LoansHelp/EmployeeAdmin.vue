@@ -99,7 +99,7 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchTwo from "components/SearchTwo";
+import SearchTwo from "components/Search/SearchTwo";
 export default {
   name: "EmployeeAdmin",
   data() {

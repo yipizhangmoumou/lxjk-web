@@ -25,7 +25,7 @@
     <div class="setting item">
       <i class="el-icon-s-tools"></i>
     </div>
-    <div class="logout item">
+    <div class="logout item" @click="logOut">
       <i class="el-icon-switch-button"></i>
     </div>
   </div>
@@ -36,6 +36,12 @@ export default {
   name: "Header",
   data() {
     return {};
+  },
+  methods: {
+    logOut() {
+      // 清token 和用户信息 跳转登录
+      this.$router.push('/login')
+    }
   }
 };
 </script>

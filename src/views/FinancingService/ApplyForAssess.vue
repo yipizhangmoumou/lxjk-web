@@ -1,6 +1,7 @@
 <template>
-  <div id="CheckEmployee">
-    <SearchThree />
+  <div id="ApplyForAssess">
+    <StatusList :ArrayList="arrayList" />
+    <SearchFour />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
@@ -18,29 +19,20 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="申请ID">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="address" label="手机号"></el-table-column>
-          <el-table-column prop="employee" label="所属机构" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="申请时间" width="160"></el-table-column>
-          <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
+          <el-table-column label="评估单号" prop="number"></el-table-column>
+          <el-table-column prop="name" label="评估时间"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
+          <el-table-column prop="employee" label="企业名称"></el-table-column>
+          <el-table-column prop="linkman" label="申请额度"></el-table-column>
+          <el-table-column prop="mobile" label="评估结果"></el-table-column>
+          <el-table-column prop="createTime" label="适用产品"></el-table-column>
+          <el-table-column prop="status" label="融资申请"></el-table-column>
+          <el-table-column prop="status" label="申请时间"></el-table-column>
+          <el-table-column prop="address" label="操作">
+            <template>
               <div class="cz">
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
-                </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  开通管理员
-                </div>
-                <div @click="operation(3, scope.row)">
-                  <i class="el-icon-delete-solid"></i>
-                  删除
+                <div>
+                  评估详情
                 </div>
               </div>
             </template>
@@ -48,7 +40,7 @@
         </el-table>
         <div class="page-container">
           <div class="selectBtn">
-            <el-button size="small" @click="selectAll">全选</el-button>
+            <!-- <el-button size="small" @click="selectAll">全选</el-button>
             <el-button size="small" @click="invertSelection(tableData)">反选</el-button>
             <el-select v-model="value" placeholder="批量操作">
               <el-option
@@ -57,7 +49,7 @@
                 :label="item.label"
                 :value="item.value"
               ></el-option>
-            </el-select>
+            </el-select> -->
           </div>
           <!-- 分页 -->
           <el-pagination
@@ -76,9 +68,10 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchThree from "components/Search/SearchThree";
+import SearchFour from "components/Search/SearchFour";
+import StatusList from "components/StatusList";
 export default {
-  name: "CheckEmployee",
+  name: "ApplyForAssess",
   data() {
     return {
       curr: 1,
@@ -90,7 +83,29 @@ export default {
           label: "黄金糕"
         }
       ],
-      value: ""
+      value: "",
+      arrayList:[
+        {
+          name:"全部评估申请",
+          count:2000,
+          color: "#58A3F7"
+        },
+        {
+          name:"评估成功",
+          count:2000,
+          color: "#FEC03D"
+        },
+        {
+          name:"评估失败",
+          count:2000,
+          color: "#FEC03D"
+        },
+        {
+          name:"融资申请",
+          count:2000,
+          color: "#FEC03D"
+        }
+      ]
     };
   },
   methods: {
@@ -128,85 +143,12 @@ export default {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    },
-
-    /**
-     * @dir 表格里面的按钮
-     * @param null
-     * @return null
-     */
-    operation(type, row) {
-      switch (type) {
-        case 1:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请",
-            message: "开通成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 2:
-          this.layer({
-            row,
-            content: "是否确定通过该员工申请，且设为管理员",
-            message: "禁用成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-        case 3:
-          this.layer({
-            row,
-            content: "是否确定删除员工申请",
-            message: "删除成功",
-            suFn() {
-              console.log("成功以后做的");
-            },
-            erFn() {
-              console.log("失败以后做的");
-            }
-          });
-          break;
-      }
-    },
-
-    /**
-     * @dir 封装的弹层
-     * @param null
-     * @return null
-     */
-    layer({ row, content, type, message, suFn, erFn }) {
-      console.log(row, "一些数据");
-      this.$confirm(content, "确认提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: type || "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: message
-          });
-          suFn();
-        })
-        .catch(() => {
-          // 取消操作
-          erFn();
-        });
     }
   },
   components: {
-    SearchThree,
-    CopyRight
+    SearchFour,
+    CopyRight,
+    StatusList
   },
   created() {
     for (let index = 0; index < 11; index++) {
@@ -228,7 +170,7 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../../assets/styl/fn.styl";
-#CheckEmployee
+#ApplyForAssess
   position relative
   .table-container
     width 1100px

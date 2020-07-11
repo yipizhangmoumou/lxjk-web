@@ -1,5 +1,6 @@
 <!--
     @dir 助贷机构管理 和 机构岗位管理 的数据筛选模块 这个高级搜索和上边的搜索可以通过事件传参的方式来进行更新table表格
+    当然你可以用slot 插槽，我懒得写了。 你要想优化就优化吧，不想优化就复制粘贴
     @date 2020年07月10日11:39:37
 -->
 
@@ -138,51 +139,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-#SearchTwo
-  background-color #fff
-  width 1100px
-  margin 20px auto 20px
-  .search-header
-    padding 14px 20px
-    box-sizing border-box
-    display flex
-    justify-content space-between
-    font-size 14px
-    font-weight bold
-    border-bottom 1px solid #e9e9e9
-    .btn
-      color #0079FE
-      cursor pointer
-  .search-form
-    padding 20px 25px 0
-    .el-form
-      display flex
-      >>> .el-input__inner
-        height 35px
-        line-height 35px
-      .btn-box
-        >>> .el-form-item__content
-          margin-left 16px !important
-  .dialog-from
-    >>> .el-dialog__body
-      padding 0 40px !important
-    .input-line
-      display flex
-      justify-content space-between
-    >>> .el-form-item
-      .el-form-item__label
-        width auto !important
-      .el-form-item__content
-        margin-left 0 !important
-    .el-input, .el-select
-      >>> .el-input__inner
-        width 240px
-    .close-if
-      font-size 14px
-      color #0079FE
-      margin-right 20px
-      cursor pointer
-    .el-date-editor.el-input, 
-    .el-date-editor.el-input__inner
-      width auto
+@import "../../assets/styl/search.styl";
 </style>
