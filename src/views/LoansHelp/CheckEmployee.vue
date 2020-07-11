@@ -76,7 +76,7 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchThree from "components/SearchThree";
+import SearchThree from "components/Search/SearchThree";
 export default {
   name: "CheckEmployee",
   data() {

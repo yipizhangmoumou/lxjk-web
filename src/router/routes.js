@@ -46,6 +46,18 @@ const routes = [
           name: 'log',
           meta: { name: '日志' },
           component: () => import("views/Log.vue")
+        },
+        {
+          path: '/applyForAssess',
+          name: 'applyForAssess',
+          meta: { name: '评估申请管理' },
+          component: () => import("views/FinancingService/ApplyForAssess")
+        },
+        {
+          path: '/serviceAdmin',
+          name: 'serviceAdmin',
+          meta: { name: '融资服务管理' },
+          component: () => import("views/FinancingService/ServiceAdmin")
         }
       ]
     },

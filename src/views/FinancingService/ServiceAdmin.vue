@@ -1,14 +1,12 @@
 <template>
-  <div id="OrganizationAdmin">
-    <SearchOne />
+  <div id="ServiceAdmin">
+    <StatusList :ArrayList="arrayList" />
+    <SearchFour />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
-          <el-button size="small" icon="el-icon-download">导入</el-button>
-          <el-button size="small" icon="el-icon-plus" type="primary">为机构新增员工</el-button>
-          <el-button size="small" icon="el-icon-plus" type="primary" @click="$router.push('/addOrganization')">添加机构</el-button>
         </div>
       </div>
       <div class="table">
@@ -21,44 +19,20 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="机构编号" width="120">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="机构名称" width="120"></el-table-column>
-          <el-table-column prop="address" label="所在地区"></el-table-column>
-          <el-table-column prop="employee" label="员工人数" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="联系人" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="联系方式" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-          <el-table-column prop="status" label="状态" width="80"></el-table-column>
-          <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
+          <el-table-column label="评估单号" prop="number"></el-table-column>
+          <el-table-column prop="name" label="评估时间"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
+          <el-table-column prop="employee" label="企业名称"></el-table-column>
+          <el-table-column prop="linkman" label="申请额度"></el-table-column>
+          <el-table-column prop="mobile" label="评估结果"></el-table-column>
+          <el-table-column prop="createTime" label="适用产品"></el-table-column>
+          <el-table-column prop="status" label="融资申请"></el-table-column>
+          <el-table-column prop="status" label="申请时间"></el-table-column>
+          <el-table-column prop="address" label="操作">
+            <template>
               <div class="cz">
                 <div>
-                  <i class="el-icon-edit"></i>
-                  编辑
-                </div>
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
-                </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  禁用
-                </div>
-                <div @click="operation(3, scope.row)">
-                  <i class="el-icon-delete-solid"></i>
-                  删除
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="codeUrl" label="结构员工推广码" width="120">
-            <template>
-              <div class="code">
-                <div>
-                  <i class="el-icon-picture"></i>
-                  推广码
+                  评估详情
                 </div>
               </div>
             </template>
@@ -66,7 +40,7 @@
         </el-table>
         <div class="page-container">
           <div class="selectBtn">
-            <el-button size="small" @click="selectAll">全选</el-button>
+            <!-- <el-button size="small" @click="selectAll">全选</el-button>
             <el-button size="small" @click="invertSelection(tableData)">反选</el-button>
             <el-select v-model="value" placeholder="批量操作">
               <el-option
@@ -75,7 +49,7 @@
                 :label="item.label"
                 :value="item.value"
               ></el-option>
-            </el-select>
+            </el-select> -->
           </div>
           <!-- 分页 -->
           <el-pagination
@@ -94,9 +68,10 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchOne from "components/Search/SearchOne";
+import SearchFour from "components/Search/SearchFour";
+import StatusList from "components/StatusList";
 export default {
-  name: "OrganizationAdmin",
+  name: "ServiceAdmin",
   data() {
     return {
       curr: 1,
@@ -108,7 +83,29 @@ export default {
           label: "黄金糕"
         }
       ],
-      value: ""
+      value: "",
+      arrayList:[
+        {
+          name:"待融资顾问服务",
+          count:2000,
+          color: "#58A3F7"
+        },
+        {
+          name:"待服务定制",
+          count:2000,
+          color: "#FEC03D"
+        },
+        {
+          name:"待服务执行",
+          count:2000,
+          color: "#FEC03D"
+        },
+        {
+          name:"已完成",
+          count:2000,
+          color: "#FB6260"
+        }
+      ]
     };
   },
   methods: {
@@ -223,8 +220,9 @@ export default {
     }
   },
   components: {
-    SearchOne,
-    CopyRight
+    SearchFour,
+    CopyRight,
+    StatusList
   },
   created() {
     for (let index = 0; index < 11; index++) {
@@ -246,7 +244,7 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../../assets/styl/fn.styl";
-#OrganizationAdmin
+#ServiceAdmin
   position relative
   .table-container
     width 1100px

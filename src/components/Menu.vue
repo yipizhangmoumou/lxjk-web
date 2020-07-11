@@ -61,11 +61,11 @@ export default {
                 name: '融资服务',
                 childrenList: [
                     {
-                        path: '/login',
+                        path: '/applyForAssess',
                         name:'评估申请管理'
                     },
                     {
-                        path: '/login',
+                        path: '/serviceAdmin',
                         name:'融资服务管理'
                     },
                      {

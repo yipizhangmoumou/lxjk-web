@@ -1,23 +1,29 @@
 <!--
     @dir 助贷机构管理 和 机构岗位管理 的数据筛选模块 这个高级搜索和上边的搜索可以通过事件传参的方式来进行更新table表格
+    当然你可以用slot 插槽，我懒得写了。 你要想优化就优化吧，不想优化就复制粘贴
     @date 2020年07月10日11:39:37
 -->
 
 <template>
-  <div id="SearchTwo">
+  <div id="SearchOne">
     <div class="search-header">
       <div class="title head-item">数据筛选</div>
       <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>
     </div>
     <div class="search-form">
       <el-form ref="search" :model="search" label-width="80px">
+        <!-- <slot name="baseSearch"></slot> -->
         <el-form-item label="输入查询">
-          <el-input placeholder="用户ID/手机号/姓名" v-model="search.name"></el-input>
+          <el-input placeholder="机构编号/名称/联系人" v-model="search.name"></el-input>
         </el-form-item>
-        <el-form-item label="机构">
-          <el-input placeholder="机构名称/编号" v-model="search.name"></el-input>
+        <el-form-item label="所在地区">
+          <el-select placeholder="全部" v-model="search.region">
+            <el-option label="全部" value></el-option>
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="岗位">
+        <el-form-item label="级别">
           <el-select placeholder="全部" v-model="search.jb">
             <el-option label="全部" value></el-option>
             <el-option label="区域一" value="shanghai"></el-option>
@@ -37,7 +43,7 @@
           <el-form-item label="输入查询：">
             <el-input v-model="form.name" placeholder="机构名称/联系人"></el-input>
           </el-form-item>
-          <el-form-item label="前台权限：">
+          <el-form-item label="机构级别：">
             <el-select v-model="form.jg" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
@@ -45,10 +51,10 @@
           </el-form-item>
         </div>
         <div class="input-line">
-          <el-form-item label="所属机构：">
-            <el-input v-model="form.num" placeholder="所属机构"></el-input>
+          <el-form-item label="机构编号：">
+            <el-input v-model="form.num" placeholder="机构编号"></el-input>
           </el-form-item>
-          <el-form-item label="员工岗位：">
+          <el-form-item label="账期类型：">
             <el-select v-model="form.zqtype" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
@@ -56,14 +62,26 @@
           </el-form-item>
         </div>
         <div class="input-line">
-          <el-form-item label="账号状态：">
+          <el-form-item label="所在地区：">
             <el-select v-model="form.address" placeholder="全部">
               <el-option label="全部" value></el-option>
               <el-option label="区域二" value="beijing"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="注册时间：">
-            <el-date-picker v-model="form.date" type="date" placeholder="选择注册时间"></el-date-picker>
+          <el-form-item label="创建时间：">
+            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
+          </el-form-item>
+        </div>
+        <div class="input-line">
+          <el-form-item label="特殊资源：">
+            <el-radio-group v-model="form.resource">
+              <el-radio
+                v-for="(item, index) in radioList"
+                :data-type="item.type"
+                :label="item.name"
+                :key="index"
+              ></el-radio>
+            </el-radio-group>
           </el-form-item>
         </div>
       </el-form>
@@ -78,7 +96,7 @@
 
 <script>
 export default {
-  name: "SearchTwo",
+  name: "SearchOne",
   data() {
     return {
       search: {
@@ -138,51 +156,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-#SearchTwo
-  background-color #fff
-  width 1100px
-  margin 20px auto 20px
-  .search-header
-    padding 14px 20px
-    box-sizing border-box
-    display flex
-    justify-content space-between
-    font-size 14px
-    font-weight bold
-    border-bottom 1px solid #e9e9e9
-    .btn
-      color #0079FE
-      cursor pointer
-  .search-form
-    padding 20px 25px 0
-    .el-form
-      display flex
-      >>> .el-input__inner
-        height 35px
-        line-height 35px
-      .btn-box
-        >>> .el-form-item__content
-          margin-left 16px !important
-  .dialog-from
-    >>> .el-dialog__body
-      padding 0 40px !important
-    .input-line
-      display flex
-      justify-content space-between
-    >>> .el-form-item
-      .el-form-item__label
-        width auto !important
-      .el-form-item__content
-        margin-left 0 !important
-    .el-input, .el-select
-      >>> .el-input__inner
-        width 240px
-    .close-if
-      font-size 14px
-      color #0079FE
-      margin-right 20px
-      cursor pointer
-    .el-date-editor.el-input, 
-    .el-date-editor.el-input__inner
-      width auto
+@import "../../assets/styl/search.styl";
 </style>
