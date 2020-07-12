@@ -4,7 +4,7 @@
             <div class="title-text">
                 <p>{{title}}</p>
             </div>
-            <div class="title-btn">
+            <div class="">
                 <el-button plain size="small" icon="el-icon-refresh" @click="reload">刷新</el-button>
                 <el-button plain size="small" icon="el-icon-arrow-left" @click="$router.go(-1)">返回</el-button>
             </div>

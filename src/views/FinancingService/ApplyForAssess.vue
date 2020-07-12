@@ -19,14 +19,14 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="评估单号" prop="number"></el-table-column>
-          <el-table-column prop="name" label="评估时间"></el-table-column>
-          <el-table-column prop="address" label="用户账号"></el-table-column>
-          <el-table-column prop="employee" label="企业名称"></el-table-column>
-          <el-table-column prop="linkman" label="申请额度"></el-table-column>
-          <el-table-column prop="mobile" label="评估结果"></el-table-column>
-          <el-table-column prop="createTime" label="适用产品"></el-table-column>
-          <el-table-column prop="status" label="融资申请"></el-table-column>
+          <el-table-column label="评估单号" prop="code"></el-table-column>
+          <el-table-column prop="createTime" label="评估时间"></el-table-column>
+          <el-table-column prop="userAccount" label="用户账号"></el-table-column>
+          <el-table-column prop="enterpriseName" label="企业名称"></el-table-column>
+          <el-table-column prop="financingAmount" label="申请额度"></el-table-column>
+          <el-table-column prop="applyResult" label="评估结果" :formatter="statushighest"></el-table-column>
+          <el-table-column prop="meetProductNum" label="适用产品"></el-table-column>
+          <el-table-column prop="financingPlanStatus" label="融资申请" :formatter="financingPlanStat"></el-table-column>
           <el-table-column prop="status" label="申请时间"></el-table-column>
           <el-table-column prop="address" label="操作">
             <template>
@@ -55,7 +55,7 @@
           <el-pagination
             :current-page="curr"
             :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="400"
           ></el-pagination>
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       curr: 1,
+      pageSize:10,
       tableData: [],
       multipleSelection: [],
       options: [
@@ -118,39 +119,61 @@ export default {
     selectAll() {
       this.$refs.multipleTable.toggleAllSelection();
     },
-
+    statushighest(row){
+      if (row.applyResult == 0) return '失败'
+      if (row.applyResult == 1) return '成功'
+    },
+    financingPlanStat(row){
+      if (row.financingPlanStatus == '1') return '未申请'
+      if (row.financingPlanStatus == '2') return '已申请'
+    }
     /**
      * @dir 反选
      * @param null
      * @return null
      */
 
-    invertSelection(rows) {
-      let arr = [];
-      this.tableData.forEach((e, index) => {
-        rows.forEach(i => {
-          if (e.id_ === i.id_) {
-            arr.push(this.tableData[index]);
-          }
-        });
-      });
-      if (arr) {
-        this.$nextTick(() => {
-          arr.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    }
+    // invertSelection(rows) {
+    //   let arr = [];
+    //   this.tableData.forEach((e, index) => {
+    //     rows.forEach(i => {
+    //       if (e.id_ === i.id_) {
+    //         arr.push(this.tableData[index]);
+    //       }
+    //     });
+    //   });
+    //   if (arr) {
+    //     this.$nextTick(() => {
+    //       arr.forEach(row => {
+    //         this.$refs.multipleTable.toggleRowSelection(row);
+    //       });
+    //     });
+    //   } else {
+    //     this.$refs.multipleTable.clearSelection();
+    //   }
+    // }
   },
   components: {
     SearchFour,
     CopyRight,
     StatusList
   },
+  mounted() {
+    const param={
+      
+      page:this.curr,
+      size:this.pageSize
+    }
+     this.$axios.post('/api/mgm/assessmentApply/listData',param)
+        .then((res) => {
+          if(res.code===0){
+            this.tableData=res.data.mgmAssessmentApplyList;
+          }
+           
+        })
+  },
   created() {
+   
     for (let index = 0; index < 11; index++) {
       this.tableData.push({
         number: parseInt(Math.random() * 1000000),
