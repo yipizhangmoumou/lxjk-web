@@ -1,7 +1,7 @@
 <template>
   <div id="ServiceDetails">
     <!-- 服务详情 -->
-    <elSteps :stepArr='stepArr' :stepActive="stepActive" />
+    <ElSteps :stepArr='stepArr' :stepActive="stepActive" />
     <div class="list-container">
       <div class="top-info">
         <div class="info-message">
@@ -34,7 +34,7 @@
                       <el-table-column prop="address" label="操作" width="150">
             <template>
               <div class="cz">
-                <div>点击查看</div>
+                <div @click="goEvaluationDetails">点击查看</div>
               </div>
             </template>
           </el-table-column>
@@ -285,11 +285,11 @@
 </template>
 
 <script>
-import elSteps from 'components/elSteps'
+import ElSteps from "components/ElSteps";
 export default {
   name:'ServiceDetails',
   components:{
-    elSteps
+    ElSteps
   },
   data(){
     return {
@@ -297,12 +297,12 @@ export default {
       actionData:[],
       form:{},
       stepArr:[
-        {title:'融资顾问服务',description:'2020.07.10 15:43:23'},
-        {title:'服务定制',description:'2020.07.10 15:43:23'},
-        {title:'服务执行',description:'执行中'},
-        {title:'完成',description:''},
+        {name:'融资顾问服务',time:'2020.07.10 15:43:23'},
+        {name:'服务定制',time:'2020.07.10 15:43:23'},
+        {name:'服务执行',time:'执行中'},
+        {name:'完成',time:''},
       ],
-      stepActive:'0',
+      stepActive: 1,
       companyInfo:{
         companyName:'湖南XXXX科技有限公司',
         companyType:'有限公司',
@@ -366,6 +366,9 @@ export default {
     seeAssurance(){
       this.showAssurance = true;
     },
+    goEvaluationDetails(){
+        this.$router.push("/evaluationDetails")
+    }
   },
 
 }
@@ -378,6 +381,7 @@ export default {
   .list-container
     width 1100px
     margin 0 auto 200px
+    margin-top: 20px;
     background-color #fff
     box-sizing border-box
     .top-info

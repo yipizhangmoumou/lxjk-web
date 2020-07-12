@@ -31,7 +31,7 @@
           <el-table-column prop="address" label="操作">
             <template>
               <div class="cz">
-                <div>
+                <div @click="goEvaluationDetails">
                   评估详情
                 </div>
               </div>
@@ -126,7 +126,10 @@ export default {
     financingPlanStat(row){
       if (row.financingPlanStatus == '1') return '未申请'
       if (row.financingPlanStatus == '2') return '已申请'
-    }
+    },
+    goEvaluationDetails(){
+        this.$router.push("/evaluationDetails")
+    },
     /**
      * @dir 反选
      * @param null
