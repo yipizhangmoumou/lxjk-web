@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="most-div pd20">
-            <h5><i class="el-icon-collection-tag" type="primary"></i>融资执行方案</h5>
+            <h5><i class="el-icon-collection-tag" type="primary"></i>企业信息完善</h5>
             <el-tabs type="border-card" class="j_tabs" :stretch="true">
   <el-tab-pane>
     <span slot="label"> 我的行程<i class="el-icon-circle-check"></i></span>
@@ -250,12 +250,12 @@
           <el-row>
             <el-col :span='12'>
               <el-form-item label="担保方式：" class="form-margin">
-                <el-input v-model="form.name" placeholder="请输入担保方式"></el-input>
+                <el-input readonly v-model="form.name" placeholder="请输入担保方式"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
               <el-form-item label="担保人：" class="form-margin">
-                <el-input v-model="form.name" placeholder="请输入担保人"></el-input>
+                <el-input readonly v-model="form.name" placeholder="请输入担保人"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -264,19 +264,19 @@
           <el-row>
             <el-col :span="12">
             <el-form-item label="担保人身份证件：" class="form-margin">
-              <el-input v-model="form.num" placeholder="请输入担保人身份证"></el-input>
+              <el-input readonly v-model="form.num" placeholder="请输入担保人身份证"></el-input>
             </el-form-item>              
             </el-col>
             <el-col :span="12">
             <el-form-item label="担保人电话：" class="form-margin">
-              <el-input v-model="form.name" placeholder="请输入担保人电话"></el-input>
+              <el-input readonly v-model="form.name" placeholder="请输入担保人电话"></el-input>
             </el-form-item>              
             </el-col>
           </el-row>
         </div>
         <div class="input-line">
           <el-form-item label="账号状态：" class="form-margin">
-            <el-input v-model="form.name" type="textarea" placeholder="请输入账号状态"></el-input>
+            <el-input readonly v-model="form.name" type="textarea" placeholder="请输入账号状态"></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -336,6 +336,7 @@ export default {
       },
       showAssurance:false,
       src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
+
     }
   },
   created(){
