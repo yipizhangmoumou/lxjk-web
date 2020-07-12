@@ -166,32 +166,7 @@ export default {
     beforeDestroy () {
 
     },
-    
-    watch: {
-        visible (val) {
-            if(val) {
-                if(this.data.id) {
-                    this.isNew = false
-                    this.form = {
-                        "id": this.data.id,
-                        "parentId": this.parentObj.id,
-                        "code": this.data.code,
-                        "dictValue": this.data.value
-                    }
-                } else {
-                    this.isNew = true
-                    this.form = {
-                        "id": null,
-                        "parentId": this.parentObj.id,
-                        "code": this.parentObj.code,
-                        "dictValue": ""
-                    }
-                }
 
-                this.$refs.form && this.$refs.form.clearValidate()
-            }
-        }
-    },
   
 }
 </script>

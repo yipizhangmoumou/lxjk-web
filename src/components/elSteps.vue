@@ -1,8 +1,16 @@
 <template>
-  <div class="step-container">
-    <el-steps class="step-step"  :active="1" finish-status="success">
-  <el-step v-for="(item,index) in stepArr" :key="index" :title="item.title" :description="item.description"></el-step>
-</el-steps>
+  <div id="stepContainer">
+    <!-- <el-steps class="step-step"  :active="1" finish-status="success">
+        <el-step v-for="(item,index) in stepArr" :key="index" :title="item.title" :description="item.description"></el-step>
+    </el-steps> -->
+    <el-steps :active="stepActive" align-center>
+        <el-step 
+            v-for = "(step,idx) in stepArr"
+            :key="idx"
+            :title="step.name" 
+            :description="step.time">
+        </el-step>
+    </el-steps>
   </div>
 </template>
 
@@ -14,7 +22,7 @@ export default {
                 required: true
             },
             stepActive:{
-              type:String,
+              type:Number,
             }
         },
   data(){
@@ -22,26 +30,19 @@ export default {
 
     }
   },
-  mounted(){
-    console.log(this.stepArr,this.stepActive);
-  },
+//   mounted(){
+//     console.log(this.stepArr,this.stepActive);
+//   },
 }
 </script>
 
 <style lang="stylus" scoped>
-.step-container
+#stepContainer
+    margin 0 auto
+    margin-top 20px
+    padding 30px
     width 1100px
-    height 200px
-    margin 20px auto
     background-color #fff
-    box-sizing border-box
-    display flex
-    justify-content center
-    align-items center
-    .el-steps
-      width 80%
-      margin 0 auto
-      .el-step
-        width 20% !important
+    box-sizing border-box 
 
 </style>

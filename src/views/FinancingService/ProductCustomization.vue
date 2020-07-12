@@ -75,7 +75,7 @@
                     </div>
                     <div class="table">
                         <el-table
-                            :data="byUseProTableData"
+                            :data="alerdyProTableData"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
@@ -154,7 +154,7 @@ export default {
                 data: {}
             },
             proCustEditData: {
-                visible: true,
+                visible: false,
                 data: {}
             },
 
@@ -183,7 +183,7 @@ export default {
             });
         }
 
-        for (let index = 0; index < 3; index++) {
+        for (let index = 0; index < 2; index++) {
             this.alerdyProTableData.push({
                 id: index+1,
                 proId: parseInt(Math.random() * 1000000),

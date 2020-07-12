@@ -75,7 +75,7 @@ const routes = [
             path: '/evaluationDetails',
             name: 'evaluationDetails',
             meta: {
-                name: '评估报告'
+                name: '评估详情'
             },
             component: () => import("views/FinancingService/EvaluationDetails")
         }, 

@@ -1,6 +1,6 @@
 <template>
   <div id="EvaluationDetails">
-        <div class="steps-container">
+        <!-- <div class="steps-container">
             <el-steps :active="2" align-center>
                 <el-step 
                     v-for = "(step,idx) in stepData"
@@ -8,7 +8,8 @@
                     :title="step.name" 
                     :description="step.time"></el-step>
             </el-steps>
-        </div>
+        </div> -->
+        <ElSteps :stepArr="stepData" :stepActive="stepActive" />
 
         <div class="evaluation-details">
             <div class="details-header">
@@ -295,7 +296,8 @@
 </template>
 
 <script>
-import CopyRight from "components/CopyRight"
+import ElSteps from "components/ElSteps";
+import CopyRight from "components/CopyRight";
 export default {
     name: "evaluationDetails",
     data() {
@@ -314,6 +316,7 @@ export default {
                     time: "2020.07.10 15:43:23"
                 }
             ],
+            stepActive: 2,
 
             baseInfoTableData: [
                 {
@@ -357,6 +360,7 @@ export default {
     },
     components: {
         // SearchFour,
+        ElSteps,
         CopyRight,
         // StatusList
     },
@@ -383,16 +387,16 @@ export default {
 @import "../../assets/styl/fn.styl";
 #EvaluationDetails
     position relative
-    .steps-container
-        margin 0 auto
-        margin-top 20px
-        padding 30px
-        width 1100px
-        background-color #fff
-        box-sizing border-box   
+    // .steps-container
+    //     margin 0 auto
+    //     margin-top 20px
+    //     padding 30px
+    //     width 1100px
+    //     background-color #fff
+    //     box-sizing border-box   
 
     .evaluation-details
-        margin 0 auto
+        margin 0 auto 200px
         margin-top 16px
         width 1100px
         background-color #fff
