@@ -1,8 +1,5 @@
 <template>
   <div id="stepContainer">
-    <!-- <el-steps class="step-step"  :active="1" finish-status="success">
-        <el-step v-for="(item,index) in stepArr" :key="index" :title="item.title" :description="item.description"></el-step>
-    </el-steps> -->
     <el-steps :active="stepActive" align-center>
         <el-step 
             v-for = "(step,idx) in stepArr"
@@ -30,9 +27,6 @@ export default {
 
     }
   },
-//   mounted(){
-//     console.log(this.stepArr,this.stepActive);
-//   },
 }
 </script>
 
