@@ -66,6 +66,12 @@ const routes = [
           component: () => import("views/FinancingService/ExecutiveProgramme")
         },
         {
+          path: '/ServiceDetails',
+          name: 'ServiceDetails',
+          meta: { name: '融资服务详情' },
+          component: () => import("views/FinancingService/ServiceDetails")
+        },
+        {
           path: '/customization',
           name: 'customization',
           meta: { name: '服务定制' },

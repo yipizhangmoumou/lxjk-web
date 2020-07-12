@@ -58,7 +58,7 @@
           <el-table-column prop="address" label="操作" width="150">
             <template>
               <div class="cz">
-                <div>融资服务详情</div>
+                <div @click="goDeatils()">融资服务详情</div>
               </div>
             </template>
           </el-table-column>
@@ -185,7 +185,13 @@ export default {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    }
+    },
+    goDeatils(){
+      this.$router.push({
+        path:'/ServiceDetails',
+
+      })
+    },
   },
   components: {
     SearchSix,
