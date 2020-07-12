@@ -51,7 +51,7 @@
             <span>产品定制</span>
           </div>
           <div>
-              <el-button type="primary" icon="el-icon-s-open">定制融资产品/查看详情</el-button>
+              <el-button type="primary" icon="el-icon-s-open" @click="goProductCustomization()">定制融资产品/查看详情</el-button>
           </div>
         </div>
         <div class="table">
@@ -98,36 +98,46 @@
 <script>
 import CopyRight from "components/CopyRight";
 export default {
-  name: "Customization",
-  data() {
-    return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
+    name: "Customization",
+    data() {
+        return {
+            tableData: [
+                {
+                    date: "2016-05-02",
+                    name: "王小虎",
+                    address: "上海市普陀区金沙江路 1518 弄"
+                },
+                {
+                    date: "2016-05-04",
+                    name: "王小虎",
+                    address: "上海市普陀区金沙江路 1517 弄"
+                },
+                {
+                    date: "2016-05-01",
+                    name: "王小虎",
+                    address: "上海市普陀区金沙江路 1519 弄"
+                },
+                {
+                    date: "2016-05-03",
+                    name: "王小虎",
+                    address: "上海市普陀区金沙江路 1516 弄"
+                }
+            ]
+        };
+    },
+    components: {
+        CopyRight
+    },
+    methods: {
+        /**
+         * @description: 【定制融资产品/查看详情】按钮跳转
+         * @Date Changed: 2020-07-12
+         */
+        goProductCustomization(){
+            console.log( "定制融资产品/查看详情" );
+            this.$router.push("/productCustomization")
         }
-      ]
-    };
-  },
-  components: {
-    CopyRight
-  }
+    }
 };
 </script>
 

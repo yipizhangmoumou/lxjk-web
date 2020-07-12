@@ -31,7 +31,7 @@
           <el-table-column prop="address" label="操作">
             <template>
               <div class="cz">
-                <div>
+                <div @click="goEvaluationDetails">
                   评估详情
                 </div>
               </div>
