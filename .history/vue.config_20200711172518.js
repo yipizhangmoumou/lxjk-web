@@ -10,9 +10,10 @@ module.exports = {
             '/api': {
                 target: 'https://www.risesin.com/api',
                 secure: false,
+
                 changeOrigin: true,
                 pathRewrite: {
-                  '^/api': ''
+                    '^/api': ''
                 }
             }
         }

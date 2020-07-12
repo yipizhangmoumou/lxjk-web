@@ -9,10 +9,11 @@ module.exports = {
         proxy: {
             '/api': {
                 target: 'https://www.risesin.com/api',
-                secure: false,
+                // secure: false,
+                ws: true,
                 changeOrigin: true,
                 pathRewrite: {
-                  '^/api': ''
+                    '^/api': ''
                 }
             }
         }

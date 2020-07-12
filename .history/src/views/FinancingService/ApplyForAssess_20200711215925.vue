@@ -21,7 +21,7 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="评估单号" prop="code"></el-table-column>
           <el-table-column prop="createTime" label="评估时间"></el-table-column>
-          <el-table-column prop="userAccount" label="用户账号"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
           <el-table-column prop="enterpriseName" label="企业名称"></el-table-column>
           <el-table-column prop="financingAmount" label="申请额度"></el-table-column>
           <el-table-column prop="applyResult" label="评估结果" :formatter="statushighest"></el-table-column>

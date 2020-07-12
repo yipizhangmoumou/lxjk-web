@@ -21,11 +21,11 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="评估单号" prop="code"></el-table-column>
           <el-table-column prop="createTime" label="评估时间"></el-table-column>
-          <el-table-column prop="userAccount" label="用户账号"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
           <el-table-column prop="enterpriseName" label="企业名称"></el-table-column>
           <el-table-column prop="financingAmount" label="申请额度"></el-table-column>
           <el-table-column prop="applyResult" label="评估结果" :formatter="statushighest"></el-table-column>
-          <el-table-column prop="meetProductNum" label="适用产品"></el-table-column>
+          <el-table-column prop="createTime" label="适用产品"></el-table-column>
           <el-table-column prop="financingPlanStatus" label="融资申请" :formatter="financingPlanStat"></el-table-column>
           <el-table-column prop="status" label="申请时间"></el-table-column>
           <el-table-column prop="address" label="操作">
@@ -124,8 +124,8 @@ export default {
       if (row.applyResult == 1) return '成功'
     },
     financingPlanStat(row){
-      if (row.financingPlanStatus == '1') return '未申请'
-      if (row.financingPlanStatus == '2') return '已申请'
+      if (row.financingPlanStat == '1') return '未申请'
+      if (row.financingPlanStat == '2') return '已申请'
     }
     /**
      * @dir 反选

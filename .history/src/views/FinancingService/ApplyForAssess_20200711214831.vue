@@ -21,12 +21,12 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="评估单号" prop="code"></el-table-column>
           <el-table-column prop="createTime" label="评估时间"></el-table-column>
-          <el-table-column prop="userAccount" label="用户账号"></el-table-column>
+          <el-table-column prop="address" label="用户账号"></el-table-column>
           <el-table-column prop="enterpriseName" label="企业名称"></el-table-column>
           <el-table-column prop="financingAmount" label="申请额度"></el-table-column>
           <el-table-column prop="applyResult" label="评估结果" :formatter="statushighest"></el-table-column>
-          <el-table-column prop="meetProductNum" label="适用产品"></el-table-column>
-          <el-table-column prop="financingPlanStatus" label="融资申请" :formatter="financingPlanStat"></el-table-column>
+          <el-table-column prop="createTime" label="适用产品"></el-table-column>
+          <el-table-column prop="status" label="融资申请"></el-table-column>
           <el-table-column prop="status" label="申请时间"></el-table-column>
           <el-table-column prop="address" label="操作">
             <template>
@@ -120,13 +120,18 @@ export default {
       this.$refs.multipleTable.toggleAllSelection();
     },
     statushighest(row){
-      if (row.applyResult == 0) return '失败'
-      if (row.applyResult == 1) return '成功'
+      if (row.highestEdu == 0) return ''
+      if (row.highestEdu == '2') return '初中'
+      if (row.highestEdu == '3') return '高中'
+      if (row.highestEdu == '4') return '中专'
+      if (row.highestEdu ==='5') return '大专'
+      if (row.highestEdu == '6') return '本科'
+      if (row.highestEdu == '7') return '研究生'
+      if (row.highestEdu == '8') return '博士'
+      if (row.highestEdu == '9') return '博士后'
     },
-    financingPlanStat(row){
-      if (row.financingPlanStatus == '1') return '未申请'
-      if (row.financingPlanStatus == '2') return '已申请'
-    }
+
+
     /**
      * @dir 反选
      * @param null
