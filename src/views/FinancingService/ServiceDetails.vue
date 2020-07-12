@@ -82,7 +82,7 @@
         </div>
         <div class="most-div pd20">
             <h5><i class="el-icon-collection-tag" type="primary"></i>融资执行方案</h5>
-            <el-tabs type="border-card" :stretch="true">
+            <el-tabs type="border-card" class="j_tabs" :stretch="true">
   <el-tab-pane>
     <span slot="label"> 我的行程<i class="el-icon-circle-check"></i></span>
 <el-form label-position="top" label-width="80px" :model="companyInfo">
@@ -170,7 +170,8 @@
   </el-row>
 </el-form>
   </el-tab-pane>
-  <el-tab-pane label="消息中心">
+  <el-tab-pane>
+    <span slot="label"> 消息中心<i class="el-icon-circle-check"></i></span>
     <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -192,7 +193,8 @@
   </el-row>
   </el-form>
   </el-tab-pane>
-  <el-tab-pane label="角色管理">
+  <el-tab-pane>
+    <span slot="label"> 角色管理<i class="el-icon-circle-check"></i></span>
 <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -202,7 +204,9 @@
   </el-row>
   </el-form>
   </el-tab-pane>
-  <el-tab-pane label="定时任务补偿">
+  <el-tab-pane>
+    
+    <span slot="label"> 定时任务补偿<i class="el-icon-circle-check"></i></span>
     <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -241,17 +245,17 @@
     </div>
     <!-- 担保详情 -->
     <el-dialog title="担保详情" class="dialog-from j_dialog" :visible.sync="showAssurance" width="600px">
-      <el-form ref="form" :model="form" label-width="130px">
+      <el-form ref="form" :model="form" label-position="top" label-width="130px">
         <div class="input-line">
           <el-row>
             <el-col :span='12'>
-              <el-form-item label="担保方式：">
-                <el-input v-model="form.name" placeholder="机构名称/联系人"></el-input>
+              <el-form-item label="担保方式：" class="form-margin">
+                <el-input v-model="form.name" placeholder="请输入担保方式"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
-              <el-form-item label="担保人：">
-                <el-input v-model="form.name" placeholder="机构名称/联系人"></el-input>
+              <el-form-item label="担保人：" class="form-margin">
+                <el-input v-model="form.name" placeholder="请输入担保人"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -259,20 +263,20 @@
         <div class="input-line">
           <el-row>
             <el-col :span="12">
-            <el-form-item label="担保人身份证件：">
-              <el-input v-model="form.num" placeholder="所属机构"></el-input>
+            <el-form-item label="担保人身份证件：" class="form-margin">
+              <el-input v-model="form.num" placeholder="请输入担保人身份证"></el-input>
             </el-form-item>              
             </el-col>
             <el-col :span="12">
-            <el-form-item label="担保人电话：">
-              <el-input v-model="form.name" placeholder="机构名称/联系人"></el-input>
+            <el-form-item label="担保人电话：" class="form-margin">
+              <el-input v-model="form.name" placeholder="请输入担保人电话"></el-input>
             </el-form-item>              
             </el-col>
           </el-row>
         </div>
         <div class="input-line">
-          <el-form-item label="账号状态：">
-            <el-input v-model="form.name" type="textarea" placeholder="机构名称/联系人"></el-input>
+          <el-form-item label="账号状态：" class="form-margin">
+            <el-input v-model="form.name" type="textarea" placeholder="请输入账号状态"></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -432,9 +436,20 @@ export default {
   img
     width 100%
     height 100%    
+.form-margin
+  padding 0 20px
 
 </style>
 <style lang="stylus">
 .j_dialog .el-dialog__header
   background rgb(242,242,242) !important
+.j_dialog /deep/.el-form--label-top .el-form-item__label
+    padding 0px !important 
+.j_dialog .el-form .el-col
+  margin 0px
+.j_tabs
+  box-shadow none !important
+.j_tabs .el-tabs__item .el-icon-circle-check
+  color #67C23A
+
 </style>
