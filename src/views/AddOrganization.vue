@@ -276,7 +276,7 @@
         </div>
         <div class="submit-btn">
           <el-button type="primary" @click="addForm">提交</el-button>
-          <el-button @click="resetForm">重置</el-button>
+          <el-button @click="resetForm">取消</el-button>
         </div>
       </el-form>
     </div>
@@ -383,17 +383,7 @@ export default {
         .catch(err => {console.log(err)})
     },
     resetForm() {
-        // 重置 记得改这里
-        this.form = {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      }
+      this.$router.back(-1)
     }
   },
   components: {

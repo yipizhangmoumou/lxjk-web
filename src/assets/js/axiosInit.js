@@ -19,7 +19,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const SUCCESS_CODE = 0
-    // const NOT_LOGIN = 100
+    const NOT_LOGIN = 100
+    if (window.location.href.indexOf('login') === -1 && response.data && response.data.code === NOT_LOGIN) {
+      window.location.href = '#/login'
+    }
     // 如果请求头里的 header 有个 needReturnAll 则直接返回 response
     if (response.config.headers.needReturnAll) return response
     // 如果有数据而且状态码为成功，则返回数据

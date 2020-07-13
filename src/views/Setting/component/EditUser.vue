@@ -16,7 +16,7 @@
                 <el-input v-model="form.userName" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="用户类型" prop="userType">
-                <el-select v-model="form.userType" placeholder="" class="full-width">
+                <el-select v-model="form.userType" placeholder="" class="full-width" :disabled="!!this.form.pkId">
                     <el-option
                             v-for="item in userTypeList"
                             :key="item.value"

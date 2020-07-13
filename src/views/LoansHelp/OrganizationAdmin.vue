@@ -21,7 +21,11 @@
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="area" label="区域"></el-table-column>
+          <el-table-column prop="area" label="区域">
+            <template v-slot="{row}">
+              {{getAreaName(row.area)}}
+            </template>
+          </el-table-column>
 <!--          <el-table-column prop="empNumber" label="所在地区"></el-table-column>-->
           <el-table-column prop="leader" label="负责人"></el-table-column>
           <el-table-column prop="name" label="公司名称"></el-table-column>
@@ -79,6 +83,7 @@ export default {
   name: "OrganizationAdmin",
   data() {
     return {
+      key:0,
       listApiUrl: '/api/mgm/loanAgency/queryList',
       dataKey: 'mgmLoanAgencyList',
       multipleSelection: [],
@@ -88,11 +93,47 @@ export default {
           label: "黄金糕"
         }
       ],
-      value: ""
+      value: "",
+      areaTree: []
     };
   },
   mixins: [tableMixin],
   methods: {
+    getAreaName(code) {
+      if(!code) return '-'
+      console.log(this.areaTree)
+      let info = this.recursion(this.areaTree, code)
+      console.log(info)
+      return (info && info.name) || '-'
+    },
+    deleteEmpty (arr) {
+      return arr.map(v => {
+        if (v.children && v.children.length) {
+          v.children = this.deleteEmpty(v.children)
+        } else {
+          delete v.children
+        }
+        return v
+      })
+    },
+    getAreaTree () {
+      this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
+        this.areaTree = this.deleteEmpty(res.data.areaTree)
+      })
+    },
+    recursion(data, current){
+      let result = null;
+      for(let i in data){
+        let item = data[i];
+        if(item.code === current){
+          result = item;
+          break;
+        }else if(item.children){
+          this.recursion(item.children, current) && (result = this.recursion(item.children, current));
+        }
+      }
+      return result;
+    },
     handleEdit(row) {
       this.$router.push({path: '/addOrganization', query: {id: row.pkId}})
     },
@@ -225,6 +266,9 @@ export default {
     CopyRight
   },
   created() {
+    this.getAreaTree()
+  },
+  mounted () {
     this.getTableData()
   }
 };
