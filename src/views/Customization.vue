@@ -643,6 +643,25 @@ export default {
     components: {
         CopyRight
     },
+    mounted(){
+      
+      console.log(this.$route.params.financingCode);
+      let planCode = this.$route.params.financingCode;
+
+      let url ='/api/mgm/financingPlan/serviceCustomization'
+       this.$axios.post(url,{
+         planCode:planCode
+       })
+      .then(res=>{
+        console.log(res);
+        // if(res.code == 0){
+        //   // let datas =res.data;
+
+        // }else{
+
+        // }
+      })  
+    },
     methods: {
         /**
          * @description: 【定制融资产品/查看详情】按钮跳转
