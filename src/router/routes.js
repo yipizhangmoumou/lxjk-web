@@ -66,6 +66,28 @@ const routes = [
           component: () => import("views/FinancingService/ExecutiveProgramme")
         },
         {
+          path: '/ServiceDetails',
+          name: 'ServiceDetails',
+          meta: { name: '融资服务详情' },
+          component: () => import("views/FinancingService/ServiceDetails")
+        },
+        {
+            path: '/evaluationDetails',
+            name: 'evaluationDetails',
+            meta: {
+                name: '评估详情'
+            },
+            component: () => import("views/FinancingService/EvaluationDetails")
+        }, 
+        {
+            path: '/productCustomization',
+            name: 'productCustomization',
+            meta: {
+                name: '产品定制'
+            },
+            component: () => import("views/FinancingService/ProductCustomization")
+        },
+        {
           path: '/customization',
           name: 'customization',
           meta: { name: '服务定制' },
@@ -104,14 +126,14 @@ const routes = [
       ]
     },
     {
-      path: "/login",
-      name: "Login",
-      component:() => import("views/Login.vue")
+        path: "/login",
+        name: "Login",
+        component: () => import("views/Login.vue")
 
     },
     {
-      path: "*",
-      redirect: "/"
+        path: "*",
+        redirect: "/"
     }
 ]
 
