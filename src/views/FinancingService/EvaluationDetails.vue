@@ -1,14 +1,5 @@
 <template>
   <div id="EvaluationDetails">
-        <!-- <div class="steps-container">
-            <el-steps :active="2" align-center>
-                <el-step 
-                    v-for = "(step,idx) in stepData"
-                    :key="idx"
-                    :title="step.name" 
-                    :description="step.time"></el-step>
-            </el-steps>
-        </div> -->
         <ElSteps :stepArr="stepData" :stepActive="stepActive" />
 
         <div class="evaluation-details">
@@ -302,6 +293,11 @@ export default {
     name: "evaluationDetails",
     data() {
         return {
+            codeId: "", // 评估单号
+
+            initData: {},
+
+
             stepData: [
                 {
                     name: "评估申请",
@@ -365,6 +361,13 @@ export default {
         // StatusList
     },
     created() {
+
+        let codeId = this.codeId = this.$route.params.codeId;
+
+        this.getInitData(codeId);
+
+
+
         for (let index = 0; index < 3; index++) {
             this.byUseProTableData.push({
                 id: index+1,
@@ -379,6 +382,26 @@ export default {
                 maxSalary: "2020-03-09 12:34:23"
             });
         }
+    },
+
+    methods: {
+
+        /**
+         * @description: 获取页面初始数据
+         * @param {string} codeId 
+         * @Date Changed: 2020-07-14
+         */
+        getInitData(codeId){
+            console.log( "codeId>>>", codeId );
+
+            this.$axios.post(`/api/mgm/assessmentApply/detail/${codeId}`)
+                .then(res=>{
+                    console.log( "评估详情数据响应：", res );
+                })
+            
+
+        }
+
     }
 };
 </script>

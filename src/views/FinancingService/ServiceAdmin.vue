@@ -51,7 +51,7 @@
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
                         <div class="cz">
-                            <div @click="goCustomization(scope.row.financingCode)">定制服务</div>
+                            <div v-if="scope.row.isCustomize" @click="goCustomization(scope.row.financingCode)">定制服务</div>
                             <div @click="goServiceDetails(scope.row.financingCode)">融资服务详情</div>
                         </div>
                     </template>
@@ -87,9 +87,12 @@
 
         <!-- 分配融资顾问---【弹出窗】 -->
         <el-dialog title="分配融资顾问" :visible.sync="isShowAdvisor" width="30%">
-            <el-form :model="form">
-                <el-form-item label="选择融资顾问：" label-width="120px">
-                    <el-select v-model="form.region" placeholder="请选择融资顾问">
+            <el-form :model="advisorFrom" :rules="advisorFromRules" ref="advisorFrom">
+                <el-form-item label="选择融资顾问：" label-width="120px" prop="id">
+                    <el-select 
+                        v-model="advisorFrom.id" 
+                        @change="advisorSelected"
+                        placeholder="请选择融资顾问">
                         <el-option 
                             v-for="(custServ,idx) in custServList" 
                             :key="idx"
@@ -99,10 +102,11 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <p style="margin-left:52px">当前服务客户数：3人</p>
+            <p style="margin-left:52px">当前服务客户数：{{advisorFrom.servNum}}人</p>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="isShowAdvisor = false">取 消</el-button>
-                <el-button type="primary" @click="isShowAdvisor = false">确 定</el-button>
+                <el-button type="primary" @click="submitAdvisorFrom('advisorFrom')">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -127,25 +131,25 @@ export default {
                 {
                     name: "待融资顾问服务",
                     key: "waitSeredNum",
-                    count: 2000,
+                    count: 0,
                     color: "#58A3F7"
                 },
                 {
                     name: "待服务定制",
                     key: "waitMadeNum",
-                    count: 2000,
+                    count: 0,
                     color: "#FEC03D"
                 },
                 {
                     name: "待服务执行",
                     key: "waitActionNum",
-                    count: 2000,
+                    count: 0,
                     color: "#FEC03D"
                 },
                 {
                     name: "已完成",
                     key: "finishedNum",
-                    count: 2000,
+                    count: 0,
                     color: "#FB6260"
                 }
             ],
@@ -172,29 +176,28 @@ export default {
             isShowAdvisor: false,   // 分配融资顾问弹窗
             // 融资顾问列表
             custServList: [],
+
+            // 融资顾问表单验证
+            advisorFromRules: {
+                id: [
+                    { required: true, message: '请选定融资顾问', trigger: 'blur' }
+                ],
+            },
+
+            // 融资顾问表单
+            advisorFrom: {
+                id: "",
+                servNum: 0
+            },
             
-
-
-
-
-
-            multipleSelection: [],
+            // 融资服务提交数据
 
 
             
             options:{},
             value:"",
-            form: {
-                name: "",
-                region: "",
-                date1: "",
-                date2: "",
-                delivery: false,
-                type: [],
-                resource: "",
-                desc: ""
-            },
-            formLabelWidth: "120px",
+
+            
 
         };
     },
@@ -238,7 +241,7 @@ export default {
                                 item.count = data.waitActionNum;
                             }
                             if( item.key == 'finishedNum' ){
-                                item.count = data.finishedNum   ;
+                                item.count = data.finishedNum;
                             }
                         });
                     }
@@ -248,8 +251,7 @@ export default {
 
         /**
          * @description: 初始数据加载：数据列表数据获取
-         * @param {type} 
-         * @return: 
+         * @param {object}  filterObj 筛选条件
          * @Date Changed: 2020-07-13
          */      
         getTableData(filterObj){
@@ -280,7 +282,7 @@ export default {
                 console.log( "获取数据列表", res );
                 if( res.code == 0 ){
                     let data = res.data;
-                    this.tableData = data.mgmFinancingPlanList.map(item=>{
+                    this.tableData = data != null ? data.mgmFinancingPlanList.map(item=>{
                         return {
                             financingCode: !item.financingCode ? "-" : item.financingCode,// 服务单号
                             userAccount: !item.userAccount ? "-" : item.userAccount,// 用户账号
@@ -292,11 +294,12 @@ export default {
                             selectProductNum: item.selectProductNum == null ? "-" : `${item.selectProductNum}项`,// 选择产品
                             createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),// 申请时间
                             custServName: !item.custServName ? "-" :  item.custServName,// 融资顾问
+                            isCustomize: !item.custServName ? false :  true,// 定制服务按钮显示/隐藏
                             actionStatus: item.actionStatus == null ? "-" : this.statusObj[item.actionStatus] // 状态
                         }
-                    });
+                    }) : [];
 
-                    this.tablePagination.total = data.totalSize || this.tablePagination.total;
+                    this.tablePagination.total = data != null ? data.totalSize : this.tablePagination.total;
 
                 }
             })
@@ -315,8 +318,13 @@ export default {
             this.getTableData(filterObj); 
         },
 
+        /**
+         * @description: 数据筛选加载：高级筛选
+         * @param {json} filterObj
+         * @Date Changed: 2020-07-13
+         */
         getByAdvancedQuery(filterObj){
-            console.log( "父组件中接收到的高级过滤的数据",filterObj  );
+            // console.log( "父组件中接收到的高级过滤的数据",filterObj  );
 
             // 筛选参数中加入筛选类型
             filterObj.type = "advanced";
@@ -324,7 +332,6 @@ export default {
             this.getTableData(filterObj); 
 
         },
-
 
         /**
          * @description: 数据列表-【全选】
@@ -416,10 +423,11 @@ export default {
                         let data = res.data;
                         this.custServList = data.map(item=>{
                             return {
-                                id: item.id,
+                                id: item.id,   
                                 // phone: item.phone,
                                 // userAccount: item.userAccount,
                                 userName: item.userName,
+                                servNum: item.servNum
                                 // createTime: item.createTime,
                                 // enterpriseName: item.enterpriseName,
                                 // hasBindWx: item.hasBindWx,
@@ -438,20 +446,89 @@ export default {
         assginAdvistor(){
             console.log( "选定的数据：", this.$refs.multipleTable.selection );
             let selectedData = this.$refs.multipleTable.selection;
-
+            
             if( selectedData.length < 1 ){
                 this.$message({
                     showClose: true,
                     message: '请选定需要分配融资顾问的服务数据！',
                     type: 'warning'
                 });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量分配融资顾问！',
+                    type: 'warning'
+                });
             } else {
-                this.getAssginAdvistorData();
-                this.isShowAdvisor = true;
+                // 是否存在融资服务的数据
+                let isHasCustServNameItem = selectedData.every(item=>item.custServName!="-");
+
+                if(!isHasCustServNameItem){
+
+                    this.getAssginAdvistorData();
+                    this.isShowAdvisor = true;
+
+                }else{
+
+                    this.$message({
+                        showClose: true,
+                        message: '已选定的数据已分配过融资顾问！',
+                        type: 'warning'
+                    });   
+                }
+
+
+                
             }   
 
             
         },
+
+        /**
+         * @description: 融资顾问选定 联动 当前服务客户数
+         * @param {number} id 融资服务id 
+         * @Date Changed: 2020-07-13
+         */
+        advisorSelected(id){
+            // console.log("融资顾问选定", id);
+            this.custServList.forEach(item=>{
+                if( item.id === id  ){
+                    this.advisorFrom.servNum = item.servNum;
+                    return;    
+                }
+            })
+        },
+
+        /**
+         * @description: 分配融资顾问表单提交
+         * @param {string} formName  表单
+         * @Date Changed: 2020-07-14
+         */  
+        submitAdvisorFrom(formName){
+            let selectedData = this.$refs.multipleTable.selection;
+
+            // console.log( "提交 选定得数据", selectedData );
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    
+                    let requiredParams = {
+                        userId: this.advisorFrom.id,
+                        financingPlanId: selectedData[0].financingCode
+                    }
+
+                    this.$axios.post("/api/mgm/financingPlan/updataFinancingAdviser",requiredParams)
+                        .then(res=>{
+                            console.log( "分配融资顾问响应：", res );
+                            
+                        })
+
+                }
+            });
+
+            
+        },      
+
+
 
         /**
          * @description: 路由跳转-定制服务
