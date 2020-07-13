@@ -1,6 +1,6 @@
 
 <template>
-  <div id="AddAndEditEmployee">
+  <div id="AddAndEditEmployee" v-loading="loading">
     <div class="form-title">
       <div>请填写员工信息</div>
       <div>
@@ -18,10 +18,10 @@
           >
             <el-select v-model="form.loanAgencyId" placeholder="请选择所属机构">
               <el-option
-                      v-for="item in []"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      v-for="item in lList"
+                      :key="item.pkId"
+                      :label="item.name"
+                      :value="item.pkId">
               </el-option>
             </el-select>
           </el-form-item>
@@ -55,6 +55,25 @@
           >
             <el-input placeholder="请输入手机号" v-model="form.phone"></el-input>
           </el-form-item>
+          <el-form-item
+                  label="用户姓名："
+                  prop="userName"
+                  :rules="[
+              { required: true, message: '请输入用户姓名', trigger: 'blur' }
+            ]"
+          >
+            <el-input placeholder="请输入手机号" v-model="form.userName"></el-input>
+          </el-form-item>
+          <el-form-item
+                  v-if="!form.pkId"
+                  label="用户密码："
+                  prop="password"
+                  :rules="[
+              { required: true, message: '请输入用户密码', trigger: 'blur' }
+            ]"
+          >
+            <el-input placeholder="请输入手机号" v-model="form.password"></el-input>
+          </el-form-item>
         <div class="submit-btn">
           <el-button type="primary" @click="addForm">提交</el-button>
           <el-button @click="resetForm">取消</el-button>
@@ -76,6 +95,7 @@ export default {
       areaTree: [],
       // 这个没有和标签的v-model绑定，由于不知道接口字段。这个后期可以改下
       form: {
+        pkId: null,
         "area": "",
         // "deptId": "",
         "loanAgencyId": undefined,
@@ -85,10 +105,29 @@ export default {
       },
       imageUrl: "",
       value: false,
-      isEdit: false
+      isEdit: false,
+      lList: []
     };
   },
   methods: {
+    getIList() {
+      this.$axios.post('/api/mgm/loanAgency/queryList', {"page": 1,
+        "size": 500}).then(res => this.lList = res.data.mgmLoanAgencyList)
+    },
+    initData () {
+        this.loading = true
+        this.$axios.post(`/api/mgm/loanAgencyUser/queryById/${this.$route.params.type}`)
+                .then(res => {
+                  if (res.data) {
+                    this.form = Object.assign(this.form, res.data)
+                  }
+                  this.loading = false
+                })
+                .catch(err => {
+                  this.$msgError(err.message)
+                  this.loading = false
+                })
+    },
     deleteEmpty (arr) {
       return arr.map(v => {
         if (v.children && v.children.length) {
@@ -106,6 +145,22 @@ export default {
     },
     addForm() {
       console.log(this.form);
+      this.$refs.form.validate()
+        .then(() =>{
+          this.loading = true
+          let url = this.form.pkId ? '/api/mgm/loanAgencyUser/update' : '/api/mgm/loanAgencyUser/add'
+          this.$axios.post(url, this.form)
+            .then(() => {
+              this.loading = false
+              this.$msgSuccess()
+              this.$router.back(-1)
+            })
+            .catch(err => {
+              this.loading = false
+              this.$msgError(err.message)
+            })
+        })
+        .catch(err => console.log(err))
     },
     resetForm() {
       // 重置 记得改这里
@@ -117,14 +172,18 @@ export default {
   },
   created() {
     this.getAreaTree()
+    this.getIList()
     // 添加
-    if(this.$route.params.type == "add") {
+    if(this.$route.params.type === "add") {
       this.isEdit = false;
     }
     // 编辑
     else {
       this.isEdit = true
+      this.initData()
     }
+  },
+  mounted () {
   }
 };
 </script>

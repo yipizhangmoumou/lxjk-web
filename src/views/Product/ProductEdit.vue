@@ -4,7 +4,7 @@
 -->
 
 <template>
-  <div id="AddOrganization">
+  <div id="AddOrganization" v-loading="loading">
     <div class="form-title">
       <div>{{$route.query.id ? '修改产品' : '新增产品'}}</div>
       <div>
@@ -28,7 +28,7 @@
                                 }"
                     collapse-tags
                     :show-all-levels="false"
-                    :disabled="form.product.pkId"
+                    :disabled="!!form.product.pkId"
             ></el-cascader>
           </el-form-item>
           <el-form-item label="申请方式" prop="applicationMethod">

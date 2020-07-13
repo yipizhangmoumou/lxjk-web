@@ -44,10 +44,10 @@ export default {
                         path: '/organizationAdmin',
                         name:'助贷机构管理'
                     },
-                    {
-                        path: '/postAdmin',
-                        name:'机构岗位管理'
-                    },
+                    // {
+                    //     path: '/postAdmin',
+                    //     name:'机构岗位管理'
+                    // },
                     {
                         path: '/employeeAdmin',
                         name:'助贷机构员工管理'
