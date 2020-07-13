@@ -29,14 +29,15 @@
           </div>
         </div>
         <div class="table">
-          <el-table :data="tableData" border style="width: 100%" align-center>
-            <el-table-column prop="date" align="center" label="用户ID"></el-table-column>
-            <el-table-column prop="name" align="center" label="联系人"></el-table-column>
-            <el-table-column prop="address" align="center" label="手机号"></el-table-column>
-            <el-table-column prop="address" align="center" label="企业名称"></el-table-column>
-            <el-table-column prop="address" align="center" label="申请金额"></el-table-column>
-            <el-table-column prop="address" align="center" label="评估适用产品"></el-table-column>
-            <el-table-column prop="address" align="center" label="融资服务申请">
+          <el-table :data="baseData" border style="width: 100%" align-center>
+            <el-table-column prop="userPkId" align="center" label="用户ID"></el-table-column>
+            <el-table-column prop="contactPerson" align="center" label="联系人"></el-table-column>
+            <el-table-column prop="contact" align="center" label="手机号"></el-table-column>
+            <el-table-column prop="enterpriseName" align="center" label="企业名称"></el-table-column>
+            <el-table-column prop="financingAmount" align="center" label="申请金额"></el-table-column>
+            <el-table-column prop="meetProductNum" align="center" label="评估适用产品"></el-table-column>
+            <el-table-column prop="selectProductNum" align="center" label="客户选定产品"></el-table-column>
+            <el-table-column align="center" label="融资服务申请">
               <template>
                   <div style="color:#027DB4">查看申请详情</div>
               </template>
@@ -55,7 +56,7 @@
           </div>
         </div>
         <div class="table">
-          <el-table :data="tableData" border style="width: 100%" align-center>
+          <el-table :data="childPlanList" border style="width: 100%" align-center>
             <el-table-column prop="date" align="center" label="序号"></el-table-column>
             <el-table-column prop="name" align="center" label="产品名称"></el-table-column>
             <el-table-column prop="address" align="center" label="产品类型"></el-table-column>
@@ -85,58 +86,58 @@
         <div class="most-div pd20">
             <el-tabs type="border-card" class="j_tabs j_customtabs" :stretch="true">
   <el-tab-pane>
-    <span slot="label"> 我的行程<i class="el-icon-circle-check"></i></span>
-<el-form v-if="!showwrite" label-position="top" label-width="80px" :model="companyInfo">
+    <span slot="label"> 企业信息<i class="el-icon-circle-check"></i></span>
+<el-form v-if="!showwrite" label-position="top" label-width="80px" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业全称</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyName}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 企业性质</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.enterpriseNature}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.industryType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.industryCode}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.areaCity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.areaCode}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.adress}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.regAddress}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 成立时间</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.time}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.regTime}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.thatYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.thatYears}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYears}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastcall}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastcall}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isImmovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isImmovables}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.immovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.immovables}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -144,11 +145,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{companyInfo.isFacility}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{enterpriseInfo.isFacility}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.facility}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.facility}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -156,17 +157,17 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isPatents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isPatents}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.patents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.patents}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isstockEquity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isstockEquity}}</el-button>
     </el-col>
   </el-row>
 </el-form>
@@ -174,31 +175,31 @@
   <div>企业信息</div>
   <div><i class="redrules">*</i>为必填项</div>
 </div>
-<el-form v-if="showwrite" label-position="top" label-width="80px" :model="companyInfo">
+<el-form v-if="showwrite" label-position="top" label-width="80px" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业全称</div>
-        <el-input type="text" v-model="companyInfo.companyName">{{}}</el-input>
+        <el-input type="text" v-model="enterpriseInfo.name">{{}}</el-input>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 企业性质</div>
-          <el-select v-model="companyInfo.companyType" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.enterpriseNature" placeholder="请选择">
             <el-option
               v-for="item in companyTypeArr"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.key"
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
   </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-          <el-select v-model="companyInfo.industryType" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.industryType" placeholder="请选择">
             <el-option
               v-for="item in industryTypeArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
@@ -206,23 +207,16 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-          <el-select v-model="companyInfo.industryType" placeholder="请选择">
-            <el-option
-              v-for="item in industryTypeArr"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+      <el-cascader :options="areaTree" v-model="enterpriseInfo.area" :props="props" clearable></el-cascader>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
-        <el-input type="text" v-model="companyInfo.adress">{{}}</el-input>
+        <el-input type="text" v-model="enterpriseInfo.adress">{{}}</el-input>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 成立时间</div>
             <el-date-picker
-      v-model="companyInfo.time"
+      v-model="enterpriseInfo.time"
       type="date"
       placeholder="选择日期">
     </el-date-picker>
@@ -231,34 +225,34 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-          <el-select v-model="companyInfo.thatYears" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.thatYears" placeholder="请选择">
             <el-option
               v-for="item in thatYearsArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-          <el-select v-model="companyInfo.lastYears" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.lastYears" placeholder="请选择">
             <el-option
               v-for="item in lastYearsArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-          <el-select v-model="companyInfo.lastcall" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.lastcall" placeholder="请选择">
             <el-option
               v-for="item in lastcallArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
@@ -266,7 +260,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-          <el-select v-model="companyInfo.isImmovables" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.isImmovables" placeholder="请选择">
             <el-option
               v-for="item in isImmovablesArr"
               :key="item.value"
@@ -277,12 +271,12 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-          <el-select v-model="companyInfo.immovables" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.immovables" placeholder="请选择">
             <el-option
               v-for="item in immovablesArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
@@ -292,7 +286,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-          <el-select v-model="companyInfo.isFacility" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.isFacility" placeholder="请选择">
             <el-option
               v-for="item in isFacilityArr"
               :key="item.value"
@@ -303,12 +297,12 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-          <el-select v-model="companyInfo.facility" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.facility" placeholder="请选择">
             <el-option
               v-for="item in facilityArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
@@ -318,7 +312,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-          <el-select v-model="companyInfo.isPatents" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.isPatents" placeholder="请选择">
             <el-option
               v-for="item in isPatentsArr"
               :key="item.value"
@@ -329,12 +323,12 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-          <el-select v-model="companyInfo.patents" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.patents" placeholder="请选择">
             <el-option
               v-for="item in patentsArr"
               :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :label="item.value"
+              :value="item.key">
             </el-option>
           </el-select>
     </el-col>
@@ -342,7 +336,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-          <el-select v-model="companyInfo.isstockEquity" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.isstockEquity" placeholder="请选择">
             <el-option
               v-for="item in isstockEquityArr"
               :key="item.value"
@@ -353,11 +347,11 @@
     </el-col>
         <el-col :span="8">
         <div class=""><i class="redrules">*</i> 联系人</div>
-        <el-input class="pdl10" type="text" v-model="companyInfo.isstockEquity"></el-input>
+        <el-input  type="text" v-model="enterpriseInfo.isstockEquity"></el-input>
     </el-col>
         <el-col :span="8">
         <div class=""><i class="redrules">*</i> 电话</div>
-        <el-input class="pdl10" type="text" v-model="companyInfo.isstockEquity"></el-input>
+        <el-input type="text" v-model="enterpriseInfo.isstockEquity"></el-input>
     </el-col>
   </el-row>
 </el-form>
@@ -368,22 +362,22 @@
   <div>法人信息</div>
   <div><i class="redrules">*</i>为必填项</div>
 </div>
-    <el-form  v-if="!showwrite" :model="companyInfo">
+    <el-form  v-if="!showwrite" :model="legalRepresentative">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 法人姓名</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.legalPerson}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalPerson}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class="">法人年龄</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.legalAge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalAge}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
         
-        <el-image :src="companyInfo.legalCard"></el-image>
+        <el-image :src="enterpriseInfo.legalCard"></el-image>
         <el-image :src="src"></el-image>
     </el-col>
   </el-row>
@@ -392,11 +386,18 @@
     <el-row>
       <el-col :span="8">
           <div class=""><i class="redrules">*</i> 法人姓名</div>
-          <el-input class="pdl10" type="text" v-model="companyInfo.legalPerson">{{}}</el-input>
+          <el-input type="text" v-model="legalRepresentative.legalPerson">{{}}</el-input>
       </el-col>
       <el-col :span="8">
         <div class="">法人年龄</div>
-          <el-input class="pdl10" type="text" v-model="companyInfo.legalAge"></el-input>
+          <el-select class="ml_0" v-model="legalRepresentative.legalAge" placeholder="请选择">
+            <el-option
+              v-for="item in legalAgeArr"
+              :key="item.value"
+              :label="item.value"
+              :value="item.key">
+            </el-option>
+          </el-select>
       </el-col>
     </el-row>
     <el-row>
@@ -420,15 +421,15 @@
   <div>企业资质</div>
   <div><i class="redrules">*</i>为必填项</div>
 </div>
-<el-form  v-if="!showwrite" :model="companyInfo">
+<el-form  v-if="!showwrite" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业营业证件</div>
-         <el-image :src="companyInfo.companyCard"></el-image>
+         <el-image :src="enterpriseInfo.companyCard"></el-image>
     </el-col>
   </el-row>
   </el-form>
-<el-form  v-if="showwrite" :model="companyInfo">
+<el-form  v-if="showwrite" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业营业证件</div>
@@ -451,70 +452,74 @@
   <div>财务账户</div>
   <div><i class="redrules">*</i>为必填项</div>
 </div>
-    <el-form v-if="!showwrite" :model="companyInfo">
+    <el-form v-if="!showwrite" :model="financialInformation">
       <el-row>
         <el-col :span="8">
             <div class=""><i class="redrules">*</i> 开户银行</div>
-            <el-button class="pdl10" disabled type="text" v-model="companyInfo.openBank">{{companyInfo.openBank}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{financialInformation.bankName}}</el-button>
         </el-col>
         <el-col :span="8">
           <div class=""><i class="redrules">*</i> 银行账号</div>
-            <el-button class="pdl10" disabled type="text">{{companyInfo.bankCard}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{financialInformation.cardNum}}</el-button>
         </el-col>
         <el-col :span="8">
           <div class=""><i class="redrules">*</i> 所在区域</div>
-            <el-button class="pdl10" disabled type="text">{{companyInfo.bankArea}}</el-button>
-        
+        <el-button type="text" disabled>{{financialInformation.cityCode}}</el-button>
+          
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
             <div class=""><i class="redrules">*</i> 开户支行</div>
-            <el-button class="pdl10" disabled type="text">{{companyInfo.bankBranch}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{financialInformation.depositBank}}</el-button>
         </el-col>
         <el-col :span="8">
           <div class=""><i class="redrules">*</i> 税号</div>
-            <el-button class="pdl10" disabled type="text">{{companyInfo.dutyParagraph}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{financialInformation.taxNumber}}</el-button>
         </el-col>
         <el-col :span="8"> 
           <div class=""><i class="redrules">*</i> 发票抬头</div>
-            <el-button class="pdl10" disabled type="text">{{companyInfo.invoiceTitle}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{financialInformation.regionCode}}</el-button>
         </el-col>
       </el-row>
   </el-form>
-    <el-form v-if="showwrite" :model="companyInfo">
+    <el-form v-if="showwrite" :model="financialInformation">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户银行</div>
-        <el-input type="text" v-model="companyInfo.openBank"></el-input>
+        <el-input type="text" v-model="financialInformation.bankName"></el-input>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 银行账号</div>
-        <el-input type="text" v-model="companyInfo.bankCard"></el-input>
+        <el-input type="text" v-model="financialInformation.cardNum"></el-input>
     </el-col>
     <el-col :span="8">
       <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-input type="text" v-model="companyInfo.bankArea"></el-input>
+      <el-cascader :options="areaTree" v-model="finan_areaCode" :props="props" clearable></el-cascader>
     
     </el-col>
   </el-row>
     <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户支行</div>
-        <el-input  type="text" v-model="companyInfo.bankBranch"></el-input>
+        <el-input  type="text" v-model="financialInformation.depositBank"></el-input>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 税号</div>
-        <el-input type="text" v-model="companyInfo.dutyParagraph"></el-input>
+        <el-input type="text" v-model="financialInformation.taxNumber"></el-input>
     </el-col>
     <el-col :span="8"> 
       <div class=""><i class="redrules">*</i> 发票抬头</div>
-        <el-input type="text" v-model="companyInfo.invoiceTitle"></el-input>
+        <el-input type="text" v-model="financialInformation.regionCode"></el-input>
     </el-col>
   </el-row>
   </el-form>  
   </el-tab-pane>
 </el-tabs>
+  <div style="text-align:center">
+     <el-button type="primary" @click="saveNew">完善提交</el-button>
+     <el-button plain>重置</el-button>
+  </div>
         </div>
         </div>
       </div>
@@ -637,14 +642,41 @@ export default {
         ],
         
         dialogImageUrl: '',
-        dialogVisible: false
+        dialogVisible: false,
+        // ------
+        financingPlan:{},
+        enterpriseInfo:{},//企业信息
+        financialInformation:{},//账户信息
+        legalRepresentative:{},//法人信息
+
+        baseData:[],//基本信息
+        childPlanList:[],//产品信息
+        areaTree:[],
+        props: {
+          children: 'children',
+          label: 'name',
+          value:'code'
+        },
+        status:'',
+        finan_areaCode:'',//账户区域的code
         };
     },
     components: {
         CopyRight
     },
     mounted(){
-      
+      this.getAreaTree();
+      this.getDic('year_revenue', 'thatYearsArr')
+      this.getDic('last_year_revenue', 'lastYearsArr')
+      this.getDic('last_year_invoiced','lastcallArr')
+
+      this.getDic('real_property', 'immovablesArr')
+      this.getDic('device_value', 'facilityArr')
+      this.getDic('patent_num','patentsArr')
+      this.getDic('corporate_age','legalAgeArr')
+
+      this.getDic('enterprise_nature','companyTypeArr')
+      this.getDic('financing_type','industryTypeArr')
       console.log(this.$route.params.financingCode);
       let planCode = this.$route.params.financingCode;
 
@@ -654,15 +686,48 @@ export default {
        })
       .then(res=>{
         console.log(res);
-        // if(res.code == 0){
-        //   // let datas =res.data;
+        if(res.code == 0){
+          let datas =res.data;
+          console.log(datas);
+          this.baseData = [datas.financingPlan];//基本信息
+          this.enterpriseInfo = datas.enterpriseInfo||{};//企业信息
+          // ---
+          // 企业code要组合 provinceCode cityCode
 
-        // }else{
-
-        // }
+          this.childPlanList = datas.childPlanList;//定制的产品
+          this.financialInformation = datas.financialInformation||{};//财务账户
+          this.legalRepresentative = datas.legalRepresentative||{};//法人信息
+          this.status = datas.status;
+          console.log(this.legalRepresentative,{});
+        }else{
+          console.log(res);
+        }
       })  
     },
     methods: {
+    deleteEmpty (arr) {
+      return arr.map(v => {
+        if (v.children && v.children.length) {
+          v.children = this.deleteEmpty(v.children)
+        } else {
+          delete v.children
+        }
+        return v
+      })
+    },     
+     getAreaTree () {
+        this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
+          this.areaTree = this.deleteEmpty(res.data.areaTree)
+          console.log(this.areaTree);
+        })
+      },
+          // 获取字典方法
+    getDic (code, key) {
+      this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})
+      .then((res) => {
+        this[key] = res.data
+      })
+    },
         /**
          * @description: 【定制融资产品/查看详情】按钮跳转
          * @Date Changed: 2020-07-12
@@ -673,6 +738,15 @@ export default {
         },
         writeCompany(){
           this.showwrite=!this.showwrite;
+        },
+        saveNew(){
+          console.log(this.enterpriseInfo);
+          console.log(this.financialInformation);
+          this.financialInformation.provinceCode = this.finan_areaCode[0]
+          this.financialInformation.cityCode = this.finan_areaCode[1]
+          this.financialInformation.regionCode = this.finan_areaCode[2]
+          console.log(this.legalRepresentative);
+          console.log(this.financialInformation);
         },
     }
 };
@@ -744,7 +818,7 @@ export default {
   margin 15px 0
 .el-form .el-col .el-button,.el-form .el-col .el-image,.el-form .el-col .el-input
   margin 10px 0
-.el-form .el-col .el-input,.el-form .el-col .el-select ,.el-form .el-col .el-date-editor
+.el-form .el-col .el-input,.el-form .el-col .el-select ,.el-form .el-col .el-date-editor,.el-form .el-col .el-cascader
   width 250px  
   margin 10px 0
   margin-left 10px
@@ -764,6 +838,8 @@ export default {
   height 50px
   line-height 50px
   padding 0 20px
+.ml_10
+  margin-left 0px !important  
 </style>
 <style lang="stylus">
 .j_tabs
@@ -776,4 +852,5 @@ export default {
   padding 0px
 .j_customtabs .el-form
   padding 15px  
+
 </style>

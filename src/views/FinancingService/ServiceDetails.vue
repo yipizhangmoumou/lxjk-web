@@ -5,13 +5,13 @@
     <div class="list-container">
       <div class="top-info">
         <div class="info-message">
-          <div>服务单号:</div><div>201808196398345</div>
+          <div>服务单号:</div><div>{{planCode}}</div>
         </div>
         <div class="info-message">
-          <div>融资顾问:</div><div>丁昱</div>
+          <div>融资顾问:</div><div>{{custServName}}</div>
         </div>
         <div class="info-message">
-          <div>服务申请时间:</div><div>2020.07.10 12:22:22</div>
+          <div>服务申请时间:</div><div>{{createTime}}</div>
         </div>
       </div>
       <div class="details-most">
@@ -84,7 +84,7 @@
             <h5><i class="el-icon-collection-tag" type="primary"></i>企业信息完善</h5>
             <el-tabs type="border-card" class="j_tabs" :stretch="true">
   <el-tab-pane>
-    <span slot="label"> 我的行程<i class="el-icon-circle-check"></i></span>
+    <span slot="label"> 企业信息<i class="el-icon-circle-check"></i></span>
 <el-form label-position="top" label-width="80px" :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -171,7 +171,7 @@
 </el-form>
   </el-tab-pane>
   <el-tab-pane>
-    <span slot="label"> 消息中心<i class="el-icon-circle-check"></i></span>
+    <span slot="label"> 法人信息<i class="el-icon-circle-check"></i></span>
     <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -194,7 +194,7 @@
   </el-form>
   </el-tab-pane>
   <el-tab-pane>
-    <span slot="label"> 角色管理<i class="el-icon-circle-check"></i></span>
+    <span slot="label"> 企业资质<i class="el-icon-circle-check"></i></span>
 <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -206,7 +206,7 @@
   </el-tab-pane>
   <el-tab-pane>
     
-    <span slot="label"> 定时任务补偿<i class="el-icon-circle-check"></i></span>
+    <span slot="label"> 财务账户<i class="el-icon-circle-check"></i></span>
     <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
@@ -349,8 +349,9 @@ export default {
         invoiceTitle:'湖南XXXX科技有限公司',
       },
       showAssurance:false,
-      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
-
+      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+      planCode:'',
+      createTime:'',
     }
   },
   created(){
@@ -382,19 +383,21 @@ export default {
     // 获取详情
     let financingCode = this.$route.params.financingCode
     console.log(financingCode);
-    let url =`/api/mgm/financingPlan/detail`
-
-       this.$axios.post(url,{
-         financingCode:financingCode
-       })
-      .then(res=>{
+    let url =`/api/mgm/financingPlan/detail/${financingCode}`
+      
+       this.$axios.post(url).then(res=>{
         console.log(res);
-        // if(res.code == 0){
-        //   // let datas =res.data;
-
-        // }else{
-
-        // }
+        if(res.code == 0){
+          let datas =res.data;
+          this.planCode = datas.planCode;
+          this.custServName = datas.custServName;
+          this.createTime = datas.createTime;
+          console.log(this.planCode);
+        }else{
+          console.log(111);
+        }
+      }).catch(err=>{
+        console.log(err);
       })   
   },
   methods:{
