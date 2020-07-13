@@ -296,6 +296,20 @@ export default {
       tableData:[],
       actionData:[],
       form:{},
+      companyId:'',//
+      companyName:'',//公司名称
+      custServId:'',
+      
+      enterprise:{},//
+      estimate:{},//
+
+      serveOrderId:'',//服务单号
+      custServName:'',//
+      applyTime:'',//服务申请时间
+
+      status:'',//服务状态进度
+
+
       stepArr:[
         {name:'融资顾问服务',time:'2020.07.10 15:43:23'},
         {name:'服务定制',time:'2020.07.10 15:43:23'},
@@ -362,6 +376,26 @@ export default {
         danbao:index%2==0?'1':'2'
       });
     }    
+  },
+  mounted(){
+    console.log(this.$route.params);
+    // 获取详情
+    let financingCode = this.$route.params.financingCode
+    console.log(financingCode);
+    let url =`/api/mgm/financingPlan/detail`
+
+       this.$axios.post(url,{
+         financingCode:financingCode
+       })
+      .then(res=>{
+        console.log(res);
+        // if(res.code == 0){
+        //   // let datas =res.data;
+
+        // }else{
+
+        // }
+      })   
   },
   methods:{
     seeAssurance(){
