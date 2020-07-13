@@ -66,7 +66,7 @@ const routes = [
           component: () => import("views/FinancingService/ExecutiveProgramme")
         },
         {
-          path: '/ServiceDetails',
+          path: '/ServiceDetails/:financingCode',
           name: 'ServiceDetails',
           meta: { name: '融资服务详情' },
           component: () => import("views/FinancingService/ServiceDetails")
@@ -88,7 +88,7 @@ const routes = [
             component: () => import("views/FinancingService/ProductCustomization")
         },
         {
-          path: '/customization',
+          path: '/customization/:financingCode',
           name: 'customization',
           meta: { name: '服务定制' },
           component: () => import("views/Customization")

@@ -1,7 +1,7 @@
 <template>
     <div id="product">
-        <div class="search-box">
-            <span>数据字典类型 : </span>
+<!--        <div class="search-box">-->
+<!--            <span>数据字典类型 : </span>-->
 <!--            <el-select v-model="codeObj" filterable  placeholder="" value-key="code">-->
 <!--                <el-option-->
 <!--                        v-for="(item, index) in dataCodeList"-->
@@ -10,7 +10,7 @@
 <!--                        :value="item">-->
 <!--                </el-option>-->
 <!--            </el-select>-->
-        </div>
+<!--        </div>-->
         <div class="table-container">
             <div class="table-header">
                 <h5>数据列表</h5>
@@ -44,14 +44,14 @@
                     <el-table-column label="操作" width="240" fixed="right">
                         <template slot-scope="{row}">
                             <div class="cz">
-                                <div @click="handleChangeStatus(row, 'active')">
+                                <div @click="handleEdit(row)">
                                     <i class="el-icon-success"></i>
                                     编辑
                                 </div>
-                                <div @click="handleChangeStatus(row, 'pend')">
-                                    <i class="el-icon-success"></i>
-                                    审核
-                                </div>
+<!--                                <div @click="handleChangeStatus(row, 'pend')">-->
+<!--                                    <i class="el-icon-success"></i>-->
+<!--                                    审核-->
+<!--                                </div>-->
                             </div>
                         </template>
                     </el-table-column>
@@ -146,12 +146,8 @@ export default {
       this.getTableData()
     },
     handleEdit (row) {
-      this.$router.push({
-        path: '/ProductEdit',
-        query: {
-          id: row.id
-        }
-      })
+      this.editObj.data = Object.assign({}, row)
+      this.editObj.visible = true
     },
     handleDelete (row) {
       this.$confirm('确认删除这条数据吗', '确认').then(() => {

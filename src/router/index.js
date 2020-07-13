@@ -16,12 +16,12 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-  // let isLogin = sessionStorage.token ? true : false
-  // if (to.path == '/login') {
-  //   next()
-  // } else {
-  //   isLogin ? next() : router.push('/login');
-  // }
+  let isLogin = !!window.sessionStorage.getItem('token')
+  if (to.path === '/login') {
+    next()
+  } else {
+    isLogin ? next() : router.push('/login');
+  }
   next();
 })
 

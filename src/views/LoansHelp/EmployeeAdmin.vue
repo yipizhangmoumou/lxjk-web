@@ -38,15 +38,15 @@
           <el-table-column prop="address" label="操作" width="240">
             <template slot-scope="scope">
               <div class="cz">
-                <div @click="$router.push('/log')">
-                  <i class="el-icon-s-order"></i>
-                  日志
-                </div>
-                <div @click="$router.push(`/addAndEditEmployee/${scope.row.id}`)">
+<!--                <div @click="$router.push('/log')">-->
+<!--                  <i class="el-icon-s-order"></i>-->
+<!--                  日志-->
+<!--                </div>-->
+                <div @click="$router.push(`/addAndEditEmployee/${scope.row.pkId}`)">
                   <i class="el-icon-edit"></i>
                   编辑
                 </div>
-                <div @click="operation(3, scope.row)">
+                <div @click="handleDelete(scope.row)">
                   <i class="el-icon-delete-solid"></i>
                   删除
                 </div>
@@ -114,6 +114,15 @@ export default {
   },
   mixins: [tableMixin],
   methods: {
+    handleDelete (row) {
+      this.$confirm('确认删除这条数据吗', '确认').then(() => {
+        this.$axios.post(`/api/mgm/loanAgencyUser/delete/${row.pkId}`)
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+      }).catch((err) => {console.log(err)})
+    },
     /**
      * @dir 全选
      * @param null
