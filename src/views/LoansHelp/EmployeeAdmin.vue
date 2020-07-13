@@ -12,32 +12,27 @@
       <div class="table">
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="listData"
           tooltip-effect="dark"
           style="width: 100%"
           :stripe="true"
           :border="true"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="ID" width="120">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-          <el-table-column prop="address" label="手机号"></el-table-column>
-          <el-table-column prop="employee" label="所属机构" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="推广用户数" width="160"></el-table-column>
-          <el-table-column prop="status" label="前台权限" width="80"></el-table-column>
-          <el-table-column prop="status" label="注册时间" width="80"></el-table-column>
-          <el-table-column prop="status" label="启用" width="80">
+<!--          <el-table-column type="selection" width="55"></el-table-column>-->
+<!--          <el-table-column label="ID" width="120">-->
+<!--            <template slot-scope="scope">{{ scope.row.number }}</template>-->
+<!--          </el-table-column>-->
+          <el-table-column prop="userName" label="姓名"></el-table-column>
+          <el-table-column prop="phone" label="手机号"></el-table-column>
+          <el-table-column prop="loanAgencyName" label="所属机构"></el-table-column>
+<!--          <el-table-column prop="linkman" label="部门" width="120"></el-table-column>-->
+<!--          <el-table-column prop="mobile" label="员工岗位" width="120"></el-table-column>-->
+<!--          <el-table-column prop="createTime" label="推广用户数" width="160"></el-table-column>-->
+<!--          <el-table-column prop="status" label="前台权限" width="80"></el-table-column>-->
+<!--          <el-table-column prop="status" label="注册时间" width="80"></el-table-column>-->
+          <el-table-column prop="status" label="状态">
             <template slot-scope="scope">
-              <div>
-                <el-switch
-                  v-model="scope.row.flag"
-                  active-color="#13ce66">
-                </el-switch>
-              </div>
+              {{scope.row.status === 0 ? '启用' : '停用'}}
             </template>
           </el-table-column>
           <el-table-column prop="address" label="操作" width="240">
@@ -58,16 +53,16 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="codeUrl" label="结构员工推广码" width="120">
-            <template>
-              <div class="code">
-                <div>
-                  <i class="el-icon-picture"></i>
-                  推广码
-                </div>
-              </div>
-            </template>
-          </el-table-column>
+<!--          <el-table-column prop="codeUrl" label="结构员工推广码" width="120">-->
+<!--            <template>-->
+<!--              <div class="code">-->
+<!--                <div>-->
+<!--                  <i class="el-icon-picture"></i>-->
+<!--                  推广码-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
         <div class="page-container">
           <div class="selectBtn">
@@ -84,11 +79,11 @@
           </div>
           <!-- 分页 -->
           <el-pagination
-            :current-page="curr"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+                  :current-page="listPage.page"
+                  :page-size="listPage.size"
+                  :total="listPage.total"
+                  :page-sizes="[10, 20, 30, 50]"
+                  layout="total, sizes, prev, pager, next, jumper"
           ></el-pagination>
         </div>
       </div>
@@ -100,12 +95,13 @@
 <script>
 import CopyRight from "components/CopyRight"
 import SearchTwo from "components/Search/SearchTwo";
+import tableMixin from '../../assets/js/tableMixin'
 export default {
   name: "EmployeeAdmin",
   data() {
     return {
-      curr: 1,
-      tableData: [],
+      listApiUrl: '/api/mgm/loanAgencyUser/queryList',
+      dataKey: 'mgmLoanAgencyUserList',
       multipleSelection: [],
       options: [
         {
@@ -116,6 +112,7 @@ export default {
       value: ""
     };
   },
+  mixins: [tableMixin],
   methods: {
     /**
      * @dir 全选
@@ -232,20 +229,7 @@ export default {
     CopyRight
   },
   created() {
-    for (let index = 0; index < 11; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        name: "机构名称" + index,
-        address: "地区" + index,
-        employee: "员工人数" + index,
-        flag: index % 2 == 0 ? false : true,
-        linkman: "联系人" + index,
-        mobile: "联系方式" + index,
-        createTime: "2020-03-09 12:34:23",
-        status: index % 2 == 0 ? "已开通" : "未开通",
-        codeUrl: "http://www.baidu.com"
-      });
-    }
+    this.getTableData()
   }
 };
 </script>

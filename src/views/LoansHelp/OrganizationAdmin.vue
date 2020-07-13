@@ -14,51 +14,30 @@
       <div class="table">
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="listData"
           tooltip-effect="dark"
           style="width: 100%"
           :stripe="true"
           :border="true"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="机构编号" width="120">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="机构名称" width="120"></el-table-column>
-          <el-table-column prop="address" label="所在地区"></el-table-column>
-          <el-table-column prop="employee" label="员工人数" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="联系人" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="联系方式" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-          <el-table-column prop="status" label="状态" width="80"></el-table-column>
+          <el-table-column prop="area" label="区域"></el-table-column>
+<!--          <el-table-column prop="empNumber" label="所在地区"></el-table-column>-->
+          <el-table-column prop="leader" label="负责人"></el-table-column>
+          <el-table-column prop="name" label="公司名称"></el-table-column>
+          <el-table-column prop="orgCode" label="公司代码"></el-table-column>
+          <el-table-column prop="phone" label="联系电话"></el-table-column>
+<!--          <el-table-column prop="status" label="状态"></el-table-column>-->
           <el-table-column prop="address" label="操作" width="240">
-            <template slot-scope="scope">
+            <template slot-scope="{row}">
               <div class="cz">
-                <div>
+                <div @click="handleEdit(row)">
                   <i class="el-icon-edit"></i>
                   编辑
                 </div>
-                <div @click="operation(1, scope.row)">
-                  <i class="el-icon-success"></i>
-                  开通
-                </div>
-                <div @click="operation(2, scope.row)">
-                  <i class="el-icon-remove"></i>
-                  禁用
-                </div>
-                <div @click="operation(3, scope.row)">
+                <div @click="handleDelete(row)">
                   <i class="el-icon-delete-solid"></i>
                   删除
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="codeUrl" label="结构员工推广码" width="120">
-            <template>
-              <div class="code">
-                <div>
-                  <i class="el-icon-picture"></i>
-                  推广码
                 </div>
               </div>
             </template>
@@ -79,11 +58,11 @@
           </div>
           <!-- 分页 -->
           <el-pagination
-            :current-page="curr"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+                  :current-page="listPage.page"
+                  :page-size="listPage.size"
+                  :total="listPage.total"
+                  :page-sizes="[10, 20, 30, 50]"
+                  layout="total, sizes, prev, pager, next, jumper"
           ></el-pagination>
         </div>
       </div>
@@ -95,12 +74,13 @@
 <script>
 import CopyRight from "components/CopyRight"
 import SearchOne from "components/Search/SearchOne";
+import tableMixin from '../../assets/js/tableMixin'
 export default {
   name: "OrganizationAdmin",
   data() {
     return {
-      curr: 1,
-      tableData: [],
+      listApiUrl: '/api/mgm/loanAgency/queryList',
+      dataKey: 'mgmLoanAgencyList',
       multipleSelection: [],
       options: [
         {
@@ -111,7 +91,25 @@ export default {
       value: ""
     };
   },
+  mixins: [tableMixin],
   methods: {
+    handleEdit(row) {
+      this.$router.push({path: '/addOrganization', query: {id: row.pkId}})
+    },
+    handleDelete(row) {
+      this.$confirm('确认删除这条数据吗', '确认').then(()=>{
+        this.$axios.post(`/api/mgm/loanAgency/delete/${row.pkId}`)
+                .then(() => {
+                  this.$msgSuccess()
+                  this.getTableData()
+                })
+        .catch(err => {
+          this.$msgError(err.message)
+        })
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
     /**
      * @dir 全选
      * @param null
@@ -227,19 +225,7 @@ export default {
     CopyRight
   },
   created() {
-    for (let index = 0; index < 11; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        name: "机构名称" + index,
-        address: "地区" + index,
-        employee: "员工人数" + index,
-        linkman: "联系人" + index,
-        mobile: "联系方式" + index,
-        createTime: "2020-03-09 12:34:23",
-        status: index % 2 == 0 ? "已开通" : "未开通",
-        codeUrl: "http://www.baidu.com"
-      });
-    }
+    this.getTableData()
   }
 };
 </script>

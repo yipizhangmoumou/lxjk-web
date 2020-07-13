@@ -83,7 +83,6 @@ export default {
     return {
       listApiUrl: '/api/mgm/product/listData',
       dataKey: 'mgmProductList',
-      listData: [],
       multipleSelection: [],
       options: [
         {
@@ -117,6 +116,9 @@ export default {
                   this.$msgSuccess()
                   this.getTableData()
                 })
+          .catch(err => {
+            this.$msgError(err.message)
+          })
       }).catch((err)=>{console.log(err)})
     },
     handleChangeStatus (row) {

@@ -4,7 +4,7 @@
 -->
 
 <template>
-  <div id="AddOrganization">
+  <div id="AddOrganization" v-loading="loading">
     <div class="form-title">
       <div>新增助贷机构</div>
       <div>
@@ -18,7 +18,7 @@
           <div class="base-box">
             <div class="form-line">
               <el-form-item
-                label="活动名称"
+                label="机构名称"
                 prop="name"
                 :rules="[
                     { required: true, message: '请填写公司名称'}
@@ -29,66 +29,74 @@
               <el-form-item
                 label="行业类型"
                 prop="name"
-                :rules="[
-                    { required: true, message: '行业类型不能为空'}
-                ]"
               >
-                <el-select v-model="form.region" placeholder="请选择行业类别">
+<!--                :rules="[-->
+<!--                    { required: true, message: '行业类型不能为空'}-->
+<!--                ]"-->
+                <el-select v-model="form.region" placeholder="请选择行业类别" disabled>
                   <el-option label="请选择行业类别" value></el-option>
                   <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item
                 label="所在区域"
-                prop="name"
+                prop="area"
                 :rules="[
                     { required: true, message: '请选择所在区域'}
                 ]"
               >
-                <el-select v-model="form.region" placeholder="请选择所在区域">
-                  <el-option label="请选择所在区域" value></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
+                <el-cascader
+                        v-model="form.area"
+                        placeholder=""
+                        :options="areaTree"
+                        :props="{
+                                      expandTrigger: 'hover',
+                                      value: 'code',
+                                      label: 'name',
+                                      emitPath: false
+                                    }"
+                        collapse-tags
+                        :show-all-levels="false"
+                ></el-cascader>
               </el-form-item>
             </div>
             <div class="form-line">
               <el-form-item
                 label="邮编"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写邮编'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写邮编"></el-input>
+                <el-input v-model="abc" placeholder="请填写邮编" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="联系人"
-                prop="name"
+                prop="leader"
                 :rules="[
                     { required: true, message: '请填写联系人'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写联系人"></el-input>
+                <el-input v-model="form.leader" placeholder="请填写联系人"></el-input>
               </el-form-item>
               <el-form-item label="职位" prop="name">
-                <el-input v-model="form.name" placeholder="请填写职位"></el-input>
+                <el-input v-model="abc" placeholder="请填写职位" disabled></el-input>
               </el-form-item>
             </div>
             <div class="form-line">
               <el-form-item
                 label="手机号码"
-                prop="name"
+                prop="phone"
                 :rules="[
                     { required: true, message: '请填写手机号码'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写手机号码"></el-input>
+                <el-input v-model="form.phone" placeholder="请填写手机号码"></el-input>
               </el-form-item>
               <el-form-item label="QQ">
-                <el-input v-model="form.name" placeholder="请填写QQ"></el-input>
+                <el-input v-model="abc" placeholder="请填写QQ" disabled></el-input>
               </el-form-item>
               <el-form-item label="邮箱" prop="name">
-                <el-input v-model="form.name" placeholder="请填写邮箱"></el-input>
+                <el-input v-model="abc" placeholder="请填写邮箱" disabled></el-input>
               </el-form-item>
             </div>
           </div>
@@ -101,9 +109,9 @@
                 :rules="[
                     { required: true, message: '请填写手机号码'}
                 ]"
-                prop="name"
               >
                 <el-upload
+                        disabled
                   class="avatar-uploader"
                   action="https://jsonplaceholder.typicode.com/posts/"
                   :show-file-list="false"
@@ -120,34 +128,34 @@
               <div class="form-line">
                 <el-form-item
                   label="详细地址"
-                  prop="name"
+                  prop="address"
                   :rules="[
                     { required: true, message: '请填写详细地址'}
                 ]"
                 >
-                  <el-input style="margin-right: 50px;" v-model="form.name" placeholder="请填写详细地址"></el-input>
+                  <el-input style="margin-right: 50px;" v-model="form.address" placeholder="请填写详细地址"></el-input>
                 </el-form-item>
                 <el-form-item
                   label="电话"
-                  prop="name"
                   :rules="[
                         { required: true, message: '请填写电话'}
                     ]"
                 >
-                  <el-input v-model="form.name" placeholder="请填写电话"></el-input>
+                  <el-input v-model="abc" placeholder="请填写电话" disabled></el-input>
                 </el-form-item>
               </div>
               <div class="form-line">
                 <el-form-item label="传真">
-                  <el-input style="margin-right: 50px;" v-model="form.name" placeholder="请填写传真"></el-input>
+                  <el-input style="margin-right: 50px;" v-model="abc" placeholder="请填写传真" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="网址">
-                  <el-input v-model="form.name" placeholder="请填写网址"></el-input>
+                  <el-input v-model="abc" placeholder="请填写网址" disabled></el-input>
                 </el-form-item>
               </div>
               <div class="form-line">
                 <el-form-item label="公司介绍">
                   <el-input
+                          disabled
                     type="textarea"
                     v-model="form.desc"
                     style="width: 650px;"
@@ -164,59 +172,53 @@
             <div class="form-line">
               <el-form-item
                 label="税号"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写税号'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写税号"></el-input>
+                <el-input v-model="abc" placeholder="请填写税号" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="发票抬头"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写发票抬头'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写发票抬头"></el-input>
+                <el-input v-model="abc" placeholder="请填写发票抬头" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="开户银行"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写开户银行'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写开户银行"></el-input>
+                <el-input v-model="abc" placeholder="请填写开户银行" disabled></el-input>
               </el-form-item>
             </div>
             <div class="form-line">
               <el-form-item
                 label="银行账号"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写银行账号'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写银行账号"></el-input>
+                <el-input v-model="abc" placeholder="请填写银行账号" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="电话号码"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写电话号码'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写电话号码"></el-input>
+                <el-input v-model="abc" placeholder="请填写电话号码" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="单位地址"
-                prop="name"
                 :rules="[
                     { required: true, message: '请填写单位地址'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写单位地址"></el-input>
+                <el-input v-model="abc" placeholder="请填写单位地址" disabled></el-input>
               </el-form-item>
             </div>
           </div>
@@ -225,31 +227,29 @@
           <div class="base-box">
             <div class="form-line">
               <el-form-item
-                label="机构编号（登录账号，也可以自动生成）"
-                prop="name"
+                label="机构编号"
+                prop="orgCode"
                 :rules="[
                     { required: true, message: '请填写机构编号'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写税号"></el-input>
+                <el-input v-model="form.orgCode" placeholder="请填写机构编号"></el-input>
               </el-form-item>
               <el-form-item
-                label="初始密码（登录后提示修改密码）"
-                prop="name"
+                label="初始密码"
                 :rules="[
                     { required: true, message: '请填写密码'}
                 ]"
               >
-                <el-input v-model="form.name" placeholder="888888"></el-input>
+                <el-input v-model="abc" placeholder="888888" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="机构级别（暂无）"
-                prop="name"
                 :rules="[
                     { required: true, message: '请选择机构级别'}
                 ]"
               >
-                <el-select v-model="form.region" placeholder="请选择机构级别">
+                <el-select v-model="form.region" placeholder="请选择机构级别" disabled>
                   <el-option label="请选择机构级别" value></el-option>
                   <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
@@ -258,15 +258,18 @@
             <div class="form-line">
               <el-form-item
                 label="签约时间"
-                prop="name"
+                prop="regTime"
                 :rules="[
                     { required: true, message: '请填写签约时间'}
                 ]"
               >
-                <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker v-model="form.regTime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="注册资本">
+                <el-input-number v-model="form.regCapital" placeholder="请填写注册资本" :controls="false" :min="0"></el-input-number>
               </el-form-item>
               <el-form-item label="备注信息">
-                <el-input class="info" v-model="form.name" placeholder="请填写备注信息"></el-input>
+                <el-input v-model="abc" placeholder="请填写备注信息" disabled></el-input>
               </el-form-item>
             </div>
           </div>
@@ -287,21 +290,64 @@ export default {
   name: "AddOrganization",
   data() {
     return {
+      abc: '',
+      loading: false,
+      // 地区树形数据
+      areaTree: [],
       // 这个没有和标签的v-model绑定，由于不知道接口字段。这个后期可以改下
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
+        "name": "",
+        "address": "",
+        "area": "",
+        "createUser": "",
+        "description": "",
+        "leader": "",// 联系人
+        "orgCode": "",
+        "phone": "",
+        "pkId": null,
+        "regCapital": undefined, // 注册资本
+        "regTime": "", // 公司注册时间
+        "status": 0
       },
       imageUrl: ""
     };
   },
+  created () {
+    this.getAreaTree()
+  },
+  mounted () {
+    this.initData()
+  },
   methods: {
+    initData () {
+      if (this.$route.query.id) {
+        this.loading = true
+        this.$axios.post(`/api/mgm/loanAgency/queryById/${this.$route.query.id}`)
+                .then(res => {
+                  this.form = Object.assign(this.form, res.data)
+                  this.loading = false
+                })
+        .catch(err => {
+          this.$msgError(err.message)
+          this.loading = false
+        })
+      }
+    },
+    deleteEmpty (arr) {
+      return arr.map(v => {
+        if (v.children && v.children.length) {
+          v.children = this.deleteEmpty(v.children)
+        } else {
+          delete v.children
+        }
+        return v
+      })
+    },
+    getAreaTree () {
+      this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
+        this.areaTree = this.deleteEmpty(res.data.areaTree)
+      })
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
@@ -319,6 +365,22 @@ export default {
     },
     addForm() {
         console.log(this.form)
+      this.$refs.form.validate()
+        .then(() =>{
+          this.loading = true
+          let url = this.$route.query.id ? '/api/mgm/loanAgency/update' : '/api/mgm/loanAgency/add'
+          this.$axios.post(url, {loanAgency: this.form})
+            .then(() => {
+              this.loading = false
+              this.$msgSuccess()
+              this.$router.back(-1)
+            })
+          .catch(err => {
+            this.loading = false
+            this.$msgError(err.message)
+          })
+        })
+        .catch(err => {console.log(err)})
     },
     resetForm() {
         // 重置 记得改这里
@@ -372,6 +434,9 @@ export default {
             margin 0 !important
           >>> input, select
             width 300px !important
+          >>> .el-input-number, .el-date-editor
+            width 300px
+            text-align left
           >>> .el-form-item__label
             width auto !important
         .info

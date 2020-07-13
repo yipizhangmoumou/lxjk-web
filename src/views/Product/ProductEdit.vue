@@ -28,10 +28,11 @@
                                 }"
                     collapse-tags
                     :show-all-levels="false"
+                    :disabled="form.product.pkId"
             ></el-cascader>
           </el-form-item>
           <el-form-item label="申请方式" prop="applicationMethod">
-            <el-select v-model="form.product.applicationMethod" placeholder="">
+            <el-select v-model="form.product.applicationMethod" multiple collapse-tags placeholder="">
               <el-option
                       v-for="item in application_method"
                       :key="item.key"
@@ -61,7 +62,7 @@
         </div>
         <div class="form-line">
           <el-form-item label="还款方式" prop="repaymentMethod">
-            <el-select v-model="form.product.repaymentMethod" placeholder="">
+            <el-select v-model="form.product.repaymentMethod" multiple collapse-tags placeholder="">
               <el-option
                       v-for="item in repayment_method"
                       :key="item.key"
@@ -71,7 +72,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="担保方式" prop="guaranteeMethod">
-            <el-select v-model="form.product.guaranteeMethod" placeholder="">
+            <el-select v-model="form.product.guaranteeMethod" multiple collapse-tags placeholder="">
               <el-option
                       v-for="item in guarantee_method"
                       :key="item.key"
@@ -228,7 +229,7 @@ export default {
       chargeList: [],
       form: {
         "product": {
-          "applicationMethod": "", // 申请方式，关联数据字典
+          "applicationMethod": [], // 申请方式，关联数据字典
           "applyTemplateData": "", // 申请资料模板
           "approvalAmountMax": 0, //审批最大额度(万)
           "approvalAmountMin": 0, //审批最小额度(万)
@@ -236,7 +237,7 @@ export default {
           "chargeStandard": "", // 收费标准
           "financingMethodJson": "", // 融资方式
           "fkApplicationCondition": "", // 申请条件-与申请条件表关联
-          "guaranteeMethod": "", // 担保方式，关联数据字典
+          "guaranteeMethod": [], // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
           "isCreditInvestigation": true,// 是否上征信
           "lendingProviderId": undefined,// 贷款机构
@@ -248,7 +249,7 @@ export default {
           "pkId": null,// 主键
           "productDescribe": "", // 产品描述
           "productName": "", // 产品名称
-          "repaymentMethod": "",// 还款方式，关联数据字典
+          "repaymentMethod": [],// 还款方式，关联数据字典
           "status": 0, //状态：-1 下架 0 上架 2注销（删除）
           // "type": undefined// 产品类型(1.短期 2.中期 3.长期)
         },
@@ -371,6 +372,9 @@ export default {
                   if (res.data) {
                     let data = res.data
                     data.product.chargeItems = data.product.chargeItems ? data.product.chargeItems.split(',') : []
+                    data.product.guaranteeMethod = data.product.guaranteeMethod ? data.product.guaranteeMethod.split(',').map(v => Number(v)) : []
+                    data.product.repaymentMethod = data.product.repaymentMethod ? data.product.repaymentMethod.split(',').map(v => Number(v)) : []
+                    data.product.applicationMethod = data.product.applicationMethod ? data.product.applicationMethod.split(',').map(v => Number(v)) : []
                     data.productApplyCondition.excludeArea = data.productApplyCondition.excludeArea ? data.productApplyCondition.excludeArea.split(',') : []
                     data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry ? data.productApplyCondition.excludeIndustry.split(',') : []
                     data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
@@ -392,9 +396,11 @@ export default {
         this.loading = true
         let obj = JSON.parse(JSON.stringify(this.form))
         obj.product.chargeItems = obj.product.chargeItems.toString()
+        obj.product.guaranteeMethod = obj.product.guaranteeMethod.toString()
+        obj.product.repaymentMethod = obj.product.repaymentMethod.toString()
+        obj.product.applicationMethod = obj.product.applicationMethod.toString()
         obj.productApplyCondition.excludeArea = obj.productApplyCondition.excludeArea.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
-        obj.product.chargeItems = obj.product.chargeItems.toString()
         if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
           obj.product.financingMethodJson = obj.product.financingMethodJson.toString()
         }
@@ -456,7 +462,7 @@ export default {
     this.getDic('corporate_age', 'corporate_age')
     this.getDic('year_revenue', 'year_revenue')
     this.getDic('last_year_revenue', 'last_year_revenue')
-    this.getDic('charge_items', 'charge_items')
+    this.getDic('fee', 'charge_items')
     this.getFinancingTypeTree()
     this.getAreaTree()
     this.getIndustryTree()
