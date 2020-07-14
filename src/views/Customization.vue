@@ -782,10 +782,9 @@ export default {
               financialInformation:this.financialInformation,
               legalRepresentative:this.legalRepresentative,
           }
-          this.$axios.post('/mgm/financingPlan/perfectEnterprise',obj).then(res=>{
+          this.$axios.post('/api/mgm/financingPlan/perfectEnterprise',obj).then(res=>{
               if(res.code==0){
                   console.log(res.data);
-                  
               }else{
                   console.log(res);
               }

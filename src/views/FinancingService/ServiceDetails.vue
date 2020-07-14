@@ -19,7 +19,7 @@
           <h5><i class="el-icon-collection-tag" type="primary"></i>基本信息</h5>
           <el-table
             ref="userTable"
-            :data="tableData"
+            :data="baseData"
             tooltip-effect="dark"
             style="width: 100%"
             :stripe="true"
@@ -352,6 +352,8 @@ export default {
       src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
       planCode:'',
       createTime:'',
+
+      baseData:[],
     }
   },
   created(){
@@ -389,6 +391,7 @@ export default {
         console.log(res);
         if(res.code == 0){
           let datas =res.data;
+          this.baseData = [datas.financingPlan];//基本信息
           this.planCode = datas.planCode;
           this.custServName = datas.custServName;
           this.createTime = datas.createTime;
