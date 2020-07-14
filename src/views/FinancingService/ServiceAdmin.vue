@@ -51,7 +51,8 @@
                 <el-table-column prop="address" label="操作" width="150">
                     <template slot-scope="scope">
                         <div class="cz">
-                            <div v-if="scope.row.isCustomize" @click="goCustomization(scope.row.financingCode)">定制服务</div>
+                            <!-- v-if="scope.row.isCustomize" -->
+                            <div  @click="goCustomization(scope.row.financingCode)">定制服务</div>
                             <div @click="goServiceDetails(scope.row.financingCode)">融资服务详情</div>
                         </div>
                     </template>

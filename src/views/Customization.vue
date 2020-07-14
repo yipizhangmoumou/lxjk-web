@@ -119,25 +119,25 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.thatYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.yearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastcall}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearInvoiced}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isImmovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasRealEstate}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.immovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.realEstateVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -145,11 +145,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{enterpriseInfo.isFacility}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{enterpriseInfo.hasEquipment}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.facility}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.equipmentVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -157,17 +157,17 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isPatents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasPatent}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.patents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.patentVal}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.isstockEquity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasSharePledge}}</el-button>
     </el-col>
   </el-row>
 </el-form>
@@ -207,7 +207,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-      <el-cascader :options="areaTree" v-model="enterpriseInfo.area" :props="props" clearable></el-cascader>
+      <el-cascader :options="areaTree" v-model="area_code" :props="props" clearable></el-cascader>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
@@ -225,7 +225,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-          <el-select v-model="enterpriseInfo.thatYears" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.yearRevenue" placeholder="请选择">
             <el-option
               v-for="item in thatYearsArr"
               :key="item.value"
@@ -236,7 +236,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-          <el-select v-model="enterpriseInfo.lastYears" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.lastYearRevenue" placeholder="请选择">
             <el-option
               v-for="item in lastYearsArr"
               :key="item.value"
@@ -247,7 +247,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-          <el-select v-model="enterpriseInfo.lastcall" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.lastYearInvoiced" placeholder="请选择">
             <el-option
               v-for="item in lastcallArr"
               :key="item.value"
@@ -260,7 +260,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-          <el-select v-model="enterpriseInfo.isImmovables" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.hasRealEstate" placeholder="请选择">
             <el-option
               v-for="item in isImmovablesArr"
               :key="item.value"
@@ -271,7 +271,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-          <el-select v-model="enterpriseInfo.immovables" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.realEstateVal" placeholder="请选择">
             <el-option
               v-for="item in immovablesArr"
               :key="item.value"
@@ -286,7 +286,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-          <el-select v-model="enterpriseInfo.isFacility" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.hasEquipment" placeholder="请选择">
             <el-option
               v-for="item in isFacilityArr"
               :key="item.value"
@@ -297,7 +297,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-          <el-select v-model="enterpriseInfo.facility" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.equipmentVal" placeholder="请选择">
             <el-option
               v-for="item in facilityArr"
               :key="item.value"
@@ -312,7 +312,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-          <el-select v-model="enterpriseInfo.isPatents" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.hasPatent" placeholder="请选择">
             <el-option
               v-for="item in isPatentsArr"
               :key="item.value"
@@ -323,7 +323,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-          <el-select v-model="enterpriseInfo.patents" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.patentVal" placeholder="请选择">
             <el-option
               v-for="item in patentsArr"
               :key="item.value"
@@ -336,7 +336,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-          <el-select v-model="enterpriseInfo.isstockEquity" placeholder="请选择">
+          <el-select v-model="enterpriseInfo.hasSharePledge" placeholder="请选择">
             <el-option
               v-for="item in isstockEquityArr"
               :key="item.value"
@@ -345,14 +345,14 @@
             </el-option>
           </el-select>
     </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
         <div class=""><i class="redrules">*</i> 联系人</div>
         <el-input  type="text" v-model="enterpriseInfo.isstockEquity"></el-input>
     </el-col>
         <el-col :span="8">
         <div class=""><i class="redrules">*</i> 电话</div>
         <el-input type="text" v-model="enterpriseInfo.isstockEquity"></el-input>
-    </el-col>
+    </el-col> -->
   </el-row>
 </el-form>
   </el-tab-pane>
@@ -402,11 +402,35 @@
     </el-row>
     <el-row>
       <el-col :span="8">
-          <div class=""><i class="redrules">*</i> 法人身份证</div>
+          <div class="" style="margin-bottom:15px"><i class="redrules">*</i> 法人身份证</div>
           <el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
-  list-type="picture-card">
-  <i class="el-icon-plus"></i>
+          style="display:inline-block"
+  action=""
+  list-type="picture-card"
+  :limit="1"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove"
+  :on-exceed="handleExceed"
+  :http-request="upload"
+  :file-list="fileList"
+  >
+  <span>正面</span>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
+          <el-upload
+          style="display:inline-block;margin-left:20px"
+  action=""
+  list-type="picture-card"
+  :limit="1"
+  :on-preview="handlePictureCardPreviewB"
+  :on-remove="handleRemoveB"
+  :on-exceed="handleExceedB"
+  :http-request="uploadB"
+  :file-list="fileListB"
+  >
+  <span>背面</span>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
   <img width="100%" :src="dialogImageUrl" alt="">
@@ -432,11 +456,18 @@
 <el-form  v-if="showwrite" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
-        <div class=""><i class="redrules">*</i> 企业营业证件</div>
+        <div class="" style="margin-bottom:15px"><i class="redrules">*</i> 企业营业证件</div>
           <el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
-  list-type="picture-card">
-  <i class="el-icon-plus"></i>
+          style="display:inline-block;margin-left:20px"
+  action=""
+  list-type="picture-card"
+  :limit="1"
+  :on-remove="handleRemoveC"
+  :on-exceed="handleExceedC"
+  :http-request="uploadC"
+  :file-list="fileListC"
+  >
+  <span>背面</span>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
   <img width="100%" :src="dialogImageUrl" alt="">
@@ -516,7 +547,7 @@
   </el-form>  
   </el-tab-pane>
 </el-tabs>
-  <div style="text-align:center">
+  <div style="text-align:center;margin-top:20px">
      <el-button type="primary" @click="saveNew">完善提交</el-button>
      <el-button plain>重置</el-button>
   </div>
@@ -534,29 +565,8 @@ export default {
     name: "Customization",
     data() {
         return {
-            tableData: [
-                {
-                    date: "2016-05-02",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1518 弄"
-                },
-                {
-                    date: "2016-05-04",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1517 弄"
-                },
-                {
-                    date: "2016-05-01",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1519 弄"
-                },
-                {
-                    date: "2016-05-03",
-                    name: "王小虎",
-                    address: "上海市普陀区金沙江路 1516 弄"
-                }
-            ],
-                  companyInfo:{
+        
+        companyInfo:{
         companyName:'湖南XXXX科技有限公司',
         companyType:'有限公司',
         industryType:'互联网',
@@ -658,7 +668,15 @@ export default {
           value:'code'
         },
         status:'',
+        area_code:'',//企业信息区域code
         finan_areaCode:'',//账户区域的code
+
+        fileList:[],
+        fileListB:[],
+        fileListC:[],
+        frontIdCard:'',
+        reverseIdCard:'',
+        businessLicense:'',
         };
     },
     components: {
@@ -733,21 +751,133 @@ export default {
          * @Date Changed: 2020-07-12
          */
         goProductCustomization(){
-            console.log( "定制融资产品/查看详情" );
-            this.$router.push("/productCustomization")
+            console.log( "定制融资产品/查看详情" ); 
+            let assessmentApplyId =''
+            let planCode = this.$route.params.financingCode
+            this.$router.push({
+                path:`/productCustomization/:${assessmentApplyId}/:${planCode}`
+            })
         },
         writeCompany(){
           this.showwrite=!this.showwrite;
         },
         saveNew(){
           console.log(this.enterpriseInfo);
+          this.enterpriseInfo.provinceCode = this.area_code[0]
+          this.enterpriseInfo.cityCode = this.area_code[1]
+          this.enterpriseInfo.regionCode = this.area_code[2]
+          this.enterpriseInfo.businessLicense = this.businessLicense;
+        //   this.enterpriseInfo.companyImg=------
           console.log(this.financialInformation);
+
           this.financialInformation.provinceCode = this.finan_areaCode[0]
           this.financialInformation.cityCode = this.finan_areaCode[1]
           this.financialInformation.regionCode = this.finan_areaCode[2]
           console.log(this.legalRepresentative);
+          this.legalRepresentative.frontIdCard = this.frontIdCard;
+          this.legalRepresentative.reverseIdCard = this.reverseIdCard;
           console.log(this.financialInformation);
+          let obj = {
+              enterpriseInfo:this.enterpriseInfo,
+              financialInformation:this.financialInformation,
+              legalRepresentative:this.legalRepresentative,
+          }
+          this.$axios.post('/mgm/financingPlan/perfectEnterprise',obj).then(res=>{
+              if(res.code==0){
+                  console.log(res.data);
+                  
+              }else{
+                  console.log(res);
+              }
+          })
         },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+            this.fileList = [];
+        },
+        handleExceed(){
+            this.$message({
+                type:'warning',
+                message:'最多可上传一张图片。'
+            })
+        },
+        upload(file){
+            console.log(file);
+            let fd = new FormData();
+      fd.append("file", file.file);
+        this.$axios.post('/api/mgm/file/uploadImg',fd).then(res => {
+            console.log(res)
+            if(res.code==0){
+                this.frontIdCard= res.data.url
+            }else{
+                console.log(res);
+                
+            }
+            
+    }).catch(err => {
+     console.log(err)
+    })
+        },
+
+        //背面图片
+        handleRemoveB(file, fileList) {
+            console.log(file, fileList);
+            this.fileListB = [];
+        },
+        handleExceedB(){
+            this.$message({
+                type:'warning',
+                message:'最多可上传一张图片。'
+            })
+        },
+        uploadB(file){
+            console.log(file);
+            let fd = new FormData();
+      fd.append("file", file.file);
+        this.$axios.post('/api/mgm/file/uploadImg',fd).then(res => {
+            if(res.code == 0){
+                this.reverseIdCard = res.data.url;
+            }else{
+                console.log(res);
+            }
+    }).catch(err => {
+     console.log(err)
+    })
+        },     
+
+        //企业证件
+        handleRemoveC(file, fileList) {
+            console.log(file, fileList);
+            this.fileListC = [];
+        },
+        handleExceedC(){
+            this.$message({
+                type:'warning',
+                message:'最多可上传一张图片。'
+            })
+        },
+        uploadC(file){
+            console.log(file);
+            let fd = new FormData();
+      fd.append("file", file.file);
+        this.$axios.post('/api/mgm/file/uploadImg',fd).then(res => {
+            if(res.code == 0){
+                this.businessLicense = res.data.url;
+            }else{
+                console.log(res);
+            }
+    }).catch(err => {
+     console.log(err)
+    })
+        },
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        handlePictureCardPreviewB(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        }
     }
 };
 </script>
