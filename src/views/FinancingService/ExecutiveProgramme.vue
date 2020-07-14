@@ -29,37 +29,38 @@
             </div>
             <div class="table">
                 <el-table
-                    ref="multipleTable"
+                    ref="tableData"
                     :data="tableData"
                     tooltip-effect="dark"
                     style="width: 100%"
                     :stripe="true"
                     :border="true">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column label="执行单号" prop="number"></el-table-column>
-                    <el-table-column label="产品ID"  prop="name"></el-table-column>
-                    <el-table-column label="产品名称" prop="name"></el-table-column>
-                    <el-table-column label="产品类型" prop="address"></el-table-column>
-                    <el-table-column label="申请额度" prop="employee"></el-table-column>
-                    <el-table-column label="期数" prop="linkman"></el-table-column>
-                    <el-table-column label="贷款利息" prop="mobile"></el-table-column>
-                    <el-table-column label="还款方式" prop="createTime"></el-table-column>
-                    <el-table-column label="担保方式" prop="status"></el-table-column>
-                    <el-table-column label="申请企业" prop="status"></el-table-column>
-                    <el-table-column label="放款机构" prop="status"></el-table-column>
-                    <el-table-column label="前置付款项" prop="status"></el-table-column>
-                    <el-table-column label="前置付款状态" prop="status"></el-table-column>
-                    <el-table-column label="服务费" prop="status"></el-table-column>
-                    <el-table-column label="服务费支付状态" prop="status"></el-table-column>
-                    <el-table-column label="方案执行时间" prop="status"></el-table-column>
-                    <el-table-column label="融资顾问" prop="status"></el-table-column>
-                    <el-table-column label="来源" prop="status"></el-table-column>
-                    <el-table-column label="状态" prop="status"></el-table-column>
-                    <el-table-column label="完成时间" prop="status"></el-table-column>
+                    <el-table-column label="执行单号" prop="childPlanCode"></el-table-column>
+                    <el-table-column label="产品ID"  prop="productId"></el-table-column>
+                    <el-table-column label="产品名称" prop="productName"></el-table-column>
+                    <el-table-column label="产品类型" prop="productTypeName"></el-table-column>
+                    <el-table-column label="申请额度" prop="finalAmount"></el-table-column>
+                    <el-table-column label="期数" prop="loanCycle"></el-table-column>
+                    <el-table-column label="贷款利息" prop="interestRate"></el-table-column>
+                    <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
+                    <el-table-column label="申请方式" prop="applicationMethodStr"></el-table-column>
+                    <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
+                    <el-table-column label="申请企业" prop="enterpriseName"></el-table-column>
+                    <el-table-column label="放款机构" prop="orgName"></el-table-column>
+                    <el-table-column label="前置付款项" prop="qzChargeItem"></el-table-column>
+                    <el-table-column label="前置付款状态" prop="qzChargeItemStatus"></el-table-column>
+                    <el-table-column label="服务费" prop="servChargeItem"></el-table-column>
+                    <el-table-column label="服务费支付状态" prop="servChargeItemStatus"></el-table-column>
+                    <el-table-column label="方案执行时间" prop="createTime"></el-table-column>
+                    <el-table-column label="融资顾问" prop="custSerName"></el-table-column>
+                    <el-table-column label="来源" prop="promoterName"></el-table-column>
+                    <el-table-column label="状态" prop="actionStatus"></el-table-column>
+                    <el-table-column label="完成时间" prop="finishTime"></el-table-column>
                     <el-table-column prop="address" label="操作" width="150">
-                        <template>
+                        <template slot-scope="scope">
                             <div class="cz">
-                                <div @click="goDeatils()">融资服务详情</div>
+                                <div @click="goServiceDetails(scope.row.childPlanCode)">融资服务详情</div>
                             </div>
                         </template>
                     </el-table-column>
@@ -96,6 +97,8 @@
 import CopyRight from "components/CopyRight";
 import SearchSix from "components/Search/SearchSix";
 import StatusList from "components/StatusList";
+
+import dateFormat from './../../unit/dataForamt'
 export default {
     name: "ExecutiveProgramme",
     data() {
@@ -301,27 +304,27 @@ export default {
                     let data = res.data;
                     this.tableData = data != null ? data.mgmActionChildPlanList.map(item=>{
                         return {
-                            childPlanCode: item.childPlanCode,//执行单号 
-                            //产品ID 
-                            productName: item.productName,//产品名称 
-                            productTypeName: item.productTypeName,//产品类型 
-                            finalAmount: item.finalAmount,//申请额度 
-                            loanCycle: item.loanCycle,//期数 
-                            //贷款利息 
-                            repaymentStr: item.repaymentStr,//还款方式 
-                            applicationMethodStr: item.applicationMethodStr,//申请方式 
-                            guaranteeMethodStr: item.guaranteeMethodStr,//担保方式 
-                            enterpriseName: item.enterpriseName,//申请企业 
-                            orgName: item.orgName,//放款机构 
-                            qzChargeItem: item.qzChargeItem,//前置付款项 
-                            qzChargeItemStatus: item.qzChargeItemStatus,//前置付款状态 
-                            servChargeItem: item.servChargeItem,//服务费
-                            servChargeItemStatus: item.servChargeItemStatus,//服务费支付状态 
-                            createTime: item.createTime,//方案执行时间 
-                            custSerName: item.custSerName,//融资顾问 
-                            promoterName: item.promoterName,//来源 
-                            actionStatus: item.actionStatus,//状态 
-                            finishTime: item.finishTime//完成时间 
+                            childPlanCode: !item.childPlanCode ? "-" : item.childPlanCode ,//执行单号 
+                            productId: !item.productId ? "-" : item.productId,//产品ID 
+                            productName: !item.productName ? "-" : item.productName,//产品名称 
+                            productTypeName: !item.productTypeName ? "-" : item.productTypeName,//产品类型 
+                            finalAmount: !item.finalAmount ? "-" : item.finalAmount,//申请额度 
+                            loanCycle: !item.loanCycle ? "-" : item.loanCycle,//期数 
+                            interestRate: !item.interestRate ? "-" : item.interestRate, //贷款利息 
+                            repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,//还款方式 
+                            applicationMethodStr: !item.applicationMethodStr ? "-" : item.applicationMethodStr ,//申请方式 
+                            guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,//担保方式 
+                            enterpriseName: !item.enterpriseName ? "-" : item.enterpriseName,//申请企业 
+                            orgName: !item.orgName ? "-" : item.orgName,//放款机构 
+                            qzChargeItem: !item.qzChargeItem ? "-" : item.qzChargeItem,//前置付款项 
+                            qzChargeItemStatus: item.qzChargeItemStatus === null ? "-" : this.qzChargeItemStatusObj[item.qzChargeItemStatus],//前置付款状态 
+                            servChargeItem: !item.servChargeItem ? "-" : item.servChargeItem,//服务费
+                            servChargeItemStatus: item.servChargeItemStatus === null ? "-" : this.servChargeItemStatus[item.servChargeItemStatus],//服务费支付状态 
+                            createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),//方案执行时间 
+                            custSerName: !item.custSerName ? "-" : item.custSerName,//融资顾问 
+                            promoterName: !item.promoterName ? "-" : item.promoterName,//来源 
+                            actionStatus: item.actionStatus === null ? "" : this.actionStatusObj[item.actionStatus],//状态 
+                            finishTime: !item.finishTime ? "-" : dateFormat.dateFmt(item.finishTime)//完成时间 
                         }
                     }) : [];
 
@@ -362,30 +365,35 @@ export default {
          */
 
         invertSelection(rows) {
-        let arr = [];
-        this.tableData.forEach((e, index) => {
-            rows.forEach(i => {
-            if (e.id_ === i.id_) {
-                arr.push(this.tableData[index]);
+            let arr = [];
+            this.tableData.forEach((e, index) => {
+                rows.forEach(i => {
+                if (e.id_ === i.id_) {
+                    arr.push(this.tableData[index]);
+                }
+                });
+            });
+            if (arr) {
+                this.$nextTick(() => {
+                arr.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
             }
-            });
-        });
-        if (arr) {
-            this.$nextTick(() => {
-            arr.forEach(row => {
-                this.$refs.multipleTable.toggleRowSelection(row);
-            });
-            });
-        } else {
-            this.$refs.multipleTable.clearSelection();
-        }
         },
-        goDeatils(){
-        this.$router.push({
-            path:'/ServiceDetails',
 
-        })
-        },
+        /**
+         * @description: 路由跳转-融资服务详情
+         * @param {string} financingCode 服务id
+         * @Date Changed: 2020-07-13 
+         */
+        goServiceDetails(financingCode){
+            this.$router.push({
+                path: `/ServiceDetails/${financingCode}`
+            });
+        }
     },
     
 
