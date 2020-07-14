@@ -89,53 +89,53 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业全称</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyName}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 企业性质</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.enterpriseNature}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.industryType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.industryCode}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.areaCity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.areaCode}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.adress}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.regAddress}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 成立时间</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.time}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.regTime}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.thatYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.yearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.lastYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastcall}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.lastYearInvoiced}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isImmovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.hasRealEstate}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.immovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.realEstateVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -143,11 +143,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{companyInfo.isFacility}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{companyInfo.hasEquipment}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.facility}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.equipmentVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -155,17 +155,17 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isPatents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.hasPatent}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.patents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.patentVal}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isstockEquity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.hasSharePledge}}</el-button>
     </el-col>
   </el-row>
 </el-form>
@@ -211,30 +211,30 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户银行</div>
-        <el-button class="pdl10" disabled type="text" v-model="companyInfo.openBank">{{companyInfo.openBank}}</el-button>
+        <el-button class="pdl10" disabled type="text" v-model="companyInfo.bankName">{{companyInfo.openBank}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 银行账号</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankCard}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.cardNum}}</el-button>
     </el-col>
     <el-col :span="8">
       <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankArea}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.cityCode}}</el-button>
     
     </el-col>
   </el-row>
     <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户支行</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankBranch}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.depositBank}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 税号</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.dutyParagraph}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.taxNumber}}</el-button>
     </el-col>
     <el-col :span="8"> 
       <div class=""><i class="redrules">*</i> 发票抬头</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.invoiceTitle}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.regionCode}}</el-button>
     </el-col>
   </el-row>
   </el-form>
@@ -395,6 +395,7 @@ export default {
           this.planCode = datas.planCode;
           this.custServName = datas.custServName;
           this.createTime = datas.createTime;
+          this.companyInfo = Object.assign({},datas.enterpriseAssetInfo,datas.financingPlan,datas.legalRepresentative)
           console.log(this.planCode);
         }else{
           console.log(111);

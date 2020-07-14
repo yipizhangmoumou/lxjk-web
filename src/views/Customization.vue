@@ -777,6 +777,7 @@ export default {
           this.legalRepresentative.frontIdCard = this.frontIdCard;
           this.legalRepresentative.reverseIdCard = this.reverseIdCard;
           console.log(this.financialInformation);
+          // return false
           let obj = {
               enterpriseInfo:this.enterpriseInfo,
               financialInformation:this.financialInformation,
