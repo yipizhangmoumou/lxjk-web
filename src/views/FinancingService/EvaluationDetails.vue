@@ -1,10 +1,10 @@
 <template>
   <div id="EvaluationDetails">
-        <ElSteps :stepArr="stepData" :stepActive="stepActive" />
+        <ElSteps :stepArr="initData.stepData" :stepActive="initData.stepActive" />
 
         <div class="evaluation-details">
             <div class="details-header">
-                订单编号：201808196398345
+                订单编号：{{ id }}
             </div>
             <div class="evaluation-details-main">
                 <!-- 一、基本信息 -->
@@ -17,7 +17,7 @@
                     </div>
                     <div class="table">
                         <el-table
-                            :data="baseInfoTableData"
+                            :data="initData.baseInfoTableData"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
@@ -41,37 +41,49 @@
                             评估适用产品：
                         </h6>
                         <el-button-group>
-                            <el-button>短期(2)</el-button>
-                            <el-button>中期0</el-button>
-                            <el-button>长期0</el-button>
+                            <el-button 
+                                :class="{active: initData.actAppIdx=='shotTerms'}" 
+                                @click="toggleActApliPro('shotTerms')">
+                                短期({{ initData.applicableProducts.shotTerms.length }})
+                            </el-button>
+                            <el-button 
+                                :class="{active: initData.actAppIdx=='middleTerms'}"
+                                @click="toggleActApliPro('middleTerms')">
+                                中期({{ initData.applicableProducts.middleTerms.length }})
+                            </el-button>
+                            <el-button
+                                :class="{active: initData.actAppIdx=='longTerms'}" 
+                                @click="toggleActApliPro('longTerms')">
+                                长期({{ initData.applicableProducts.longTerms.length }})
+                            </el-button>
                         </el-button-group>
                     </div>
                     <div class="table">
                         <el-table
-                            :data="byUseProTableData"
+                            :data="initData.applicableProducts[initData.actAppIdx]"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
                             fit>
-                            <el-table-column label="序号" prop="id" width="100px"></el-table-column>
-                            <el-table-column label="客户选取" prop="customerSelected"></el-table-column>
-                            <el-table-column label="产品名称" prop="proName"></el-table-column>
-                            <el-table-column label="产品类型" prop="proType"></el-table-column>
-                            <el-table-column label="放款机构" prop="lender"></el-table-column>
-                            <el-table-column label="期数" prop="dateNum"></el-table-column>
-                            <el-table-column label="贷款利息" prop="interest"></el-table-column>
-                            <el-table-column label="还款方式" prop="repayment"></el-table-column>
-                            <el-table-column label="担保方式" prop="guarantee"></el-table-column>
-                            <el-table-column label="最高申请额度" prop="maxSalary"></el-table-column>
+                            <el-table-column label="序号" prop="idx" width="100px"></el-table-column>
+                            <el-table-column label="产品ID" prop="productId"></el-table-column>
+                            <el-table-column label="产品名称" prop="productName"></el-table-column>
+                            <el-table-column label="产品类型" prop="productType"></el-table-column>
+                            <el-table-column label="放款机构" prop="orgName"></el-table-column>
+                            <el-table-column label="期数" prop="loanCycle"></el-table-column>
+                            <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
+                            <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
+                            <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
+                            <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
                         </el-table>
                         <!-- 分页 -->
                         <div class="page-conatiner">
                             <el-pagination
-                                :current-page="curr"
-                                :page-sizes="[100, 200, 300, 400]"
-                                :page-size="100"
+                                :current-page="initData.applicableProductsCurr"
+                                :page-sizes="[10, 20, 50, 100]"
+                                :page-size="10"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="400"
+                                :total="initData.applicableProducts[initData.actAppIdx].length"
                             ></el-pagination>
                         </div>
                         
@@ -89,44 +101,57 @@
                             <p>客户选定产品：申请额度合计：<span>¥200万</span></p>
                         </div>
                         <el-button-group>
-                            <el-button>短期(2)</el-button>
-                            <el-button>中期0</el-button>
-                            <el-button>长期0</el-button>
+                            <el-button 
+                                :class="{active: initData.selectedAppIdx=='shotTerms'}" 
+                                @click="toggleSelectediPro('shotTerms')">
+                                短期({{ initData.selectedProducts.shotTerms.length }})
+                            </el-button>
+                            <el-button 
+                                :class="{active: initData.selectedAppIdx=='middleTerms'}"
+                                @click="toggleSelectediPro('middleTerms')">
+                                中期({{ initData.selectedProducts.middleTerms.length }})
+                            </el-button>
+                            <el-button
+                                :class="{active: initData.selectedAppIdx=='longTerms'}" 
+                                @click="toggleSelectediPro('longTerms')">
+                                长期({{ initData.selectedProducts.longTerms.length }})
+                            </el-button>
                         </el-button-group>
                     </div>
                     <div class="table">
                         <el-table
-                            :data="byUseProTableData"
+                            :data="initData.selectedProducts[initData.selectedAppIdx]"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
                             fit>
-                            <el-table-column label="序号" prop="id" width="100px"></el-table-column>
-                            <el-table-column label="客户选取" prop="customerSelected"></el-table-column>
-                            <el-table-column label="产品名称" prop="proName"></el-table-column>
-                            <el-table-column label="产品类型" prop="proType"></el-table-column>
-                            <el-table-column label="放款机构" prop="lender"></el-table-column>
-                            <el-table-column label="期数" prop="dateNum"></el-table-column>
-                            <el-table-column label="贷款利息" prop="interest"></el-table-column>
-                            <el-table-column label="还款方式" prop="repayment"></el-table-column>
-                            <el-table-column label="担保方式" prop="guarantee"></el-table-column>
-                            <el-table-column label="最高申请额度" prop="maxSalary"></el-table-column>
+                            <el-table-column label="序号" prop="idx" width="100px"></el-table-column>
+                            <el-table-column label="客户选取" prop="selectProductStatus"></el-table-column>
+                            <el-table-column label="产品ID" prop="productId"></el-table-column>
+                            <el-table-column label="产品名称" prop="productName"></el-table-column>
+                            <el-table-column label="产品类型" prop="productType"></el-table-column>
+                            <el-table-column label="放款机构" prop="orgName"></el-table-column>
+                            <el-table-column label="期数" prop="loanCycle"></el-table-column>
+                            <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
+                            <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
+                            <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
+                            <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
                         </el-table>
                         <!-- 分页 -->
                         <div class="page-conatiner">
                             <el-pagination
-                                :current-page="curr"
-                                :page-sizes="[100, 200, 300, 400]"
-                                :page-size="100"
+                                :current-page="initData.selectedProductsCurr"
+                                :page-sizes="[10, 20, 50, 100]"
+                                :page-size="10"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="400"
+                                :total="initData.selectedProducts[initData.selectedAppIdx].length"
                             ></el-pagination>
                         </div>
                         
                     </div>
                 </div>
 
-                <!-- 四、评估适用产品 -->
+                <!-- 四、评估申请信息 -->
                 <div class="table-container">
                     <div class="table-header apply-header">
                         <h6>
@@ -134,144 +159,110 @@
                             评估申请信息
                         </h6>
                     </div>
-                    <el-form label-position="top" label-width="80px" :model="componyApplyInfo">
+                    <el-form label-position="top" label-width="80px" :model="initData.componyApplyInfo">
                         <div class="form-line">
                             
                             <el-form-item 
                                 label="企业全称"
-                                prop="fullName"
-                                :rules="[
-                                    { required: true, message: '请填写企业全称'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.fullName" disabled></el-input>
+                                prop="name"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.name" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="企业性质"
-                                prop="nature"
-                                :rules="[
-                                    { required: true, message: '请填写企业性质'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.nature" disabled></el-input>
+                                prop="enterpriseNature"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.enterpriseNature" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="行业类型"
-                                prop="industryType"
-                                :rules="[
-                                    { required: true, message: '请填写企业性质'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.industryType" disabled></el-input>
+                                prop="industryValue"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.industryValue" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="所在区域"
-                                prop="area"
-                                :rules="[
-                                    { required: true, message: '请填写所在区域'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.area" disabled></el-input>
+                                prop="region"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.address" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="详细地址"
                                 prop="address"
-                                :rules="[
-                                    { required: true, message: '请填写详细地址'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.address" disabled></el-input>
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.address" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="成立时间"
-                                prop="ctime"
-                                :rules="[
-                                    { required: true, message: '请填写成立时间'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.ctime" disabled></el-input>
+                                prop="establishDate"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.establishDate" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="本年度销售收入"
-                                prop="annualSales"
-                                :rules="[
-                                    { required: true, message: '请填写本年度销售收入'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.annualSales" disabled></el-input>
+                                prop="currentYearRevenueValue"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.currentYearRevenueValue" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="上年度销售收入"
-                                prop="lastYearSales"
-                                :rules="[
-                                    { required: true, message: '请填写上年度销售收入'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.lastYearSales" disabled></el-input>
+                                prop="lastYearRevenueValue"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.lastYearRevenueValue" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="上年度开票收入"
-                                prop="lastYearOpen"
-                                :rules="[
-                                    { required: true, message: '请填写上年度开票收入'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.lastYearOpen" disabled></el-input>
+                                prop="lastYearInvoiceAmountValue"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.lastYearInvoiceAmountValue" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="是否有不动产"
-                                prop="isImmovables"
-                                :rules="[
-                                    { required: true, message: '请填写是否有不动产'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.isImmovables" disabled></el-input>
+                                prop="hasRealEstate"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.hasRealEstate" disabled></el-input>
                             </el-form-item><el-form-item 
                                 label="不动产价值"
-                                prop="ImmovablesSales"
-                                :rules="[
-                                    { required: true, message: '请填写不动产价值'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.ImmovablesSales" disabled></el-input>
+                                prop="realEstateValString"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.realEstateValString" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="法人年龄"
-                                prop="legalPersonAge"
-                                :rules="[
-                                    { required: true, message: '请填写法人年龄'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.legalPersonAge" disabled></el-input>
+                                prop="corporateAge"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.corporateAge" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="是否有设备"
-                                prop="isDevice"
-                                :rules="[
-                                    { required: true, message: '请填写是否有设备'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.isDevice" disabled></el-input>
+                                prop="hasEquipment"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.hasEquipment" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="设备价值"
-                                prop="deviceSales"
-                                :rules="[
-                                    { required: true, message: '请填写设备价值'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.deviceSales" disabled></el-input>
+                                prop="equipmentVal"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.equipmentVal" disabled></el-input>
                             </el-form-item>
                             
                             <el-form-item 
                                 label="是否有股权质押"
-                                prop="isEquityPledge"
-                                :rules="[
-                                    { required: true, message: '请填写是否有股权质押'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.isEquityPledge" disabled></el-input>
+                                prop="hasSharePledge"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.hasSharePledge" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="是否有专利"
-                                prop="ishasPatent"
-                                :rules="[
-                                    { required: true, message: '请填写是否有专利'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.ishasPatent" disabled></el-input>
+                                prop="hasPatent"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.hasPatent" disabled></el-input>
                             </el-form-item>
                             <el-form-item 
                                 label="专利数"
-                                prop="patentNum"
-                                :rules="[
-                                    { required: true, message: '请填写专利数'}
-                                ]">
-                                <el-input v-model="componyApplyInfo.patentNum" disabled></el-input>
+                                prop="patentVal"
+                                required>
+                                <el-input v-model="initData.componyApplyInfo.patentVal" disabled></el-input>
                             </el-form-item>
                             
                         </div>
@@ -293,64 +284,93 @@ export default {
     name: "evaluationDetails",
     data() {
         return {
-            codeId: "", // 评估单号
+            id: "", // 评估单号
 
-            initData: {},
+            // 页面初始加载数据
+            initData: {
+                // 流程步骤数据
+                stepActive: 2,
+                stepData: [
+                    {
+                        name: "评估申请",
+                        time: "2020.07.10 15:43:23"
+                    },
+                    {
+                        name: "评估完成",
+                        time: "2020.07.10 15:43:23"
+                    },
+                    {
+                        name: "正式服务申请",
+                        time: "2020.07.10 15:43:23"
+                    }
+                ],
 
+                /*** ------ 基本信息：开始 ------ ***/ 
+                baseInfoTableData: [
+                    {
+                        id: "123",
+                        name: "湖南XXXXXX有限公司",
+                        type: "债券融资",
+                        salary: "¥200万",
+                        result: "成功",
+                        beapp: "9项",
+                        applySatatus: "未申请"
 
-            stepData: [
-                {
-                    name: "评估申请",
-                    time: "2020.07.10 15:43:23"
+                    }
+                ],
+                /*** ------ 基本信息：结束 ------ ***/ 
+
+                /*** ------ 评估适用产品：开始 ------ ***/ 
+                actAppIdx: "shotTerms",
+                applicableProducts: {
+                    "shotTerms": [],  // 短期
+                    "middleTerms": [],// 中期
+                    "longTerms": []   // 长期
                 },
-                {
-                    name: "评估完成",
-                    time: "2020.07.10 15:43:23"
+                applicableProductsCurr: 1,   //评估适用产品当前分页
+                /*** ------ 评估适用产品：结束 ------ ***/ 
+
+
+                /*** ------ 申请选定产品：开始 ------ ***/ 
+                applySalaryTotal: 0,   // 申请额度合计
+                selectedAppIdx: "shotTerms",
+                selectedProducts: {
+                    "shotTerms": [],  // 短期
+                    "middleTerms": [],// 中期
+                    "longTerms": []   // 长期
                 },
-                {
-                    name: "正式服务申请",
-                    time: "2020.07.10 15:43:23"
-                }
-            ],
-            stepActive: 2,
+                selectedProductsCurr: 1,   //  客户申请选定产品
+                /*** ------ 申请选定产品：结束 ------ ***/ 
 
-            baseInfoTableData: [
-                {
-                    id: "123",
-                    name: "湖南XXXXXX有限公司",
-                    type: "债券融资",
-                    salary: "¥200万",
-                    result: "成功",
-                    beapp: "9项",
-                    applySatatus: "未申请"
+                
+                /*** ------ 评估申请信息：开始 ------ ***/ 
+                componyApplyInfo: {}
+                /*** ------ 评估申请信息：结束 ------ ***/ 
 
-                }
-            ],
+
+            },
+
+            // 产品类型枚举
+            productTypeObj: {
+                "1": "长期",
+                "2": "中期", 
+                "3": "短期"
+            },
+
+            // 客户选取状态枚举
+            selectProductStatusObj: {
+                "0": "客户选定",
+                "1": "否" 
+            },
+
+            // 0|1 枚举
+            isTureOrFalseObj: {
+                "0": "否",
+                "1": "是"
+            },
+
+
             
-            byUseProTableData: [],
-            curr: 1,
-
-            componyApplyInfo: {
-                fullName: "湖南XXXX科技有限公司",
-                nature: "有限公司",
-                industryType: "互联网",
-                area: "湖南省 长沙市 雨花区",
-                address: "雨花区时代阳光大道123号",
-                ctime: "2017年6月",
-                annualSales: "200万-1000万",
-                lastYearSales: "200万-1000万",
-                lastYearOpen: "200万-1000万",
-                isImmovables: "是",
-                ImmovablesSales: "1000万以内",
-                legalPersonAge: "20-60岁",
-                isDevice: "是",
-                deviceSales: "1000万以内",
-                isEquityPledge: "是",
-                ishasPatent: "是",
-                patentNum: "5个以内"
-
-
-            }
 
         };
     },
@@ -362,44 +382,186 @@ export default {
     },
     created() {
 
-        let codeId = this.codeId = this.$route.params.codeId;
+        let id = this.id = this.$route.params.id;
 
-        this.getInitData(codeId);
+        /**
+         * @description: 获取页面初始数据
+         * @param {string} id
+         * @Date Changed: 2020-07-14
+         */
+        this.getInitData(id);
 
-
-
-        for (let index = 0; index < 3; index++) {
-            this.byUseProTableData.push({
-                id: index+1,
-                customerSelected: "客户选定",
-                proName: "商户信用贷-"+index,
-                proType: "短期",
-                lender: "长沙银行",
-                dateNum: "12-24期",
-                interest: "年化7%-9%",
-                repayment: `等额本息 先息后本`,
-                guarantee: "需要担保人,资质好可免担保",
-                maxSalary: "2020-03-09 12:34:23"
-            });
-        }
     },
 
     methods: {
 
         /**
          * @description: 获取页面初始数据
-         * @param {string} codeId 
+         * @param {string} id 
          * @Date Changed: 2020-07-14
          */
-        getInitData(codeId){
-            console.log( "codeId>>>", codeId );
+        getInitData(id){
+            console.log( "codeId>>>", id );
 
-            this.$axios.post(`/api/mgm/assessmentApply/detail/${codeId}`)
+            this.$axios.post(`/api/mgm/assessmentApply/detail/${42}`)
                 .then(res=>{
-                    console.log( "评估详情数据响应：", res );
-                })
+                    // console.log( "评估详情数据响应：", res );
+                    if(res.code == 0){
+                        let data = res.data;
+
+                        // 评估进度状态
+
+                        // 基本信息
+
+                        /** ------ 评估适用产品 数据重构：开始------ **/
+                        this.initData.applicableProducts.shotTerms = !data.shotTerms ? [] : data.shotTerms.map((item,idx)=>{
+                            return {
+                                idx: idx,// 序号
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                            }
+                        });
+                        this.initData.applicableProducts.middleTerms = !data.middleTerms ? [] : data.middleTerms.map((item,idx)=>{
+                            return {
+                                idx: idx,// 序号
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                            }
+                        });
+                        this.initData.applicableProducts.longTerms = !data.longTerms ? [] : data.longTerms.map((item,idx)=>{
+                            return {
+                                idx: idx,// 序号
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                            }
+                        });
+                        /** ------ 评估适用产品 数据重构：结束------ **/
+
+
+                        /** ------ 评估申请选定产品 数据重构：开始------ **/ 
+                        this.initData.selectedProducts.shotTerms = !data.selectedShortTerms ? [] : data.selectedShortTerms.map((item,idx)=>{
+                            console.log( item );
+                            return {
+                                idx: idx,// 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+
+                            }
+                        });
+                        this.initData.selectedProducts.middleTerms = !data.selectedMiddleTerms ? [] : data.selectedMiddleTerms.map((item,idx)=>{
+                            console.log( item );
+                            return {
+                                idx: idx,// 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+
+                            }
+                        });
+                        this.initData.selectedProducts.longTerms = !data.selectedLongTerms ? [] : data.selectedLongTerms.map((item,idx)=>{
+                            console.log( item );
+                            return {
+                                idx: idx,// 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+
+                            }
+                        });
+                        /** ------ 评估申请选定产品 数据重构：结束------ **/ 
+
+                        
+                        /** ------ 评估申请信息 数据重构：开始------ **/ 
+                        this.initData.componyApplyInfo = !data.enterpriseDetail ? {} : {
+                            name: !data.enterpriseDetail.name ? "-" : data.enterpriseDetail.name,// 企业名称
+                            enterpriseNature: !data.enterpriseDetail.enterpriseNature ? "-" : data.enterpriseDetail.enterpriseNature,// 企业性质
+                            industryValue: !data.enterpriseDetail.industryValue ? "-" : data.enterpriseDetail.industryValue,// 行业类型
+                            region: `${!data.enterpriseDetail.province ? "-" : data.enterpriseDetail.province} ${!data.enterpriseDetail.city ? "-" : data.enterpriseDetail.city} ${!data.enterpriseDetail.area ? "-" : data.enterpriseDetail.area }`,// 所在区域
+                            address: `${data.enterpriseDetail.province}-${data.enterpriseDetail.city}-${data.enterpriseDetail.area}`,// 详细地址
+                            establishDate: !data.enterpriseDetail.establishDate ? "-" : data.enterpriseDetail.establishDate ,// 成立时间
+                            currentYearRevenueValue: !data.enterpriseDetail.currentYearRevenueValue ? "-" : data.enterpriseDetail.currentYearRevenueValue,// 本年度销售收入
+                            lastYearRevenueValue: !data.enterpriseDetail.lastYearRevenueValue ? "-" : data.enterpriseDetail.lastYearRevenueValue,// 上年度销售收入
+                            lastYearInvoiceAmountValue: !data.enterpriseDetail.lastYearInvoiceAmountValue ? "-" : data.enterpriseDetail.lastYearInvoiceAmountValue,// 上年度开票收入
+                            hasRealEstate: data.enterpriseDetail.hasRealEstate === null ? "-" : data.enterpriseDetail.hasRealEstate ? "是" : "否",// 是否有不动产
+                            realEstateValString: !data.enterpriseDetail.realEstateValString ? "-" : data.enterpriseDetail.realEstateValString,// 不动产价值
+                            corporateAge: !data.enterpriseDetail.corporateAge ? "-" : data.enterpriseDetail.corporateAge,// 法人年龄
+                            hasEquipment: data.enterpriseDetail.hasEquipment === null ? "-" : data.enterpriseDetail.hasEquipment ? "是" : "否",// 是否有设备
+                            equipmentVal: !data.enterpriseDetail.equipmentVal ? "-" : data.enterpriseDetail.equipmentVal,// 设备价值
+                            hasSharePledge: data.enterpriseDetail.hasSharePledge === null ? "-" : data.enterpriseDetail.hasSharePledge ? "是" : "否",// 是否有股权质押
+                            hasPatent: data.enterpriseDetail.hasPatent === null ? "-" : data.enterpriseDetail.hasPatent ? "是" : "否",// 是否有专利
+                            patentVal: !data.enterpriseDetail.patentVal ? "-" : data.enterpriseDetail.patentVal// 专利数
+                        }
+                        /** ------ 评估申请信息 数据重构：结束------ **/ 
+
+                    }
+                });
             
 
+        },
+
+        /**
+         * @description: 评估适用产品tab切换
+         * @param {string} key tab标识 
+         * @Date Changed: 2020-07-14
+         */        
+        toggleActApliPro(key){
+            this.initData.actAppIdx = key;
+
+            // console.log( "评估适用产品当前显示数据量：", this.initData.applicableProducts[key] );
+        },
+
+        /**
+         * @description: 申请选定产品tab切换
+         * @param {string} key tab标识 
+         * @Date Changed: 2020-07-14
+         */ 
+        toggleSelectediPro(key){
+            this.initData.selectedAppIdx = key;
+
+            // console.log( "申请选定产品当前显示数据量：", this.initData.selectedProducts[key] );
         }
 
     }
@@ -410,14 +572,6 @@ export default {
 @import "../../assets/styl/fn.styl";
 #EvaluationDetails
     position relative
-    // .steps-container
-    //     margin 0 auto
-    //     margin-top 20px
-    //     padding 30px
-    //     width 1100px
-    //     background-color #fff
-    //     box-sizing border-box   
-
     .evaluation-details
         margin 0 auto 200px
         margin-top 16px
@@ -449,6 +603,10 @@ export default {
                         margin  0 10px
                         span
                             color #D9001B
+                    .el-button-group
+                        .active 
+                            color #fff
+                            background #409eff
                 .apply-header
                     padding-bottom 20px
                     border-bottom 2px solid #f5f5f5

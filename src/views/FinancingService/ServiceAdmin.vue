@@ -285,6 +285,7 @@ export default {
                     let data = res.data;
                     this.tableData = data != null ? data.mgmFinancingPlanList.map(item=>{
                         return {
+                            financingPlanId: item.financingPlanId, // 融资服务id
                             financingCode: !item.financingCode ? "-" : item.financingCode,// 服务单号
                             userAccount: !item.userAccount ? "-" : item.userAccount,// 用户账号
                             contactPerson: !item.contactPerson ? "-" : item.contactPerson ,// 联系人
@@ -514,12 +515,38 @@ export default {
                     
                     let requiredParams = {
                         userId: this.advisorFrom.id,
-                        financingPlanId: selectedData[0].financingCode
+                        financingPlanId: selectedData[0].financingPlanId
                     }
+
+                    console.log( "selectedData", selectedData );
+
+                    console.log( "requiredParams", requiredParams );
 
                     this.$axios.post("/api/mgm/financingPlan/updataFinancingAdviser",requiredParams)
                         .then(res=>{
                             console.log( "分配融资顾问响应：", res );
+                            if( res.code == 0 ){
+                                this.$message({
+                                    showClose: true,
+                                    message: '融资顾问分配成功！',
+                                    type: 'success'
+                                });
+
+
+
+                                // 数据加载-获取数据列表
+                                this.getTableData();
+
+                                this.isShowAdvisor = false;
+                            }else{
+                                this.$message({
+                                    showClose: true,
+                                    message: `融资顾问分配失败！原因：${res.message}`,
+                                    type: 'error'
+                                });
+
+                                this.isShowAdvisor = false;
+                            }
                             
                         })
 

@@ -31,7 +31,7 @@
                     <el-table-column label="操作" prop="address">
                         <template slot-scope="scope">
                             <div class="cz">
-                                <div @click="goEvaluationDetails(scope.row.code)">
+                                <div @click="goEvaluationDetails(scope.row.id)">
                                     评估详情
                                 </div>
                             </div>
@@ -222,6 +222,7 @@ export default {
                     let data = res.data;
                     this.tableData = data != null ? data.mgmAssessmentApplyList.map(item=>{
                         return {
+                            id: item.id,
                             code: !item.code ? "-" : item.code,// 评估单号
                             assessTime: !item.assessTime? "-" : item.assessTime,// 评估时间   
                             userAccount: !item.userAccount ? "-" : item.userAccount,// 用户账号
@@ -282,12 +283,12 @@ export default {
 
         /**
          * @description: 路由跳转-定制服务
-         * @param {string} codeId 评估单号id
+         * @param {string} id 评估id
          * @Date Changed: 2020-07-13
          */
-        goEvaluationDetails(codeId){
+        goEvaluationDetails(id){
             this.$router.push({
-                path: `/evaluationDetails/${codeId}`
+                path: `/evaluationDetails/${id}`
             });
         },
     },
