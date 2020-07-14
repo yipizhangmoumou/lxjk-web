@@ -403,7 +403,7 @@ export default {
         getInitData(id){
             console.log( "codeId>>>", id );
 
-            this.$axios.post(`/api/mgm/assessmentApply/detail/${42}`)
+            this.$axios.post(`/api/mgm/assessmentApply/detail/${id}`)
                 .then(res=>{
                     // console.log( "评估详情数据响应：", res );
                     if(res.code == 0){

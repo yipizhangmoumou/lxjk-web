@@ -38,8 +38,8 @@
             <el-table-column prop="meetProductNum" align="center" label="评估适用产品"></el-table-column>
             <el-table-column prop="selectProductNum" align="center" label="客户选定产品"></el-table-column>
             <el-table-column align="center" label="融资服务申请">
-              <template>
-                  <div style="color:#027DB4">查看申请详情</div>
+              <template slot-scope="scope">
+                  <div style="color:#027DB4" @click="goEvaluationDetails(scope.row.financingPlanId)">查看申请详情</div>
               </template>
             </el-table-column>
           </el-table>
@@ -751,11 +751,10 @@ export default {
          * @Date Changed: 2020-07-12
          */
         goProductCustomization(){
-            console.log( "定制融资产品/查看详情" ); 
-            let assessmentApplyId =''
             let planCode = this.$route.params.financingCode
+            console.log( "定制融资产品/查看详情", planCode ); 
             this.$router.push({
-                path:`/productCustomization/:${assessmentApplyId}/:${planCode}`
+                path:`/productCustomization/${planCode}`
             })
         },
         writeCompany(){
@@ -876,7 +875,19 @@ export default {
         handlePictureCardPreviewB(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
-        }
+        },
+
+        /**
+         * @description: 路由跳转-评估详情
+         * @param {string} id 评估id
+         * @Date Changed: 2020-07-13
+         */
+        goEvaluationDetails(id){
+            console.log( "===>", id );
+            this.$router.push({
+                path: `/evaluationDetails/${id}`
+            });
+        },
     }
 };
 </script>
