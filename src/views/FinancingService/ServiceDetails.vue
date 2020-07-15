@@ -118,25 +118,25 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.yearRevenue}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{currentYearRevenue[businessInfo.currentYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearRevenue}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearRevenue[businessInfo.lastYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearInvoiced}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearInvoiceAmount[businessInfo.lastYearInvoiceAmount]}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasRealEstate}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasRealEstate?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.realEstateVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{realEstateVal[enterpriseAssetInfo.realEstateVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -144,11 +144,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{enterpriseInfo.hasEquipment}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{enterpriseAssetInfo.hasEquipment?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.equipmentVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{equipmentVal[enterpriseAssetInfo.equipmentVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -156,17 +156,17 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasPatent}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasPatent?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.patentVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{patentVal[enterpriseAssetInfo.patentVal]}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasSharePledge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasSharePledge?"是":"否"}}</el-button>
     </el-col>
   </el-row>
 </el-form>
@@ -177,11 +177,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 法人姓名</div>
-        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalPerson}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class="">法人年龄</div>
-        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalAge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{age[legalRepresentative.age]}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
@@ -235,7 +235,7 @@
     </el-col>
     <el-col :span="8"> 
       <div class=""><i class="redrules">*</i> 发票抬头</div>
-        <el-button class="pdl10" disabled type="text">{{financialInformation.regionCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.name}}</el-button>
     </el-col>
   </el-row>
   </el-form>
@@ -359,6 +359,7 @@ export default {
       enterpriseAssetInfo:{},
       financialInformation:{},
       legalRepresentative:{},
+      businessInfo:{},
       companyTypeArr:[
         {value:'1',label:'有限公司'},
         {value:'2',label:'股份有限公司'}
@@ -409,7 +410,43 @@ export default {
           {value:'1',label:'20-40岁'},
         {value:'2',label:'40-60岁'}
         ],
-
+        areaTree:[],
+      realEstateVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      equipmentVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      patentVal:{
+        1:'5个以内',
+        2:'5-10个',
+        3:'10个以上'
+      },
+      currentYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearInvoiceAmount:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      age:{
+        1:'22周岁以下',
+        2:'22周岁-60周岁',
+        3:'60周岁以上'
+      },
+      areaText:[],
     }
   },
   created(){
@@ -437,6 +474,8 @@ export default {
     }    
   },
   mounted(){
+      this.getAreaTree();
+      this.getIndustryTree();
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -464,20 +503,32 @@ export default {
           this.actionData = datas.childPlanList;
           this.createTime = datas.createTime;
             this.enterpriseInfo = datas.enterpriseInfo||{};
-            
+            this.enterpriseAssetInfo= datas.enterpriseAssetInfo||{};
             this.financialInformation = datas.financialInformation||{};
             this.legalRepresentative = datas.legalRepresentative||{};
+          this.businessInfo = datas.businessInfo||{};
           console.log(this.enterpriseInfo.name);
+          // 公司性质
           this.companyTypeArr.map(item=>{
               if(item.key == this.enterpriseInfo.enterpriseNature){
                   this.enterpriseInfo.enterpriseNature = item.value
               }
           })
-          this.industryTypeArr.map(item=>{
-              if(item.key == this.enterpriseInfo.industryType){
-                  this.enterpriseInfo.enterpriseNature = item.value
-              }
-          })
+          // 行业类型
+          // this.industryTypeArr.map(item=>{
+          //     if(item.key == this.enterpriseInfo.industryType){
+          //         this.enterpriseInfo.enterpriseNature = item.value
+          //     }
+          // })
+          
+          this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
+          // let codeText = [];
+          // this.areaTree.map((item,index)=>{
+          //   if(item.code==this.enterpriseInfo.provinceCode){
+          //     codeText.push(item.name)
+
+          //   }
+          // })
         }else{
           console.log(111);
         }
@@ -486,6 +537,31 @@ export default {
       })   
   },
   methods:{
+    thattreeFn(showData,listData){
+      listData.map((item)=>{
+        if(showData == item.code){
+          this.areaText.push(item.name)
+          if(listData.parentCode=='0'){
+            
+          this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
+          }else{
+            this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
+          }
+        }
+      })
+      console.log(this.areaText)
+    },
+    getIndustryTree () {
+      this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
+        this.industryTree = this.deleteEmpty(res.data.industryTreeList)
+      })
+    },        
+     getAreaTree () {
+        this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
+          this.areaTree = this.deleteEmpty(res.data.areaTree)
+          console.log(this.areaTree);
+        })
+      },    
           // 获取字典方法
     getDic (code, key) {
       this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})

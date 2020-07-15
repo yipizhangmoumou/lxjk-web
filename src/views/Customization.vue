@@ -119,25 +119,25 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.yearRevenue}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{currentYearRevenue[businessInfo.currentYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearRevenue}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearRevenue[businessInfo.lastYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.lastYearInvoiced}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearInvoiceAmount[businessInfo.lastYearInvoiceAmount]}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasRealEstate}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasRealEstate?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.realEstateVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{realEstateVal[enterpriseAssetInfo.realEstateVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -145,11 +145,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{enterpriseInfo.hasEquipment}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{enterpriseAssetInfo.hasEquipment?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.equipmentVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{equipmentVal[enterpriseAssetInfo.equipmentVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -157,17 +157,17 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasPatent}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasPatent?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.patentVal}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{patentVal[enterpriseAssetInfo.patentVal]}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.hasSharePledge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasSharePledge?"是":"否"}}</el-button>
     </el-col>
   </el-row>
 </el-form>
@@ -194,14 +194,7 @@
   </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-          <el-select v-model="enterpriseInfo.industryType" placeholder="请选择">
-            <el-option
-              v-for="item in industryTypeArr"
-              :key="item.value"
-              :label="item.value"
-              :value="item.key">
-            </el-option>
-          </el-select>
+          <el-cascader :options="industryTypeArr" v-model="industryType" :props="props" clearable></el-cascader>
     </el-col>
   </el-row>
   <el-row>
@@ -211,12 +204,12 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
-        <el-input type="text" v-model="enterpriseInfo.adress">{{}}</el-input>
+        <el-input type="text" v-model="enterpriseInfo.regAddress">{{}}</el-input>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 成立时间</div>
             <el-date-picker
-      v-model="enterpriseInfo.time"
+      v-model="enterpriseInfo.regTime"
       type="date"
       placeholder="选择日期">
     </el-date-picker>
@@ -225,7 +218,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-          <el-select v-model="enterpriseInfo.yearRevenue" placeholder="请选择">
+          <el-select v-model="businessInfo.currentYearRevenue" placeholder="请选择">
             <el-option
               v-for="item in thatYearsArr"
               :key="item.value"
@@ -236,7 +229,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-          <el-select v-model="enterpriseInfo.lastYearRevenue" placeholder="请选择">
+          <el-select v-model="businessInfo.lastYearRevenue" placeholder="请选择">
             <el-option
               v-for="item in lastYearsArr"
               :key="item.value"
@@ -247,7 +240,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-          <el-select v-model="enterpriseInfo.lastYearInvoiced" placeholder="请选择">
+          <el-select v-model="businessInfo.lastYearInvoiceAmount" placeholder="请选择">
             <el-option
               v-for="item in lastcallArr"
               :key="item.value"
@@ -260,7 +253,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-          <el-select v-model="enterpriseInfo.hasRealEstate" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.hasRealEstate" placeholder="请选择">
             <el-option
               v-for="item in isImmovablesArr"
               :key="item.value"
@@ -271,7 +264,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-          <el-select v-model="enterpriseInfo.realEstateVal" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.realEstateVal" placeholder="请选择">
             <el-option
               v-for="item in immovablesArr"
               :key="item.value"
@@ -286,7 +279,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-          <el-select v-model="enterpriseInfo.hasEquipment" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.hasEquipment" placeholder="请选择">
             <el-option
               v-for="item in isFacilityArr"
               :key="item.value"
@@ -297,7 +290,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-          <el-select v-model="enterpriseInfo.equipmentVal" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.equipmentVal" placeholder="请选择">
             <el-option
               v-for="item in facilityArr"
               :key="item.value"
@@ -312,7 +305,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-          <el-select v-model="enterpriseInfo.hasPatent" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.hasPatent" placeholder="请选择">
             <el-option
               v-for="item in isPatentsArr"
               :key="item.value"
@@ -323,7 +316,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-          <el-select v-model="enterpriseInfo.patentVal" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.patentVal" placeholder="请选择">
             <el-option
               v-for="item in patentsArr"
               :key="item.value"
@@ -336,7 +329,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-          <el-select v-model="enterpriseInfo.hasSharePledge" placeholder="请选择">
+          <el-select v-model="enterpriseAssetInfo.hasSharePledge" placeholder="请选择">
             <el-option
               v-for="item in isstockEquityArr"
               :key="item.value"
@@ -366,11 +359,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 法人姓名</div>
-        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalPerson}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class="">法人年龄</div>
-        <el-button class="pdl10" disabled type="text">{{legalRepresentative.legalAge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.age}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
@@ -386,11 +379,11 @@
     <el-row>
       <el-col :span="8">
           <div class=""><i class="redrules">*</i> 法人姓名</div>
-          <el-input type="text" v-model="legalRepresentative.legalPerson">{{}}</el-input>
+          <el-input type="text" v-model="legalRepresentative.name">{{}}</el-input>
       </el-col>
       <el-col :span="8">
         <div class="">法人年龄</div>
-          <el-select class="ml_0" v-model="legalRepresentative.legalAge" placeholder="请选择">
+          <el-select class="ml_0" v-model="legalRepresentative.age" placeholder="请选择">
             <el-option
               v-for="item in legalAgeArr"
               :key="item.value"
@@ -510,7 +503,7 @@
         </el-col>
         <el-col :span="8"> 
           <div class=""><i class="redrules">*</i> 发票抬头</div>
-            <el-button class="pdl10" disabled type="text">{{financialInformation.regionCode}}</el-button>
+            <el-button class="pdl10" disabled type="text">{{enterpriseInfo.name}}</el-button>
         </el-col>
       </el-row>
   </el-form>
@@ -541,7 +534,7 @@
     </el-col>
     <el-col :span="8"> 
       <div class=""><i class="redrules">*</i> 发票抬头</div>
-        <el-input type="text" v-model="financialInformation.regionCode"></el-input>
+        <el-input type="text" v-model="enterpriseInfo.name"></el-input>
     </el-col>
   </el-row>
   </el-form>  
@@ -622,30 +615,30 @@ export default {
         {value:'1',label:'100万-200万'},
         {value:'2',label:'200万-300万'}],
       isImmovablesArr:[
-         {value:'1',label:'是'},
-        {value:'2',label:'否'}
+         {value:true,label:'是'},
+        {value:false,label:'否'}
       ],
       immovablesArr:[
         {value:'1',label:'100万-200万'},
         {value:'2',label:'200万-300万'}
       ],
       isFacilityArr:[
-         {value:'1',label:'是'},
-        {value:'2',label:'否'}],
+         {value:true,label:'是'},
+        {value:false,label:'否'}],
       facilityArr:[
         {value:'1',label:'100万-200万'},
         {value:'2',label:'200万-300万'}
       ],
       isPatentsArr:[
-         {value:'1',label:'是'},
-        {value:'2',label:'否'}],
+         {value:true,label:'是'},
+        {value:false,label:'否'}],
       patentsArr:[
         {value:'1',label:'100万-200万'},
         {value:'2',label:'200万-300万'}
       ],
       isstockEquityArr:[
-         {value:'1',label:'是'},
-        {value:'2',label:'否'}],
+         {value:true,label:'是'},
+        {value:false,label:'否'}],
         legalAgeArr:[
           {value:'1',label:'20-40岁'},
         {value:'2',label:'40-60岁'}
@@ -658,7 +651,8 @@ export default {
         enterpriseInfo:{},//企业信息
         financialInformation:{},//账户信息
         legalRepresentative:{},//法人信息
-
+        enterpriseAssetInfo:{},//是否字典特 对象
+        businessInfo:{},//年度对象
         baseData:[],//基本信息
         childPlanList:[],//产品信息
         areaTree:[],
@@ -677,13 +671,54 @@ export default {
         frontIdCard:'',
         reverseIdCard:'',
         businessLicense:'',
+
+        industryType:'',
+      realEstateVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      equipmentVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      patentVal:{
+        1:'5个以内',
+        2:'5-10个',
+        3:'10个以上'
+      },
+      currentYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearInvoiceAmount:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      age:{
+        1:'22周岁以下',
+        2:'22周岁-60周岁',
+        3:'60周岁以上'
+      },     
+      areaText:[],   
         };
     },
     components: {
         CopyRight
     },
-    mounted(){
+    created(){
       this.getAreaTree();
+      this.getIndustryTree();
+    },
+    mounted(){
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -694,7 +729,6 @@ export default {
       this.getDic('corporate_age','legalAgeArr')
 
       this.getDic('enterprise_nature','companyTypeArr')
-      this.getDic('financing_type','industryTypeArr')
       console.log(this.$route.params.financingCode);
       let planCode = this.$route.params.financingCode;
 
@@ -715,14 +749,38 @@ export default {
           this.childPlanList = datas.childPlanList;//定制的产品
           this.financialInformation = datas.financialInformation||{};//财务账户
           this.legalRepresentative = datas.legalRepresentative||{};//法人信息
+          this.enterpriseAssetInfo = datas.enterpriseAssetInfo||{};
+          this.businessInfo = datas.businessInfo||{};
           this.status = datas.status;
           console.log(this.legalRepresentative,{});
+          console.log(this.areaTree)
+          this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
         }else{
           console.log(res);
         }
       })  
     },
     methods: {
+    thattreeFn(showData,listData){
+      listData.map((item)=>{
+        console.log(2333)
+        if(showData == item.code){
+          this.areaText.push(item.name)
+          if(listData.parentCode=='0'){
+            
+          this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
+          }else{
+            this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
+          }
+        }
+      })
+      console.log(this.areaText)
+    },      
+    getIndustryTree () {
+      this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
+        this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
+      })
+    },      
     deleteEmpty (arr) {
       return arr.map(v => {
         if (v.children && v.children.length) {
@@ -764,7 +822,7 @@ export default {
           console.log(this.enterpriseInfo);
           this.enterpriseInfo.provinceCode = this.area_code[0]
           this.enterpriseInfo.cityCode = this.area_code[1]
-          this.enterpriseInfo.regionCode = this.area_code[2]
+          this.enterpriseInfo.areaCode = this.area_code[2]
           this.enterpriseInfo.businessLicense = this.businessLicense;
         //   this.enterpriseInfo.companyImg=------
           console.log(this.financialInformation);
@@ -773,14 +831,17 @@ export default {
           this.financialInformation.cityCode = this.finan_areaCode[1]
           this.financialInformation.regionCode = this.finan_areaCode[2]
           console.log(this.legalRepresentative);
-          this.legalRepresentative.frontIdCard = this.frontIdCard;
-          this.legalRepresentative.reverseIdCard = this.reverseIdCard;
+          this.enterpriseInfo.frontIdCard = this.frontIdCard;
+          this.enterpriseInfo.reverseIdCard = this.reverseIdCard;
           console.log(this.financialInformation);
           // return false
           let obj = {
               enterpriseInfo:this.enterpriseInfo,
               financialInformation:this.financialInformation,
               legalRepresentative:this.legalRepresentative,
+              enterpriseAssetInfo:this.enterpriseAssetInfo,
+              planCode:this.$route.params.financingCode,
+              businessInfo:this.businessInfo
           }
           this.$axios.post('/api/mgm/financingPlan/perfectEnterprise',obj).then(res=>{
               if(res.code==0){
