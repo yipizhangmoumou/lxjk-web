@@ -379,7 +379,6 @@ export default {
          * @Date Changed: 2020-07-14
          */    
         toggleActivePro(key){
-            console.log( "短|中|长 按钮点击", key );
 
             this.initData.activeIdx = key;
             switch(key){
