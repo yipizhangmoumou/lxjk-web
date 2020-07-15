@@ -359,6 +359,57 @@ export default {
       enterpriseAssetInfo:{},
       financialInformation:{},
       legalRepresentative:{},
+      companyTypeArr:[
+        {value:'1',label:'有限公司'},
+        {value:'2',label:'股份有限公司'}
+      ],
+      industryTypeArr:[
+        {value:'1',label:'互联网'},
+        {value:'2',label:'物联网'}
+      ],
+      areaCityArr:[
+        {value:'1',label:'互联网'},
+        {value:'2',label:'物联网'}
+      ],
+      thatYearsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      lastYearsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      lastcallArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      isImmovablesArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}
+      ],
+      immovablesArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isFacilityArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+      facilityArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isPatentsArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+      patentsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isstockEquityArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+        legalAgeArr:[
+          {value:'1',label:'20-40岁'},
+        {value:'2',label:'40-60岁'}
+        ],
+
     }
   },
   created(){
@@ -386,6 +437,17 @@ export default {
     }    
   },
   mounted(){
+      this.getDic('year_revenue', 'thatYearsArr')
+      this.getDic('last_year_revenue', 'lastYearsArr')
+      this.getDic('last_year_invoiced','lastcallArr')
+
+      this.getDic('real_property', 'immovablesArr')
+      this.getDic('device_value', 'facilityArr')
+      this.getDic('patent_num','patentsArr')
+      this.getDic('corporate_age','legalAgeArr')
+
+      this.getDic('enterprise_nature','companyTypeArr')
+      this.getDic('financing_type','industryTypeArr')
     console.log(this.$route.params);
     // 获取详情
     let financingCode = this.$route.params.financingCode
@@ -406,6 +468,16 @@ export default {
             this.financialInformation = datas.financialInformation||{};
             this.legalRepresentative = datas.legalRepresentative||{};
           console.log(this.enterpriseInfo.name);
+          this.companyTypeArr.map(item=>{
+              if(item.key == this.enterpriseInfo.enterpriseNature){
+                  this.enterpriseInfo.enterpriseNature = item.value
+              }
+          })
+          this.industryTypeArr.map(item=>{
+              if(item.key == this.enterpriseInfo.industryType){
+                  this.enterpriseInfo.enterpriseNature = item.value
+              }
+          })
         }else{
           console.log(111);
         }
@@ -414,6 +486,13 @@ export default {
       })   
   },
   methods:{
+          // 获取字典方法
+    getDic (code, key) {
+      this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})
+      .then((res) => {
+        this[key] = res.data
+      })
+    },      
     seeAssurance(){
       this.showAssurance = true;
     },
