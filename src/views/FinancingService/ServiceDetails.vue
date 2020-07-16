@@ -187,9 +187,8 @@
   <el-row>
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
-        
-        <el-image :src="enterpriseInfo.frontIdCardBase64"></el-image>
-        <el-image :src="enterpriseInfo.reverseIdCardBase64"></el-image>
+        <el-image :src="'data:image/png;base64,'+enterpriseInfo.frontIdCardBase64"></el-image>
+        <el-image :src="'data:image/png;base64,'+enterpriseInfo.reverseIdCardBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
@@ -199,10 +198,8 @@
 <el-form :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
-        <div class=""><i class="redrules">*</i> 企业营业证件</div>
-        {{enterpriseInfo.businessLicense}}
-        <img :src="'https://www.risesin.com/api/'+enterpriseInfo.businessLicense" alt="">
-         <!-- <el-image :src="enterpriseInfo.businessLicenseBase64"></el-image> -->
+        <div class=""><i class="redrules">*</i> 企业营业证件</div>        
+         <el-image :src="'data:image/png;base64,'+enterpriseInfo.businessLicenseBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
@@ -546,7 +543,7 @@ export default {
             this.industryTypeArr.map(item=>{
                 item.children.map(item1=>{
                     if(data== item1.code){
-                        this.industryText.push(item1.name)
+                        this.industryText.push(item.name)
                         this.industryType = [item.code,item1.code]
                         return 
                     }
@@ -675,5 +672,10 @@ export default {
   box-shadow none !important
 .j_tabs .el-tabs__item .el-icon-circle-check
   color #67C23A
-
+.j_image
+    width 200px
+    height 150px
+    img
+        height 100%
+        width 100%
 </style>
