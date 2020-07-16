@@ -111,8 +111,25 @@ export default {
     },
     data () {
         return {
+
+
             loading: false,
-            isNew: true,
+
+
+            /**
+             * @description: 枚举数据
+             * @param {string} repayment_method 【还款方式】
+             * @param {string} guarantee_method 【担保方式】
+             * @Date Changed: 2020-07-16
+             */
+            EnuData:{},
+
+
+
+
+
+
+
             form: {
                 name: "",   // 产品名称
                 lender: "", // 放款机构
@@ -135,12 +152,45 @@ export default {
             }
         }
     },
-    computed: {
-        dialogTitle () {
-            return this.isNew ? '新建字典' : '编辑字典'
-        }
+
+    created () {
+        // this.getAllEnumerate();
+
+        // 统一调用获取枚举数据方法
+        this.getEnuData();
     },
+
     methods: {
+        
+                /**
+         * @description: 方法：获取枚举数据基本函数
+         * @param {string} code 枚举关键字 
+         * @Date Changed: 2020-07-15
+         */
+        getEnuDataMethods(code){
+            this.$axios.post("/api/mgm/dict/listDictByParentCode",{code})
+                .then(res=>{
+                    // console.log("还款方式枚举",res);
+                    if( res.code == 0 ){
+                        this.EnuData[code] = !res.data ? [] : res.data;
+                    }
+                })
+        },  
+        
+         /**
+         * @description: 初始数据获取：获取枚举数据
+         * @Date Changed: 2020-07-15
+         */ 
+        getEnuData(){
+            // 【还款方式】枚举
+            this.getEnuDataMethods("repayment_method");
+            // 【担保方式】枚举
+            this.getEnuDataMethods("guarantee_method");
+        }, 
+
+
+
+
         /**
          * @description: 弹窗【取消】按钮
          * @Date Changed: 2020-07-12
@@ -156,17 +206,7 @@ export default {
         handleSave () {
             
         }
-    },
-    created () {
-
-    },
-    mounted () {
-
-    },
-    beforeDestroy () {
-
-    },
-
+    }
   
 }
 </script>

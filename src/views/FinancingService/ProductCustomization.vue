@@ -54,11 +54,11 @@
                             <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
                             <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
                             <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
-                            <el-table-column label="定制状态" prop="customizationStatus"></el-table-column>
+                            <el-table-column label="定制状态" prop="actionStatus"></el-table-column>
                             <el-table-column label="操作">
-                                <template>
+                                <template slot-scope="scope">
                                     <div class="cz">
-                                        <div @click="productCustomize">
+                                        <div @click="productCustomize(scope.row)">
                                             产品定制
                                         </div>
                                     </div>
@@ -108,12 +108,12 @@
                             <el-table-column label="服务费" prop="servChargeItem"></el-table-column>
                             <el-table-column label="申请额度" prop="financingAmount"></el-table-column>
                             <el-table-column label="操作">
-                                <template>
+                                <template slot-scope="scope">
                                     <div class="cz">
-                                        <div @click="aleryProEdit">
+                                        <div @click="aleryProEdit(scope.row)">
                                             编辑
                                         </div>
-                                        <div @click="aleryProDelete">
+                                        <div @click="aleryProDelete(scope.row.childActionCode)">
                                             删除
                                         </div>
                                     </div>
@@ -144,7 +144,7 @@
             :dataCodeList="dataCodeList" 
             :parentObj="codeObj"
             @queryList="getTableData" -->
-        <ProCustModel v-model="proCustData.visible"/>
+        <ProCustModel v-model="proCustData.visible" :data="proCustData.data" @getInitData="getInitData"/>
         <ProCustModelEdit v-model="proCustEditData.visible"/>
   </div>
 </template>
@@ -225,7 +225,7 @@ export default {
         CopyRight
     },
     created() {
-        // 接收路由中传递过来的编号id
+        // 接收路由中传递过来的编号id  "27184768-1db3-4f3b-bae8-188c45e57cc2";
         let planCode = this.planCode = this.$route.params.planCode;
 
         /**
@@ -244,13 +244,13 @@ export default {
          * @Date Changed: 2020-07-13
          */ 
         getInitData(planCode){
+            console.log( "------initData调用~" , planCode);
             this.$axios.post("/api/mgm/financingPlan/productCustomizationPage",{planCode})
                 .then(res=>{
                     // console.log( "产品定制~",res );
                     if(res.code == 0){
                         let data = res.data;
                         console.log( "产品定制~",data );
-
                         /** ------ 评估适用产品 数据重构：开始------ **/
                         // 短期
                         this.initData.applicableProducts.pageMgmAssessmentApplyListShort = !data.pageMgmAssessmentApplyListShort ? [] : data.pageMgmAssessmentApplyListShort.map((item,idx)=>{
@@ -266,7 +266,7 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                customizationStatus: item.customizationStatus === null ? "-" : item.customizationStatus ? "否" : "是"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
                             }
                         });
                         // 中期
@@ -283,7 +283,7 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                customizationStatus: item.customizationStatus === null ? "-" : item.customizationStatus ? "否" : "是"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
                             }
                         });
                         // 长期
@@ -300,11 +300,10 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                customizationStatus: item.customizationStatus === null ? "-" : item.customizationStatus ? "否" : "是"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
                             }
                         });
-
-                        this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort;
+                        
                         /** ------ 评估适用产品 数据重构：结束------ **/
 
                         /** ------ 评估申请选定产品 数据重构：开始------ **/ 
@@ -312,6 +311,7 @@ export default {
                         this.initData.selectedProducts.actionPlanProductListShort = !data.actionPlanProductListShort ? [] : data.actionPlanProductListShort.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
+                                childActionCode: item.childActionCode, // 产品的id
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
                                 productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
@@ -329,7 +329,7 @@ export default {
                         this.initData.selectedProducts.actionPlanProductListMiddle = !data.actionPlanProductListMiddle ? [] : data.actionPlanProductListMiddle.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
-
+                                childActionCode: item.childActionCode, // 产品的id
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
                                 productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
@@ -347,7 +347,7 @@ export default {
                         this.initData.selectedProducts.actionPlanProductListLong = !data.actionPlanProductListLong ? [] : data.actionPlanProductListLong.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
-
+                                childActionCode: item.childActionCode, // 产品的id
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
                                 productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
@@ -362,11 +362,39 @@ export default {
                             }
                         });
 
-                        this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
                         /** ------ 评估申请选定产品 数据重构：结束------ **/ 
 
                         // 已定制的产品总额度
-                        this.initData.totalAmount = data.totalAmount == null ? 0 : data.totalAmount
+                        this.initData.totalAmount = data.totalAmount == null ? 0 : data.totalAmount;
+                        
+                        /**
+                         * @description: 根据当前激活的tab key 加载当前页面表格数据
+                         * @Date Changed: 2020-07-16
+                         */
+                        console.log( "激活===>",this.activeIdx );
+                        switch(this.initData.activeIdx){
+                            case 'short':
+                                console.log( "进入short~" );
+                               this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
+                               break;
+                            case 'middle':
+                                console.log( "进入middle~" );
+                                this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+                                break;
+                            case 'long':
+                                console.log( "进入long~" );
+                                this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+                                break;
+                        }
+
+
+
 
                     }
                 })
@@ -410,8 +438,17 @@ export default {
          * @description: 评估使用产品【产品定制】按钮
          * @Date Changed: 2020-07-12
          */
-        productCustomize(){
-            this.proCustData.data = {}
+        productCustomize(row){
+            console.log( "当前数据", row );
+            let { productId, productName, orgName } = row;
+
+
+            this.proCustData.data = {
+                planCode: this.planCode,
+                productId,
+                productName,
+                orgName
+            }
             this.proCustData.visible = true
         },
 
@@ -425,20 +462,38 @@ export default {
         },
 
         /**
-         * @description: 已定制产品【编辑】按钮
+         * @description: 已定制产品【删除】按钮
+         * @param {string} childActionCode 已定制产品的childActionCode
          * @Date Changed: 2020-07-12
          */  
-        aleryProDelete(){
+        aleryProDelete(childActionCode){
             this.$confirm("是否确认删除该定制产品", "删除定制的产品", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             })
             .then(() => {
-                this.$message({
-                    type: "success",
-                    message: "删除成功"
-                });
+                this.$axios.post(`/api/mgm/actionChildPlan/delete/${childActionCode}`)
+                    .then(res=>{
+                        // console.log("删除响应：",res);
+                        if(res.code == 0){
+                            this.$message({
+                                type: "success",
+                                message: "删除成功"
+                            });
+
+                            // 重新加载表格数据
+                            this.getInitData(this.planCode);
+
+                        }else{
+                            this.$message({
+                                showClose: true,
+                                message: `删除失败！原因：${res.message}`,
+                                type: 'error'
+                            });  
+                        }
+                    })
+                
                 
             })
         }, 
