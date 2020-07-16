@@ -95,7 +95,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 企业性质</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.enterpriseNature}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseNature[enterpriseInfo.enterpriseNature]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
@@ -626,8 +626,6 @@ export default {
          {value:true,label:'是'},
         {value:false,label:'否'}],
       facilityArr:[
-        {value:'1',label:'100万-200万'},
-        {value:'2',label:'200万-300万'}
       ],
       isPatentsArr:[
          {value:true,label:'是'},
@@ -673,6 +671,11 @@ export default {
         businessLicense:'',
 
         industryType:"",
+        enterpriseNature:{
+            1:'有限公司',
+            2:'个体工商户',
+            3:'其他',
+        },
       realEstateVal:{
         1:'1000万以内',
         2:'1000万-3000万',
@@ -771,7 +774,9 @@ export default {
           console.log(this.legalRepresentative,{});
           console.log(this.areaTree);
           this.area_code = [this.enterpriseInfo.provinceCode,this.enterpriseInfo.cityCode,this.enterpriseInfo.areaCode]
-          console.log(this.enterpriseInfo.cityCode,this.enterpriseInfo.areaCode)
+          this.enterpriseAssetInfo.realEstateVal = parseInt(this.enterpriseAssetInfo.realEstateVal)
+          this.enterpriseAssetInfo.equipmentVal = parseInt(this.enterpriseAssetInfo.equipmentVal) 
+          this.enterpriseAssetInfo.patentVal = parseInt(this.enterpriseAssetInfo.patentVal)                   
           this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
           this.thatindustryFn(this.enterpriseInfo.industryCode)
         }else{
