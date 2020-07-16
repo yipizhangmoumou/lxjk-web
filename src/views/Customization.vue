@@ -99,13 +99,13 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.industryCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{industryTextinfo}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.areaCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{areaTextinfo}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
@@ -194,7 +194,7 @@
   </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-          <el-cascader :options="industryTypeArr" v-model="industryType" :props="props" clearable></el-cascader>
+          <el-cascader :options="industryTypeArr" :show-all-levels="false" v-model="industryType" :props="props" clearable></el-cascader>
     </el-col>
   </el-row>
   <el-row>
@@ -672,7 +672,7 @@ export default {
         reverseIdCard:'',
         businessLicense:'',
 
-        industryType:'',
+        industryType:"",
       realEstateVal:{
         1:'1000万以内',
         2:'1000万-3000万',
@@ -709,16 +709,28 @@ export default {
         3:'60周岁以上'
       },     
       areaText:[],   
+      areaTextinfo:'',
+      industryText:[],
+      industryTextinfo:'',
         };
     },
     components: {
         CopyRight
     },
-    created(){
-      this.getAreaTree();
-      this.getIndustryTree();
+    created:async function(){
+        try{
+            await this.getAreaTree();
+            await this.getIndustryTree();
+            await this.initData();
+        } catch(e){
+            console.log(e);
+            
+        }
     },
     mounted(){
+        
+    //   this.getAreaTree();
+    //   this.getIndustryTree();
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -730,6 +742,10 @@ export default {
 
       this.getDic('enterprise_nature','companyTypeArr')
       console.log(this.$route.params.financingCode);
+
+    },
+    methods: {
+        initData(){
       let planCode = this.$route.params.financingCode;
 
       let url ='/api/mgm/financingPlan/serviceCustomization'
@@ -753,29 +769,49 @@ export default {
           this.businessInfo = datas.businessInfo||{};
           this.status = datas.status;
           console.log(this.legalRepresentative,{});
-          console.log(this.areaTree)
+          console.log(this.areaTree);
+          this.area_code = [this.enterpriseInfo.provinceCode,this.enterpriseInfo.cityCode,this.enterpriseInfo.areaCode]
+          console.log(this.enterpriseInfo.cityCode,this.enterpriseInfo.areaCode)
           this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
+          this.thatindustryFn(this.enterpriseInfo.industryCode)
         }else{
           console.log(res);
         }
-      })  
-    },
-    methods: {
+      })
+        },
     thattreeFn(showData,listData){
-      listData.map((item)=>{
-        console.log(2333)
+      listData.forEach((item)=>{
+        
         if(showData == item.code){
           this.areaText.push(item.name)
-          if(listData.parentCode=='0'){
+          console.log(this.areaText)
+          if(this.areaText.length==1){
             
           this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
-          }else{
+          }else
+          if(this.areaText.length==2){
             this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
+          }
+          if(this.areaText.length==3){
+              return
           }
         }
       })
       console.log(this.areaText)
-    },      
+      this.areaTextinfo = this.areaText.join('/');
+    },  
+        thatindustryFn(data){
+            this.industryTypeArr.map(item=>{
+                item.children.map(item1=>{
+                    if(data== item1.code){
+                        this.industryText.push(item.name)
+                        this.industryType = [item.code,item1.code]
+                        return 
+                    }
+                })
+            })
+            this.industryTextinfo = this.industryText[0]
+        },
     getIndustryTree () {
       this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
         this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
@@ -845,7 +881,10 @@ export default {
           }
           this.$axios.post('/api/mgm/financingPlan/perfectEnterprise',obj).then(res=>{
               if(res.code==0){
-                  console.log(res.data);
+                  this.$message({
+                      type:'success',
+                      message:'保存成功'
+                  })
               }else{
                   console.log(res);
               }

@@ -98,13 +98,13 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.industryCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{industryTextinfo}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.areaCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{areaTextinfo}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
@@ -188,8 +188,8 @@
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
         
-        <el-image :src="legalRepresentative.legalCard"></el-image>
-        <el-image :src="src"></el-image>
+        <el-image :src="enterpriseInfo.frontIdCardBase64"></el-image>
+        <el-image :src="enterpriseInfo.reverseIdCardBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
@@ -200,7 +200,9 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业营业证件</div>
-         <el-image :src="enterpriseInfo.companyCard"></el-image>
+        {{enterpriseInfo.businessLicense}}
+        <img :src="'https://www.risesin.com/api/'+enterpriseInfo.businessLicense" alt="">
+         <!-- <el-image :src="enterpriseInfo.businessLicenseBase64"></el-image> -->
     </el-col>
   </el-row>
   </el-form>
@@ -446,36 +448,25 @@ export default {
         2:'22周岁-60周岁',
         3:'60周岁以上'
       },
-      areaText:[],
+      areaText:[],   
+      areaTextinfo:'',
+      industryText:[],
+      industryTextinfo:'',
+      businessLicenseBase64:'',
+      frontIdCardBase64:'',
+      reverseIdCardBase64:'',
     }
   },
-  created(){
-    for (let index = 0; index < 3; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        user: "user" + index,
-        mobile: "手机号" + index,
-        company: "企业名称" + index,
-        linkman: "申请金额" + index,
-        mobile1: "评估适用产品" + index,
-      });
-    }    
-        for (let index = 0; index < 3; index++) {
-      this.actionData.push({
-        number: parseInt(Math.random() * 1000000),
-        user: "user" + index,
-        actionnum: "actionnum" + index,
-        mobile: "手机号" + index,
-        company: "企业名称" + index,
-        linkman: "申请金额" + index,
-        mobile1: "评估适用产品" + index,
-        danbao:index%2==0?'1':'2'
-      });
-    }    
-  },
+    created:async function(){
+        try{
+            await this.getAreaTree();
+            await this.getIndustryTree();
+            await this.initData();
+        } catch(e){
+            console.log(e);
+        }
+    },
   mounted(){
-      this.getAreaTree();
-      this.getIndustryTree();
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -488,6 +479,9 @@ export default {
       this.getDic('enterprise_nature','companyTypeArr')
       this.getDic('financing_type','industryTypeArr')
     console.log(this.$route.params);
+  },
+  methods:{
+      initData(){
     // 获取详情
     let financingCode = this.$route.params.financingCode
     console.log(financingCode);
@@ -514,54 +508,74 @@ export default {
                   this.enterpriseInfo.enterpriseNature = item.value
               }
           })
-          // 行业类型
-          // this.industryTypeArr.map(item=>{
-          //     if(item.key == this.enterpriseInfo.industryType){
-          //         this.enterpriseInfo.enterpriseNature = item.value
-          //     }
-          // })
-          
           this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
-          // let codeText = [];
-          // this.areaTree.map((item,index)=>{
-          //   if(item.code==this.enterpriseInfo.provinceCode){
-          //     codeText.push(item.name)
+          this.thatindustryFn(this.enterpriseInfo.industryCode)
+        //   this.businessLicenseBase64 = this.enterpriseInfo.businessLicenseBase64;
+        //   this.frontIdCardBase64 = this.enterpriseInfo.frontIdCardBase64;
+        //   this.reverseIdCardBase64 = this.enterpriseInfo.reverseIdCardBase64;
 
-          //   }
-          // })
         }else{
           console.log(111);
         }
       }).catch(err=>{
         console.log(err);
       })   
-  },
-  methods:{
+      },
     thattreeFn(showData,listData){
-      listData.map((item)=>{
+      listData.forEach((item)=>{
+        
         if(showData == item.code){
           this.areaText.push(item.name)
-          if(listData.parentCode=='0'){
+          console.log(this.areaText)
+          if(this.areaText.length==1){
             
           this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
-          }else{
+          }else
+          if(this.areaText.length==2){
             this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
+          }
+          if(this.areaText.length==3){
+              return
           }
         }
       })
       console.log(this.areaText)
-    },
-    getIndustryTree () {
+      this.areaTextinfo = this.areaText.join('/');
+    },  
+        thatindustryFn(data){
+            this.industryTypeArr.map(item=>{
+                item.children.map(item1=>{
+                    if(data== item1.code){
+                        this.industryText.push(item1.name)
+                        this.industryType = [item.code,item1.code]
+                        return 
+                    }
+                })
+            })
+            console.log(this.industryText);
+            
+            this.industryTextinfo = this.industryText[0]
+        },
+    getIndustryTree() {
       this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
-        this.industryTree = this.deleteEmpty(res.data.industryTreeList)
+        this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
       })
     },        
-     getAreaTree () {
+     getAreaTree() {
         this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
           this.areaTree = this.deleteEmpty(res.data.areaTree)
-          console.log(this.areaTree);
         })
       },    
+    deleteEmpty (arr) {
+      return arr.map(v => {
+        if (v.children && v.children.length) {
+          v.children = this.deleteEmpty(v.children)
+        } else {
+          delete v.children
+        }
+        return v
+      })
+    },         
           // 获取字典方法
     getDic (code, key) {
       this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})
