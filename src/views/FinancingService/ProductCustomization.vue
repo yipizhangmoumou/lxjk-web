@@ -3,12 +3,27 @@
         <div class="product-details">
             <div class="details-header">
                 <div class="info">
-                    <p>客户选定产品：申请额度合计：<span>¥200万</span></p>
+                    <p>客户选定产品：申请额度合计：<span>¥{{initData.totalAmount}}万</span></p>
                 </div>
                 <el-button-group>
-                    <el-button>短期 2/3</el-button>
+                    <!-- <el-button>短期 2/3</el-button>
                     <el-button>中期 0/3</el-button>
-                    <el-button>长期 0/3</el-button>
+                    <el-button>长期 0/3</el-button> -->
+                    <el-button 
+                        :class="{active: initData.activeIdx=='short'}" 
+                        @click="toggleActivePro('short')">
+                        短期 {{initData.applicableProducts.pageMgmAssessmentApplyListShort.length}}/{{initData.selectedProducts.actionPlanProductListShort.length}}
+                    </el-button>
+                    <el-button 
+                        :class="{active: initData.activeIdx=='middle'}"
+                        @click="toggleActivePro('middle')">
+                        中期 {{initData.applicableProducts.pageMgmAssessmentApplyListMiddle.length}}/{{initData.selectedProducts.actionPlanProductListMiddle.length}}
+                    </el-button>
+                    <el-button
+                        :class="{active: initData.activeIdx=='long'}" 
+                        @click="toggleActivePro('long')">
+                        长期 {{initData.applicableProducts.pageMgmAssessmentApplyListLong.length}}/{{initData.selectedProducts.actionPlanProductListLong.length}}
+                    </el-button>
                 </el-button-group>
             </div>
             <div class="product-details-main">
@@ -23,27 +38,27 @@
                     </div>
                     <div class="table">
                         <el-table
-                            :data="byUseProTableData"
+                            :data="initData.currentAppProList"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
                             fit>
-                            <el-table-column label="序号" prop="id" width="100px"></el-table-column>
-                            <el-table-column label="客户选取" prop="customerSelected"></el-table-column>
-                            <el-table-column label="客户ID" prop="proId"></el-table-column>
-                            <el-table-column label="产品名称" prop="proName"></el-table-column>
-                            <el-table-column label="产品类型" prop="proType"></el-table-column>
-                            <el-table-column label="放款机构" prop="lender"></el-table-column>
-                            <el-table-column label="期数" prop="dateNum"></el-table-column>
-                            <el-table-column label="贷款利息" prop="interest"></el-table-column>
-                            <el-table-column label="还款方式" prop="repayment"></el-table-column>
-                            <el-table-column label="担保方式" prop="guarantee"></el-table-column>
-                            <el-table-column label="最高申请额度" prop="maxSalary"></el-table-column>
-                            <el-table-column label="定制状态" prop="status"></el-table-column>
+                            <el-table-column label="序号" prop="idx" width="100px"></el-table-column>
+                            <el-table-column label="客户选取" prop="selectProductStatus"></el-table-column>
+                            <el-table-column label="客户ID" prop="productId"></el-table-column>
+                            <el-table-column label="产品名称" prop="productName"></el-table-column>
+                            <el-table-column label="产品类型" prop="productType"></el-table-column>
+                            <el-table-column label="放款机构" prop="orgName"></el-table-column>
+                            <el-table-column label="期数" prop="loanCycle"></el-table-column>
+                            <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
+                            <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
+                            <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
+                            <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
+                            <el-table-column label="定制状态" prop="actionStatus"></el-table-column>
                             <el-table-column label="操作">
-                                <template>
+                                <template slot-scope="scope">
                                     <div class="cz">
-                                        <div @click="productCustomize">
+                                        <div @click="productCustomize(scope.row)">
                                             产品定制
                                         </div>
                                     </div>
@@ -53,11 +68,11 @@
                         <!-- 分页 -->
                         <div class="page-conatiner">
                             <el-pagination
-                                :current-page="curr"
-                                :page-sizes="[100, 200, 300, 400]"
-                                :page-size="100"
+                                :current-page="initData.applicableProductsCurr"
+                                :page-sizes="[10, 25, 50, 100]"
+                                :page-size="10"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="400"
+                                :total="initData.currentAppProList.length"
                             ></el-pagination>
                         </div>
                         
@@ -75,30 +90,30 @@
                     </div>
                     <div class="table">
                         <el-table
-                            :data="alerdyProTableData"
+                            :data="initData.currentSelectedProList"
                             tooltip-effect="dark"
                             style="width: 100%"
                             :border="true"
                             fit>
-                            <el-table-column label="序号" prop="id"></el-table-column>
-                            <el-table-column label="产品ID" prop="customerSelected"></el-table-column>
-                            <el-table-column label="产品名称" prop="proName"></el-table-column>
-                            <el-table-column label="产品类型" prop="proType"></el-table-column>
-                            <el-table-column label="放款机构" prop="lender"></el-table-column>
-                            <el-table-column label="期数" prop="dateNum"></el-table-column>
-                            <el-table-column label="贷款利息" prop="interest"></el-table-column>
-                            <el-table-column label="还款方式" prop="repayment"></el-table-column>
-                            <el-table-column label="担保方式" prop="guarantee"></el-table-column>
-                            <el-table-column label="前置付款项" prop="beforePay"></el-table-column>
-                            <el-table-column label="服务费" prop="serverSalary"></el-table-column>
-                            <el-table-column label="申请额度" prop="applyQuota"></el-table-column>
+                            <el-table-column label="序号" prop="idx"></el-table-column>
+                            <el-table-column label="产品ID" prop="productId"></el-table-column>
+                            <el-table-column label="产品名称" prop="productName"></el-table-column>
+                            <el-table-column label="产品类型" prop="productType"></el-table-column>
+                            <el-table-column label="放款机构" prop="orgName"></el-table-column>
+                            <el-table-column label="期数" prop="loanCycle"></el-table-column>
+                            <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
+                            <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
+                            <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
+                            <el-table-column label="前置付款项" prop="qzChargeItem"></el-table-column>
+                            <el-table-column label="服务费" prop="servChargeItem"></el-table-column>
+                            <el-table-column label="申请额度" prop="financingAmount"></el-table-column>
                             <el-table-column label="操作">
-                                <template>
+                                <template slot-scope="scope">
                                     <div class="cz">
-                                        <div @click="aleryProEdit">
+                                        <div @click="aleryProEdit(scope.row)">
                                             编辑
                                         </div>
-                                        <div @click="aleryProDelete">
+                                        <div @click="aleryProDelete(scope.row.childActionCode)">
                                             删除
                                         </div>
                                     </div>
@@ -108,18 +123,16 @@
                         <!-- 分页 -->
                         <div class="page-conatiner">
                             <el-pagination
-                                :current-page="curr"
-                                :page-sizes="[100, 200, 300, 400]"
-                                :page-size="100"
+                                :current-page="initData.selectedProductsCurr"
+                                :page-sizes="[10, 25, 50, 100]"
+                                :page-size="10"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="400"
+                                :total="initData.currentSelectedProList.length"
                             ></el-pagination>
                         </div>
                         
                     </div>
                 </div>
-
-                
 
             </div>
         </div>
@@ -131,7 +144,7 @@
             :dataCodeList="dataCodeList" 
             :parentObj="codeObj"
             @queryList="getTableData" -->
-        <ProCustModel v-model="proCustData.visible"/>
+        <ProCustModel v-model="proCustData.visible" :data="proCustData.data" @getInitData="getInitData"/>
         <ProCustModelEdit v-model="proCustEditData.visible"/>
   </div>
 </template>
@@ -144,6 +157,52 @@ export default {
     name: "productCustomization",
     data() {
         return {
+            planCode: "", // 融资申请code
+
+            initData: {
+                totalAmount: 0,
+
+                activeIdx: "short",  // 激活按钮状态 short | middle | long
+
+                /*** ------ 评估适用产品：开始 ------ ***/ 
+                applicableProducts: {
+                    pageMgmAssessmentApplyListShort: [],  // 短期
+                    pageMgmAssessmentApplyListMiddle: [],// 中期
+                    pageMgmAssessmentApplyListLong: []   // 长期
+                },
+                currentAppProList: [], // 当前展示的列表数据
+                applicableProductsCurr: 1,   //评估适用产品当前分页
+                /*** ------ 评估适用产品：结束 ------ ***/
+
+                /*** ------ 申请选定产品：开始 ------ ***/ 
+                selectedProducts: {
+                    actionPlanProductListShort: [],  // 短期
+                    actionPlanProductListMiddle: [],// 中期
+                    actionPlanProductListLong: []   // 长期
+                },
+                currentSelectedProList: [], // 当前展示的列表数据
+                selectedProductsCurr: 1,   //  客户申请选定产品
+                /*** ------ 申请选定产品：结束 ------ ***/
+
+
+            },
+
+            // 产品类型枚举
+            productTypeObj: {
+                "1": "长期",
+                "2": "中期", 
+                "3": "短期"
+            },
+
+            // 客户选取状态枚举
+            selectProductStatusObj: {
+                "0": "客户选定",
+                "1": "否" 
+            },
+
+
+
+
             
             byUseProTableData: [],
             alerdyProTableData: [],
@@ -166,48 +225,230 @@ export default {
         CopyRight
     },
     created() {
-        for (let index = 0; index < 3; index++) {
-            this.byUseProTableData.push({
-                id: index+1,
-                customerSelected: "客户选定",
-                proId: parseInt(Math.random() * 1000000),
-                proName: "商户信用贷-"+index,
-                proType: "短期",
-                lender: "长沙银行",
-                dateNum: "12-24期",
-                interest: "年化7%-9%",
-                repayment: `等额本息 先息后本`,
-                guarantee: "需要担保人,资质好可免担保",
-                maxSalary: "2020-03-09 12:34:23",
-                status: "已定制"
-            });
-        }
+        // 接收路由中传递过来的编号id  "27184768-1db3-4f3b-bae8-188c45e57cc2";
+        let planCode = this.planCode = this.$route.params.planCode;
 
-        for (let index = 0; index < 2; index++) {
-            this.alerdyProTableData.push({
-                id: index+1,
-                proId: parseInt(Math.random() * 1000000),
-                proName: "商户信用贷-"+index,
-                proType: "短期",
-                lender: "长沙银行",
-                dateNum: "12-24期",
-                interest: "年化7%-9%",
-                repayment: `等额本息 先息后本`,
-                guarantee: "需要担保人,资质好可免担保",
-                beforePay: "无",
-                serverSalary: "￥10万",
-                applyQuota: "￥100.00万"
-            });
-        }
+        /**
+         * @description: 获取页面初始数据
+         * @param {string} planCode
+         * @Date Changed: 2020-07-14
+         */
+        this.getInitData(planCode);
+
     },
     methods: {
+
+        /**
+         * @description: 初始数据加载：
+         * @param {string}  planCode
+         * @Date Changed: 2020-07-13
+         */ 
+        getInitData(planCode){
+            console.log( "------initData调用~" , planCode);
+            this.$axios.post("/api/mgm/financingPlan/productCustomizationPage",{planCode})
+                .then(res=>{
+                    // console.log( "产品定制~",res );
+                    if(res.code == 0){
+                        let data = res.data;
+                        console.log( "产品定制~",data );
+                        /** ------ 评估适用产品 数据重构：开始------ **/
+                        // 短期
+                        this.initData.applicableProducts.pageMgmAssessmentApplyListShort = !data.pageMgmAssessmentApplyListShort ? [] : data.pageMgmAssessmentApplyListShort.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
+                            }
+                        });
+                        // 中期
+                        this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle = !data.pageMgmAssessmentApplyListMiddle ? [] : data.pageMgmAssessmentApplyListMiddle.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
+                            }
+                        });
+                        // 长期
+                        this.initData.applicableProducts.pageMgmAssessmentApplyListLong = !data.pageMgmAssessmentApplyListLong ? [] : data.pageMgmAssessmentApplyListLong.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
+                            }
+                        });
+                        
+                        /** ------ 评估适用产品 数据重构：结束------ **/
+
+                        /** ------ 评估申请选定产品 数据重构：开始------ **/ 
+                        // 短期
+                        this.initData.selectedProducts.actionPlanProductListShort = !data.actionPlanProductListShort ? [] : data.actionPlanProductListShort.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                childActionCode: item.childActionCode, // 产品的id
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
+                                servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
+                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                            }
+                        });
+                        // 中期
+                        this.initData.selectedProducts.actionPlanProductListMiddle = !data.actionPlanProductListMiddle ? [] : data.actionPlanProductListMiddle.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                childActionCode: item.childActionCode, // 产品的id
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
+                                servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
+                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                            }
+                        });
+                        // 长期
+                        this.initData.selectedProducts.actionPlanProductListLong = !data.actionPlanProductListLong ? [] : data.actionPlanProductListLong.map((item,idx)=>{
+                            return {
+                                idx: idx,  // 序号
+                                childActionCode: item.childActionCode, // 产品的id
+                                productId: !item.productId ? "-" : item.productId,// 产品ID
+                                productName: !item.productName ? "-" : item.productName,// 产品名称
+                                productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
+                                orgName: !item.orgName ? "-" : item.orgName,// 放款机构
+                                loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
+                                guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
+                                qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
+                                servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
+                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                            }
+                        });
+
+                        /** ------ 评估申请选定产品 数据重构：结束------ **/ 
+
+                        // 已定制的产品总额度
+                        this.initData.totalAmount = data.totalAmount == null ? 0 : data.totalAmount;
+                        
+                        /**
+                         * @description: 根据当前激活的tab key 加载当前页面表格数据
+                         * @Date Changed: 2020-07-16
+                         */
+                        console.log( "激活===>",this.activeIdx );
+                        switch(this.initData.activeIdx){
+                            case 'short':
+                                console.log( "进入short~" );
+                               this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
+                               break;
+                            case 'middle':
+                                console.log( "进入middle~" );
+                                this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+                                break;
+                            case 'long':
+                                console.log( "进入long~" );
+                                this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong; 
+                               
+                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+                                break;
+                        }
+
+
+
+
+                    }
+                })
+
+        },
+
+        /**
+         * @description: 短|中|长 按钮切换
+         * @param {string} key 按钮类型
+         * @Date Changed: 2020-07-14
+         */    
+        toggleActivePro(key){
+
+            this.initData.activeIdx = key;
+            switch(key){
+                case "short":
+                    // 评估适用产品 短期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort;
+
+                    // 申请选定产品 短期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
+                    break;
+                case "middle":
+                    // 评估适用产品 中期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle;
+
+                    // 申请选定产品 中期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+                    break;
+                case "long":
+                    // 评估适用产品 长期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong;
+
+                    // 申请选定产品 长期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+                    break;
+            }
+        },    
 
         /**
          * @description: 评估使用产品【产品定制】按钮
          * @Date Changed: 2020-07-12
          */
-        productCustomize(){
-            this.proCustData.data = {}
+        productCustomize(row){
+            console.log( "当前数据", row );
+            let { productId, productName, orgName } = row;
+
+
+            this.proCustData.data = {
+                planCode: this.planCode,
+                productId,
+                productName,
+                orgName
+            }
             this.proCustData.visible = true
         },
 
@@ -221,26 +462,40 @@ export default {
         },
 
         /**
-         * @description: 已定制产品【编辑】按钮
+         * @description: 已定制产品【删除】按钮
+         * @param {string} childActionCode 已定制产品的childActionCode
          * @Date Changed: 2020-07-12
          */  
-        aleryProDelete(){
+        aleryProDelete(childActionCode){
             this.$confirm("是否确认删除该定制产品", "删除定制的产品", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             })
             .then(() => {
-                this.$message({
-                    type: "success",
-                    message: "删除成功"
-                });
+                this.$axios.post(`/api/mgm/actionChildPlan/delete/${childActionCode}`)
+                    .then(res=>{
+                        // console.log("删除响应：",res);
+                        if(res.code == 0){
+                            this.$message({
+                                type: "success",
+                                message: "删除成功"
+                            });
+
+                            // 重新加载表格数据
+                            this.getInitData(this.planCode);
+
+                        }else{
+                            this.$message({
+                                showClose: true,
+                                message: `删除失败！原因：${res.message}`,
+                                type: 'error'
+                            });  
+                        }
+                    })
+                
                 
             })
-            .catch(() => {
-                // 取消操作
-                
-            });
         }, 
 
     }
@@ -267,6 +522,10 @@ export default {
             border-bottom: 1px solid #e9e9e9;
             .info
                 margin-right 10px
+            .el-button-group
+                .active 
+                    color #fff
+                    background #409eff
         .product-details-main
             padding 20px
             .table-container

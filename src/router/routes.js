@@ -72,7 +72,7 @@ const routes = [
           component: () => import("views/FinancingService/ServiceDetails")
         },
         {
-            path: '/evaluationDetails',
+            path: '/evaluationDetails/:id',
             name: 'evaluationDetails',
             meta: {
                 name: '评估详情'
@@ -80,7 +80,7 @@ const routes = [
             component: () => import("views/FinancingService/EvaluationDetails")
         }, 
         {
-            path: '/productCustomization',
+            path: '/productCustomization/:planCode',
             name: 'productCustomization',
             meta: {
                 name: '产品定制'

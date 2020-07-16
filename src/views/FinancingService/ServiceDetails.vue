@@ -5,13 +5,13 @@
     <div class="list-container">
       <div class="top-info">
         <div class="info-message">
-          <div>服务单号:</div><div>201808196398345</div>
+          <div>服务单号:</div><div>{{planCode}}</div>
         </div>
         <div class="info-message">
-          <div>融资顾问:</div><div>丁昱</div>
+          <div>融资顾问:</div><div>{{custServName}}</div>
         </div>
         <div class="info-message">
-          <div>服务申请时间:</div><div>2020.07.10 12:22:22</div>
+          <div>服务申请时间:</div><div>{{createTime}}</div>
         </div>
       </div>
       <div class="details-most">
@@ -19,19 +19,20 @@
           <h5><i class="el-icon-collection-tag" type="primary"></i>基本信息</h5>
           <el-table
             ref="userTable"
-            :data="tableData"
+            :data="baseData"
             tooltip-effect="dark"
             style="width: 100%"
             :stripe="true"
             :border="true"
           >
-            <el-table-column label="用户ID" prop="number"></el-table-column>
-            <el-table-column prop="user" label="联系人"></el-table-column>
-            <el-table-column prop="mobile" label="手机号"></el-table-column>
-            <el-table-column prop="company" label="企业名称"></el-table-column>
-            <el-table-column prop="linkman" label="申请金额"></el-table-column>
-            <el-table-column prop="mobile1" label="评估适用产品"></el-table-column>
-                      <el-table-column prop="address" label="操作" width="150">
+            <el-table-column label="用户ID" prop="userPkId"></el-table-column>
+            <el-table-column prop="contactPerson" label="联系人"></el-table-column>
+            <el-table-column prop="contact" label="手机号"></el-table-column>
+            <el-table-column prop="enterpriseName" label="企业名称"></el-table-column>
+            <el-table-column prop="financingAmount" label="申请金额"></el-table-column>
+            <el-table-column prop="meetProductNum" label="评估适用产品"></el-table-column>
+            <el-table-column prop="selectProductNum" align="center" label="客户选定产品"></el-table-column>
+                      <el-table-column label="操作" width="150">
             <template>
               <div class="cz">
                 <div @click="goEvaluationDetails">点击查看</div>
@@ -84,58 +85,58 @@
             <h5><i class="el-icon-collection-tag" type="primary"></i>企业信息完善</h5>
             <el-tabs type="border-card" class="j_tabs" :stretch="true">
   <el-tab-pane>
-    <span slot="label"> 我的行程<i class="el-icon-circle-check"></i></span>
-<el-form label-position="top" label-width="80px" :model="companyInfo">
+    <span slot="label"> 企业信息<i class="el-icon-circle-check"></i></span>
+<el-form label-position="top" label-width="80px" :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业全称</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyName}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 企业性质</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.companyType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.enterpriseNature}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 行业类型</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.industryType}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{industryTextinfo}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.areaCity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{areaTextinfo}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 详细地址</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.adress}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.regAddress}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 成立时间</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.time}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.regTime}}</el-button>
     </el-col>
   </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.thatYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{currentYearRevenue[businessInfo.currentYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastYears}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearRevenue[businessInfo.lastYearRevenue]}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.lastcall}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{lastYearInvoiceAmount[businessInfo.lastYearInvoiceAmount]}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isImmovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasRealEstate?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.immovables}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{realEstateVal[enterpriseAssetInfo.realEstateVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -143,11 +144,11 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
-        <el-button class="pdl10" disabled type="text" >{{companyInfo.isFacility}}</el-button>
+        <el-button class="pdl10" disabled type="text" >{{enterpriseAssetInfo.hasEquipment?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.facility}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{equipmentVal[enterpriseAssetInfo.equipmentVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -155,86 +156,85 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有专利</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isPatents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasPatent?"是":"否"}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.patents}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{patentVal[enterpriseAssetInfo.patentVal]}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.isstockEquity}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.hasSharePledge?"是":"否"}}</el-button>
     </el-col>
   </el-row>
 </el-form>
   </el-tab-pane>
   <el-tab-pane>
-    <span slot="label"> 消息中心<i class="el-icon-circle-check"></i></span>
-    <el-form :model="companyInfo">
+    <span slot="label"> 法人信息<i class="el-icon-circle-check"></i></span>
+    <el-form :model="legalRepresentative">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 法人姓名</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.legalPerson}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{legalRepresentative.name}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class="">法人年龄</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.legalAge}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{age[legalRepresentative.age]}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
-        
-        <el-image :src="companyInfo.legalCard"></el-image>
-        <el-image :src="src"></el-image>
+        <el-image :src="'data:image/png;base64,'+enterpriseInfo.frontIdCardBase64"></el-image>
+        <el-image :src="'data:image/png;base64,'+enterpriseInfo.reverseIdCardBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
   </el-tab-pane>
   <el-tab-pane>
-    <span slot="label"> 角色管理<i class="el-icon-circle-check"></i></span>
-<el-form :model="companyInfo">
+    <span slot="label"> 企业资质<i class="el-icon-circle-check"></i></span>
+<el-form :model="enterpriseInfo">
   <el-row>
     <el-col :span="8">
-        <div class=""><i class="redrules">*</i> 企业营业证件</div>
-         <el-image :src="companyInfo.companyCard"></el-image>
+        <div class=""><i class="redrules">*</i> 企业营业证件</div>        
+         <el-image :src="'data:image/png;base64,'+enterpriseInfo.businessLicenseBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
   </el-tab-pane>
   <el-tab-pane>
     
-    <span slot="label"> 定时任务补偿<i class="el-icon-circle-check"></i></span>
+    <span slot="label"> 财务账户<i class="el-icon-circle-check"></i></span>
     <el-form :model="companyInfo">
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户银行</div>
-        <el-button class="pdl10" disabled type="text" v-model="companyInfo.openBank">{{companyInfo.openBank}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{financialInformation.bankName}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 银行账号</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankCard}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{financialInformation.cardNum}}</el-button>
     </el-col>
     <el-col :span="8">
       <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankArea}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{financialInformation.cityCode}}</el-button>
     
     </el-col>
   </el-row>
     <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 开户支行</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.bankBranch}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{financialInformation.depositBank}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 税号</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.dutyParagraph}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{financialInformation.taxNumber}}</el-button>
     </el-col>
     <el-col :span="8"> 
       <div class=""><i class="redrules">*</i> 发票抬头</div>
-        <el-button class="pdl10" disabled type="text">{{companyInfo.invoiceTitle}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseInfo.name}}</el-button>
     </el-col>
   </el-row>
   </el-form>
@@ -349,55 +349,237 @@ export default {
         invoiceTitle:'湖南XXXX科技有限公司',
       },
       showAssurance:false,
-      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
+      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+      planCode:'',
+      createTime:'',
 
+      baseData:[],
+      enterpriseInfo:{},
+      enterpriseAssetInfo:{},
+      financialInformation:{},
+      legalRepresentative:{},
+      businessInfo:{},
+      companyTypeArr:[
+        {value:'1',label:'有限公司'},
+        {value:'2',label:'股份有限公司'}
+      ],
+      industryTypeArr:[
+        {value:'1',label:'互联网'},
+        {value:'2',label:'物联网'}
+      ],
+      areaCityArr:[
+        {value:'1',label:'互联网'},
+        {value:'2',label:'物联网'}
+      ],
+      thatYearsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      lastYearsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      lastcallArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}],
+      isImmovablesArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}
+      ],
+      immovablesArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isFacilityArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+      facilityArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isPatentsArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+      patentsArr:[
+        {value:'1',label:'100万-200万'},
+        {value:'2',label:'200万-300万'}
+      ],
+      isstockEquityArr:[
+         {value:'1',label:'是'},
+        {value:'2',label:'否'}],
+        legalAgeArr:[
+          {value:'1',label:'20-40岁'},
+        {value:'2',label:'40-60岁'}
+        ],
+        areaTree:[],
+      realEstateVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      equipmentVal:{
+        1:'1000万以内',
+        2:'1000万-3000万',
+        3:'3000万以上'
+      },
+      patentVal:{
+        1:'5个以内',
+        2:'5-10个',
+        3:'10个以上'
+      },
+      currentYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearRevenue:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      lastYearInvoiceAmount:{
+        1:'200万以内',
+        2:'200万-1000万',
+        3:'1000以上'
+      },
+      age:{
+        1:'22周岁以下',
+        2:'22周岁-60周岁',
+        3:'60周岁以上'
+      },
+      areaText:[],   
+      areaTextinfo:'',
+      industryText:[],
+      industryTextinfo:'',
+      businessLicenseBase64:'',
+      frontIdCardBase64:'',
+      reverseIdCardBase64:'',
     }
   },
-  created(){
-    for (let index = 0; index < 3; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        user: "user" + index,
-        mobile: "手机号" + index,
-        company: "企业名称" + index,
-        linkman: "申请金额" + index,
-        mobile1: "评估适用产品" + index,
-      });
-    }    
-        for (let index = 0; index < 3; index++) {
-      this.actionData.push({
-        number: parseInt(Math.random() * 1000000),
-        user: "user" + index,
-        actionnum: "actionnum" + index,
-        mobile: "手机号" + index,
-        company: "企业名称" + index,
-        linkman: "申请金额" + index,
-        mobile1: "评估适用产品" + index,
-        danbao:index%2==0?'1':'2'
-      });
-    }    
-  },
+    created:async function(){
+        try{
+            await this.getAreaTree();
+            await this.getIndustryTree();
+            await this.initData();
+        } catch(e){
+            console.log(e);
+        }
+    },
   mounted(){
+      this.getDic('year_revenue', 'thatYearsArr')
+      this.getDic('last_year_revenue', 'lastYearsArr')
+      this.getDic('last_year_invoiced','lastcallArr')
+
+      this.getDic('real_property', 'immovablesArr')
+      this.getDic('device_value', 'facilityArr')
+      this.getDic('patent_num','patentsArr')
+      this.getDic('corporate_age','legalAgeArr')
+
+      this.getDic('enterprise_nature','companyTypeArr')
+      this.getDic('financing_type','industryTypeArr')
     console.log(this.$route.params);
+  },
+  methods:{
+      initData(){
     // 获取详情
     let financingCode = this.$route.params.financingCode
     console.log(financingCode);
-    let url =`/api/mgm/financingPlan/detail`
-
-       this.$axios.post(url,{
-         financingCode:financingCode
-       })
-      .then(res=>{
+    let url =`/api/mgm/financingPlan/detail/${financingCode}`
+      
+       this.$axios.post(url).then(res=>{
         console.log(res);
-        // if(res.code == 0){
-        //   // let datas =res.data;
+        if(res.code == 0){
+          let datas =res.data;
+          this.baseData = [datas.financingPlan];//基本信息
+          this.planCode = datas.planCode;
+          this.custServName = datas.custServName;
+          this.actionData = datas.childPlanList;
+          this.createTime = datas.createTime;
+            this.enterpriseInfo = datas.enterpriseInfo||{};
+            this.enterpriseAssetInfo= datas.enterpriseAssetInfo||{};
+            this.financialInformation = datas.financialInformation||{};
+            this.legalRepresentative = datas.legalRepresentative||{};
+          this.businessInfo = datas.businessInfo||{};
+          console.log(this.enterpriseInfo.name);
+          // 公司性质
+          this.companyTypeArr.map(item=>{
+              if(item.key == this.enterpriseInfo.enterpriseNature){
+                  this.enterpriseInfo.enterpriseNature = item.value
+              }
+          })
+          this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
+          this.thatindustryFn(this.enterpriseInfo.industryCode)
+        //   this.businessLicenseBase64 = this.enterpriseInfo.businessLicenseBase64;
+        //   this.frontIdCardBase64 = this.enterpriseInfo.frontIdCardBase64;
+        //   this.reverseIdCardBase64 = this.enterpriseInfo.reverseIdCardBase64;
 
-        // }else{
-
-        // }
+        }else{
+          console.log(111);
+        }
+      }).catch(err=>{
+        console.log(err);
       })   
-  },
-  methods:{
+      },
+    thattreeFn(showData,listData){
+      listData.forEach((item)=>{
+        
+        if(showData == item.code){
+          this.areaText.push(item.name)
+          console.log(this.areaText)
+          if(this.areaText.length==1){
+            
+          this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
+          }else
+          if(this.areaText.length==2){
+            this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
+          }
+          if(this.areaText.length==3){
+              return
+          }
+        }
+      })
+      console.log(this.areaText)
+      this.areaTextinfo = this.areaText.join('/');
+    },  
+        thatindustryFn(data){
+            this.industryTypeArr.map(item=>{
+                item.children.map(item1=>{
+                    if(data== item1.code){
+                        this.industryText.push(item.name)
+                        this.industryType = [item.code,item1.code]
+                        return 
+                    }
+                })
+            })
+            console.log(this.industryText);
+            
+            this.industryTextinfo = this.industryText[0]
+        },
+    getIndustryTree() {
+      this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
+        this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
+      })
+    },        
+     getAreaTree() {
+        this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
+          this.areaTree = this.deleteEmpty(res.data.areaTree)
+        })
+      },    
+    deleteEmpty (arr) {
+      return arr.map(v => {
+        if (v.children && v.children.length) {
+          v.children = this.deleteEmpty(v.children)
+        } else {
+          delete v.children
+        }
+        return v
+      })
+    },         
+          // 获取字典方法
+    getDic (code, key) {
+      this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})
+      .then((res) => {
+        this[key] = res.data
+      })
+    },      
     seeAssurance(){
       this.showAssurance = true;
     },
@@ -490,5 +672,10 @@ export default {
   box-shadow none !important
 .j_tabs .el-tabs__item .el-icon-circle-check
   color #67C23A
-
+.j_image
+    width 200px
+    height 150px
+    img
+        height 100%
+        width 100%
 </style>
