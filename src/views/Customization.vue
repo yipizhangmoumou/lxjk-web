@@ -736,6 +736,7 @@ export default {
       industryText:[],
       industryTextinfo:'',
       areaTextinfoBank:'',
+      areaTextbank:[],
       rules:{
             [`enterpriseInfo.name`]:[{ required: true, message: '请输入企业全称', trigger: 'blur' }],
             [`enterpriseInfo.enterpriseNature`]: [
@@ -858,6 +859,9 @@ export default {
           this.fileList.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.frontIdCardBase64})
           this.fileListB.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.reverseIdCardBase64})
           this.fileListC.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.businessLicenseBase64})
+          this.frontIdCard= this.companyInfo.enterpriseInfo.frontIdCard
+          this.reverseIdCard= this.companyInfo.enterpriseInfo.reverseIdCard
+          this.businessLicense= this.companyInfo.enterpriseInfo.businessLicense          
         }else{
           console.log(res);
         }
@@ -867,36 +871,44 @@ export default {
       listData.forEach((item)=>{
         
         if(showData == item.code){
-          this.areaText.push(item.name)
-          console.log(this.areaText)
-          if(this.areaText.length==1 && type==1){
-            
-          this.thattreeFn(this.companyInfo.enterpriseInfo.cityCode,item.children,1)
-          }else
-          if(this.areaText.length==2 &&type==1){
-            this.thattreeFn(this.companyInfo.enterpriseInfo.areaCode,item.children,1)
-          }
-          if(this.areaText.length==3 &&type==1){
-              return
-          }
-          
-          if(this.areaText.length==1 && type==2){
-            
-          this.thattreeFn(this.companyInfo.financialInformation.cityCode,item.children,2)
-          }else
-          if(this.areaText.length==2 &&type==2){
-            this.thattreeFn(this.companyInfo.financialInformation.regionCode,item.children,2)
-          }
-          if(this.areaText.length==3 &&type==2){
-              return
-          }          
+            if(type == 1){
+                this.areaText.push(item.name)
+                console.log(this.areaText)
+                if(this.areaText.length==1){
+                this.thattreeFn(this.companyInfo.enterpriseInfo.cityCode,item.children,1)
+                }else
+                if(this.areaText.length==2){
+                    this.thattreeFn(this.companyInfo.enterpriseInfo.areaCode,item.children,1)
+                }
+                if(this.areaText.length==3){
+                    return
+                }
+            }else
+            if(type == 2){
+                this.areaTextbank.push(item.name);
+                if(this.areaTextbank.length==1){
+                    
+                this.thattreeFn(this.companyInfo.financialInformation.cityCode,item.children,2)
+                }else
+                if(this.areaTextbank.length==2){
+                    this.thattreeFn(this.companyInfo.financialInformation.regionCode,item.children,2)
+                }
+                if(this.areaTextbank.length==3){
+                    return
+                }                       
+            }
+
+   
         }
       })
       console.log(this.areaText)
+      console.log(this.areaTextbank)
       if(type==1){
         this.areaTextinfo = this.areaText.join('/');
+        // this.areaText = [];
       }else{
-        this.areaTextinfoBank = this.areaText.join('/');
+        this.areaTextinfoBank = this.areaTextbank.join('/');
+        // this.areaText = [];
       }
       
     },  

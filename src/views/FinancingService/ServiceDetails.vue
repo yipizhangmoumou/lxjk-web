@@ -219,7 +219,7 @@
     </el-col>
     <el-col :span="8">
       <div class=""><i class="redrules">*</i> 所在区域</div>
-        <el-button class="pdl10" disabled type="text">{{financialInformation.cityCode}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{areaTextinfoBank}}</el-button>
     
     </el-col>
   </el-row>
@@ -446,7 +446,9 @@ export default {
         3:'60周岁以上'
       },
       areaText:[],   
+      areaTextbank:[],
       areaTextinfo:'',
+      areaTextinfoBank:'',
       industryText:[],
       industryTextinfo:'',
       businessLicenseBase64:'',
@@ -505,7 +507,8 @@ export default {
                   this.enterpriseInfo.enterpriseNature = item.value
               }
           })
-          this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree)
+          this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree,1)
+          this.thattreeFn(this.financialInformation.provinceCode,this.areaTree,2)
           this.thatindustryFn(this.enterpriseInfo.industryCode)
         //   this.businessLicenseBase64 = this.enterpriseInfo.businessLicenseBase64;
         //   this.frontIdCardBase64 = this.enterpriseInfo.frontIdCardBase64;
@@ -518,26 +521,47 @@ export default {
         console.log(err);
       })   
       },
-    thattreeFn(showData,listData){
+    thattreeFn(showData,listData,type){
       listData.forEach((item)=>{
         
         if(showData == item.code){
-          this.areaText.push(item.name)
-          console.log(this.areaText)
-          if(this.areaText.length==1){
-            
-          this.thattreeFn(this.enterpriseInfo.cityCode,item.children)
-          }else
-          if(this.areaText.length==2){
-            this.thattreeFn(this.enterpriseInfo.areaCode,item.children)
-          }
-          if(this.areaText.length==3){
-              return
-          }
+            if(type==1){
+                this.areaText.push(item.name)
+                console.log(this.areaText)
+                if(this.areaText.length==1){
+                    
+                this.thattreeFn(this.enterpriseInfo.cityCode,item.children,1)
+                }else
+                if(this.areaText.length==2){
+                    this.thattreeFn(this.enterpriseInfo.areaCode,item.children,1)
+                }
+                if(this.areaText.length==3){
+                    return
+                }                
+            }else
+            if(type==2){
+                this.areaTextbank.push(item.name);
+                if(this.areaTextbank.length==1){
+                    
+                this.thattreeFn(this.financialInformation.cityCode,item.children,2)
+                }else
+                if(this.areaTextbank.length==2){
+                    this.thattreeFn(this.financialInformation.regionCode,item.children,2)
+                }
+                if(this.areaTextbank.length==3){
+                    return
+                }    
+            }
+
         }
       })
-      console.log(this.areaText)
-      this.areaTextinfo = this.areaText.join('/');
+      if(type==1){
+        this.areaTextinfo = this.areaText.join('/');
+      }else{
+          console.log(this.areaTextbank);
+          
+        this.areaTextinfoBank = this.areaTextbank.join('/');
+      }        
     },  
         thatindustryFn(data){
             this.industryTypeArr.map(item=>{
