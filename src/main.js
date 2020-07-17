@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -30,6 +31,11 @@ Vue.msgError = Vue.prototype.$msgError = function (message) {
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.component("copyright", CopyRight);
+Vue.mixin({
+  computed: {
+    ...mapState(['loginUserInfo'])
+  }
+})
 
 new Vue({
   router,

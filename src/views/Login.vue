@@ -52,6 +52,11 @@
                   this.loading = true
                     this.$axios.post('/api/mgm/index/login', this.user).then(res => {
                       window.sessionStorage.setItem('token', res.data.token)
+                      window.sessionStorage.setItem('role', res.data.role)
+                      let userInfo = {
+                        role: res.data.role
+                      }
+                      this.$store.commit('setLoginUserInfo', userInfo)
                       this.$router.push("/");
                       this.loading = false
                     }).catch(() => {

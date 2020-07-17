@@ -101,9 +101,7 @@ export default {
   methods: {
     getAreaName(code) {
       if(!code) return '-'
-      console.log(this.areaTree)
       let info = this.recursion(this.areaTree, code)
-      console.log(info)
       return (info && info.name) || '-'
     },
     deleteEmpty (arr) {
@@ -270,6 +268,7 @@ export default {
   },
   mounted () {
     this.getTableData()
+    console.log('this.loginUserInfo--->',this.loginUserInfo)
   }
 };
 </script>
