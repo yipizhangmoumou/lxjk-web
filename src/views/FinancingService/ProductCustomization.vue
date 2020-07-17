@@ -3,7 +3,7 @@
         <div class="product-details">
             <div class="details-header">
                 <div class="info">
-                    <p>客户选定产品：申请额度合计：<span>¥{{initData.totalAmount}}万</span></p>
+                    <p>客户选定产品：申请额度合计：<span style="color: red;">¥{{initData.totalAmount}}万</span></p>
                 </div>
                 <el-button-group>
                     <!-- <el-button>短期 2/3</el-button>
@@ -88,6 +88,9 @@
                         </h6>
                         
                     </div>
+                    <!-- show-summary
+                        :summary-method="getSummaries"
+                        :span-method="arraySpanMethod" -->
                     <div class="table">
                         <el-table
                             :data="initData.currentSelectedProList"
@@ -119,6 +122,11 @@
                                     </div>
                                 </template>    
                             </el-table-column>
+                            <div 
+                                class="total selectedTotal" 
+                                slot="append">
+                                <p>申请额度小计：<span class='salary'> ¥{{initData.selectedProducts.currentTotal}}万</span></p>
+                            </div>
                         </el-table>
                         <!-- 分页 -->
                         <div class="page-conatiner">
@@ -145,7 +153,7 @@
             :parentObj="codeObj"
             @queryList="getTableData" -->
         <ProCustModel v-model="proCustData.visible" :data="proCustData.data" @getInitData="getInitData"/>
-        <ProCustModelEdit v-model="proCustEditData.visible"/>
+        <ProCustModelEdit v-model="proCustEditData.visible" :data="proCustEditData.data" @getInitData="getInitData"/>
   </div>
 </template>
 
@@ -177,8 +185,12 @@ export default {
                 /*** ------ 申请选定产品：开始 ------ ***/ 
                 selectedProducts: {
                     actionPlanProductListShort: [],  // 短期
+                    shortTotalFinalAmount: 0,        // 短期申请额度小计
                     actionPlanProductListMiddle: [],// 中期
-                    actionPlanProductListLong: []   // 长期
+                    middleTotalFinalAmount: 0,       // 中期申请额度小计
+                    actionPlanProductListLong: [],   // 长期
+                    longTotalFinalAmount: 0,        // 长期申请额度小计
+                    currentTotal: 0                     
                 },
                 currentSelectedProList: [], // 当前展示的列表数据
                 selectedProductsCurr: 1,   //  客户申请选定产品
@@ -189,9 +201,9 @@ export default {
 
             // 产品类型枚举
             productTypeObj: {
-                "1": "长期",
+                "1": "短期",
                 "2": "中期", 
-                "3": "短期"
+                "3": "长期"
             },
 
             // 客户选取状态枚举
@@ -235,8 +247,53 @@ export default {
          */
         this.getInitData(planCode);
 
+        
+
     },
     methods: {
+        /**
+         * @description: 短|中|长 按钮切换
+         * @param {string} key 按钮类型
+         * @Date Changed: 2020-07-14
+         */    
+        toggleActivePro(key){
+
+            this.initData.activeIdx = key;
+            switch(key){
+                case "short":
+                    console.log(  this.initData.selectedProducts.actionPlanProductListShort );
+                    // 评估适用产品 短期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort;
+
+                    // 申请选定产品 短期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
+
+                    // 选定产品小计
+                    this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.shortTotalFinalAmount;
+                    break;
+                case "middle":
+                    // 评估适用产品 中期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle;
+
+                    // 申请选定产品 中期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+
+                    // 中期申请额度小计
+                    this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.middleTotalFinalAmount;
+
+                    break;
+                case "long":
+                    // 评估适用产品 长期
+                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong;
+
+                    // 申请选定产品 长期
+                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+
+                    // 长期申请额度小计
+                    this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.longTotalFinalAmount;
+                    break;
+            }
+        },    
 
         /**
          * @description: 初始数据加载：
@@ -244,13 +301,15 @@ export default {
          * @Date Changed: 2020-07-13
          */ 
         getInitData(planCode){
-            console.log( "------initData调用~" , planCode);
             this.$axios.post("/api/mgm/financingPlan/productCustomizationPage",{planCode})
                 .then(res=>{
                     // console.log( "产品定制~",res );
                     if(res.code == 0){
                         let data = res.data;
-                        console.log( "产品定制~",data );
+
+                        // 已定制的产品总额度
+                        this.initData.totalAmount = data.totalAmount == null ? 0 : data.totalAmount;
+
                         /** ------ 评估适用产品 数据重构：开始------ **/
                         // 短期
                         this.initData.applicableProducts.pageMgmAssessmentApplyListShort = !data.pageMgmAssessmentApplyListShort ? [] : data.pageMgmAssessmentApplyListShort.map((item,idx)=>{
@@ -325,6 +384,9 @@ export default {
                                 financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
                             }
                         });
+                        // 短期申请额度小计
+                        this.initData.selectedProducts.shortTotalFinalAmount = data.shortTotalFinalAmount;
+                        
                         // 中期
                         this.initData.selectedProducts.actionPlanProductListMiddle = !data.actionPlanProductListMiddle ? [] : data.actionPlanProductListMiddle.map((item,idx)=>{
                             return {
@@ -343,6 +405,9 @@ export default {
                                 financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
                             }
                         });
+                        // 中期申请额度小计
+                        this.initData.selectedProducts.middleTotalFinalAmount = data.middleTotalFinalAmount;
+
                         // 长期
                         this.initData.selectedProducts.actionPlanProductListLong = !data.actionPlanProductListLong ? [] : data.actionPlanProductListLong.map((item,idx)=>{
                             return {
@@ -361,35 +426,41 @@ export default {
                                 financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
                             }
                         });
+                        // 长期申请额度小计
+                        this.initData.selectedProducts.longTotalFinalAmount = data.longTotalFinalAmount;
 
                         /** ------ 评估申请选定产品 数据重构：结束------ **/ 
 
-                        // 已定制的产品总额度
-                        this.initData.totalAmount = data.totalAmount == null ? 0 : data.totalAmount;
+                        
                         
                         /**
                          * @description: 根据当前激活的tab key 加载当前页面表格数据
                          * @Date Changed: 2020-07-16
                          */
-                        console.log( "激活===>",this.activeIdx );
                         switch(this.initData.activeIdx){
                             case 'short':
-                                console.log( "进入short~" );
                                this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort; 
                                
                                this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
+
+                               // 选定产品小计
+                               this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.shortTotalFinalAmount;
                                break;
                             case 'middle':
-                                console.log( "进入middle~" );
                                 this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle; 
                                
-                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+                                this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
+
+                                // 选定产品小计
+                                this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.middleTotalFinalAmount;
                                 break;
                             case 'long':
-                                console.log( "进入long~" );
                                 this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong; 
                                
-                               this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+                                this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
+
+                                // 选定产品小计
+                                this.initData.selectedProducts.currentTotal = this.initData.selectedProducts.longTotalFinalAmount;
                                 break;
                         }
 
@@ -400,39 +471,6 @@ export default {
                 })
 
         },
-
-        /**
-         * @description: 短|中|长 按钮切换
-         * @param {string} key 按钮类型
-         * @Date Changed: 2020-07-14
-         */    
-        toggleActivePro(key){
-
-            this.initData.activeIdx = key;
-            switch(key){
-                case "short":
-                    // 评估适用产品 短期
-                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort;
-
-                    // 申请选定产品 短期
-                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListShort;
-                    break;
-                case "middle":
-                    // 评估适用产品 中期
-                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle;
-
-                    // 申请选定产品 中期
-                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListMiddle;
-                    break;
-                case "long":
-                    // 评估适用产品 长期
-                    this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListLong;
-
-                    // 申请选定产品 长期
-                    this.initData.currentSelectedProList = this.initData.selectedProducts.actionPlanProductListLong;
-                    break;
-            }
-        },    
 
         /**
          * @description: 评估使用产品【产品定制】按钮
@@ -454,11 +492,38 @@ export default {
 
         /**
          * @description: 已定制产品【编辑】按钮
+         * @param {string} row 
          * @Date Changed: 2020-07-12
          */  
-        aleryProEdit(){
-            this.proCustEditData.data = {}
-            this.proCustEditData.visible = true
+        aleryProEdit(row){
+            console.log( row );
+            let { childActionCode, productName, orgName } = row;
+
+            this.proCustEditData.data = {
+                planCode: this.planCode,
+                childActionCode,
+                productName,
+                orgName
+            }
+            this.proCustEditData.visible = true;
+
+
+            
+            // this.proCustEditData.data = {
+            //     finalAmount, //申请额度
+            //     financingPlanCode, // 融资申请code
+            //     guaranteeMethod, // 担保方式
+            //     guarantorIdNum, // 担保人身份证号码
+            //     guarantorName, // 担保人姓名
+            //     guarantorOtherInfo, // 担保人其他信息
+            //     guarantorPhone, // 担保人电话
+            //     interestRate, // 利息
+            //     loanCycle, // 期数
+            //     productId, // 产品id
+            //     qzCharge, // 前置收费
+            //     repayment,  // 还款方式
+            //     servCharge, // 咨询服务费
+            // }
         },
 
         /**
@@ -556,6 +621,12 @@ export default {
                             justify-content space-around
                             color #0079FE
                             cursor pointer
+                        .total
+                            padding 16px
+                            font-size 16px
+                            text-align  right
+                            .salary
+                                color red
                     .page-conatiner
                         margin-top 10px
                         display flex
