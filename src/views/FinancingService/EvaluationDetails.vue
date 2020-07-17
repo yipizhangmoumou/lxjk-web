@@ -20,15 +20,15 @@
                             :data="initData.baseInfoTableData"
                             tooltip-effect="dark"
                             style="width: 100%"
-                            :border="true"
+                            border
                             fit>
-                            <el-table-column label="用户ID" prop="id" width="100px"></el-table-column>
-                            <el-table-column label="企业名称" prop="name"></el-table-column>
-                            <el-table-column label="融资方式" prop="type"></el-table-column>
-                            <el-table-column label="申请金额" prop="salary"></el-table-column>
-                            <el-table-column label="评估结果" prop="result"></el-table-column>
-                            <el-table-column label="评估适用产品" prop="beapp"></el-table-column>
-                            <el-table-column label="正式申请状态" prop="applySatatus"></el-table-column>
+                            <el-table-column label="用户ID" prop="uid" width="100px"></el-table-column>
+                            <el-table-column label="企业名称" prop="enterpriseName"></el-table-column>
+                            <el-table-column label="融资方式" prop="financingType"></el-table-column>
+                            <el-table-column label="申请金额" prop="financingAmount"></el-table-column>
+                            <el-table-column label="评估结果" prop="applyResult"></el-table-column>
+                            <el-table-column label="评估适用产品" prop="meetProductNum"></el-table-column>
+                            <el-table-column label="正式申请状态" prop="applyLength"></el-table-column>
                         </el-table>
                     </div>
                 </div>
@@ -97,9 +97,9 @@
                             <i class="el-icon-collection-tag"></i>
                             申请选定产品：
                         </h6>
-                        <div class="info">
+                        <!-- <div class="info">
                             <p>客户选定产品：申请额度合计：<span>¥200万</span></p>
-                        </div>
+                        </div> -->
                         <el-button-group>
                             <el-button 
                                 :class="{active: initData.selectedAppIdx=='shotTerms'}" 
@@ -290,6 +290,7 @@ export default {
             initData: {
                 // 流程步骤数据
                 stepActive: 2,
+
                 stepData: [
                     {
                         name: "评估申请",
@@ -308,13 +309,13 @@ export default {
                 /*** ------ 基本信息：开始 ------ ***/ 
                 baseInfoTableData: [
                     {
-                        id: "123",
-                        name: "湖南XXXXXX有限公司",
-                        type: "债券融资",
-                        salary: "¥200万",
-                        result: "成功",
-                        beapp: "9项",
-                        applySatatus: "未申请"
+                        uid: "123",
+                        enterpriseName: "湖南XXXXXX有限公司",
+                        financingType: "债券融资",
+                        financingAmount: "¥200万",
+                        applyResult: "成功",
+                        meetProductNum: "9项",
+                        applyLength: "未申请"
 
                     }
                 ],
@@ -401,17 +402,33 @@ export default {
          * @Date Changed: 2020-07-14
          */
         getInitData(id){
-            console.log( "codeId>>>", id );
-
             this.$axios.post(`/api/mgm/assessmentApply/detail/${id}`)
                 .then(res=>{
-                    // console.log( "评估详情数据响应：", res );
+                    console.log( "评估详情数据响应：", res );
                     if(res.code == 0){
                         let data = res.data;
 
-                        // 评估进度状态
+                        
+                        /** ------ 评估进度状态 数据重构：开始------ **/
+                        this.initData.stepActive = data.assessmentApply.applyResult ? 3 : !data.assessmentApply.meetProductNum ? 2 : 1;
+                        /** ------ 评估进度状态 数据重构：开始------ **/
 
-                        // 基本信息
+
+                        /** ------ 基本信息 数据重构：开始------ **/
+                        let arr = [];
+                        arr.push(data.assessmentApply);
+                        this.initData.baseInfoTableData = arr.map(item=>{
+                            return {
+                                uid: !item.uid ? "-" : item.uid,// 用户ID   ！！！！无
+                                enterpriseName: !item.enterpriseName ? "-" : item.enterpriseName,// 企业名称
+                                financingType: item.financingType == null ? "-" : item.financingType,// 融资方式   ！！！！无
+                                financingAmount: !item.financingAmount == null ? "-" : `￥${item.financingAmount}万`,// 申请金额
+                                applyResult: !item.applyResult == null ? "-" : item.applyResult ? "成功" : "失败",// 评估结果
+                                meetProductNum: item.meetProductNum == null ? "-" : `${item.meetProductNum}项`,// 评估适用产品
+                                applyLength: item.applyLength == null ? "-" : `已申请${item.applyLength}项`// 正式申请状态 ！！！！无
+                            }
+                        })
+                        /** ------ 基本信息 数据重构：结束------ **/
 
                         /** ------ 评估适用产品 数据重构：开始------ **/
                         this.initData.applicableProducts.shotTerms = !data.shotTerms ? [] : data.shotTerms.map((item,idx)=>{

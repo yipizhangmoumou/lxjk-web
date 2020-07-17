@@ -109,7 +109,7 @@
                             <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
                             <el-table-column label="前置付款项" prop="qzChargeItem"></el-table-column>
                             <el-table-column label="服务费" prop="servChargeItem"></el-table-column>
-                            <el-table-column label="申请额度" prop="financingAmount"></el-table-column>
+                            <el-table-column label="申请额度" prop="finalAmount"></el-table-column>
                             <el-table-column label="操作">
                                 <template slot-scope="scope">
                                     <div class="cz">
@@ -237,6 +237,7 @@ export default {
         CopyRight
     },
     created() {
+
         // 接收路由中传递过来的编号id  "27184768-1db3-4f3b-bae8-188c45e57cc2";
         let planCode = this.planCode = this.$route.params.planCode;
 
@@ -325,7 +326,7 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
                             }
                         });
                         // 中期
@@ -342,7 +343,7 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus === -1 ? "-" : "已定制"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
                             }
                         });
                         // 长期
@@ -381,7 +382,7 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
                             }
                         });
                         // 短期申请额度小计
@@ -402,7 +403,7 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
                             }
                         });
                         // 中期申请额度小计
@@ -423,7 +424,7 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                financingAmount: item.financingAmount === null ? "-" : item.financingAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
                             }
                         });
                         // 长期申请额度小计

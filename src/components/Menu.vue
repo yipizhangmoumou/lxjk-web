@@ -131,8 +131,6 @@ export default {
     mounted() {
         this.menuList.forEach((el, index) => {
             el.childrenList.forEach((item, i) => {
-                console.log( "item", item.child );
-                console.log( "this.$route.path>>>", this.$route.name );
 
                 if ( item.path == this.$route.path || item.child.includes(this.$route.name) ) {
                     

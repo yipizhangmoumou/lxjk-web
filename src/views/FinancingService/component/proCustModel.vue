@@ -69,7 +69,6 @@
                             :label="item.value" 
                             :value="item.key">
                         </el-option>
-                        <!-- <el-option label="区域二" value="beijing"></el-option> -->
                     </el-select>
                 </el-form-item>
 
@@ -121,22 +120,25 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                
+                <el-form-item prop="guaranteeMethod" v-if="proCustData.guaranteeMethod==2">
+                </el-form-item>
 
-                <el-form-item label="担保人：" prop="guarantorName">
+                <el-form-item label="担保人：" prop="guarantorName" v-if="proCustData.guaranteeMethod!=2">
                     <el-input
                         v-model="proCustData.guarantorName" 
                         placeholder="请输入担保人姓名">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="担保人身份证件：" prop="guarantorIdNum">
+                <el-form-item label="担保人身份证件：" prop="guarantorIdNum" v-if="proCustData.guaranteeMethod!=2">
                     <el-input 
                         v-model="proCustData.guarantorIdNum" 
                         placeholder="请输入证件号">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="担保人电话：" prop="guarantorPhone">
+                <el-form-item label="担保人电话：" prop="guarantorPhone" v-if="proCustData.guaranteeMethod!=2">
                     <el-input 
                         v-model="proCustData.guarantorPhone" 
                         placeholder="请输入电话">
@@ -145,7 +147,7 @@
             </div>
 
             <div class="form-line textare">
-                <el-form-item label="担保人其他信息：" prop="guarantorOtherInfo">
+                <el-form-item label="担保人其他信息：" prop="guarantorOtherInfo" v-if="proCustData.guaranteeMethod!=2">
                     <el-input 
                         type="textarea" 
                         v-model="proCustData.guarantorOtherInfo" 
@@ -219,9 +221,6 @@ export default {
                 guarantorPhone: "", // 担保人电话       guarantorPhone
                 guarantorOtherInfo: "", // 担保人其他信息  guarantorOtherInfo
 
-                // financingPlanCode    融资申请code
-                // productId       产品id
-
 
             },
             
@@ -275,6 +274,7 @@ export default {
         }
     },
     created(){
+       
         
 
     },
@@ -350,13 +350,38 @@ export default {
         handleSave (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let requiredParam = JSON.parse(JSON.stringify(this.proCustData));
+                    // let requiredParam = JSON.parse(JSON.stringify(this.proCustData));
+                    let requiredParam = {
+                        financingPlanCode: this.data.planCode,
+                        productId: this.data.productId
+                    };
 
-                    requiredParam.financingPlanCode = this.data.planCode;
-                    requiredParam.productId = this.data.productId;
+                    let {loanCycle, interestRate, repayment, finalAmount, qzCharge,servCharge, guaranteeMethod, guarantorName, guarantorIdNum, guarantorPhone, guarantorOtherInfo} = this.proCustData;
 
-                    requiredParam.qzCharge = `${ requiredParam.qzCharge }${ this.beforeTollUnit }`
-                    requiredParam.servCharge = `${ requiredParam.servCharge }${ this.serverTollUnit }`
+                    // 根据担保方式处理提交数据
+                    if( guaranteeMethod == 1 ){ // 需要担保人
+                        requiredParam.loanCycle = loanCycle;
+                        requiredParam.interestRate = interestRate;
+                        requiredParam.repayment = repayment;
+                        requiredParam.finalAmount = finalAmount;
+                        requiredParam.qzCharge = `${ qzCharge }${ this.beforeTollUnit }`;
+                        requiredParam.servCharge = `${ servCharge }${ this.serverTollUnit }`;
+                        requiredParam.guaranteeMethod = guaranteeMethod;
+                        requiredParam.guarantorName = guarantorName;
+                        requiredParam.guarantorIdNum = guarantorIdNum;
+                        requiredParam.guarantorPhone = guarantorPhone;
+                        requiredParam.guarantorOtherInfo = guarantorOtherInfo;
+
+                    }else if( guaranteeMethod == 2 ){ // 可申请免担保
+                        requiredParam.loanCycle = loanCycle;
+                        requiredParam.interestRate = interestRate;
+                        requiredParam.repayment = repayment;
+                        requiredParam.finalAmount = finalAmount;
+                        requiredParam.qzCharge = `${ qzCharge }${ this.beforeTollUnit }`;
+                        requiredParam.servCharge = `${ servCharge }${ this.serverTollUnit }`;
+                        requiredParam.guaranteeMethod = guaranteeMethod;
+                        
+                    }
 
 
 
@@ -415,7 +440,16 @@ export default {
                         display flex
                         flex-wrap: wrap
                         justify-content space-around
+                        width: 100%;
+                        margin: 0 auto;
+                        // display: grid;
+                        // display: -ms-grid;
+                        // grid-template-columns: repeat(2, 1fr);
+                        // -ms-grid-columns: (1fr)[2];
+                        // grid-gap: .5rem;
                         .el-form-item
+                            // margin 0 auto
+                            // margin-bottom 22px
                             width 240px
                             /deep/ .el-form-item__label 
                                         padding 0
@@ -427,7 +461,9 @@ export default {
                                             width: 100%
                                             .el-input-group__append
                                                 width 30px
-                    .textare                
+                        
+                    .textare       
+                        // grid-template-columns: repeat(1, 1fr);         
                         width: 100%
                         .el-form-item
                             box-sizing border-box

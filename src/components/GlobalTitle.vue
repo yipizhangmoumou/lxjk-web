@@ -33,6 +33,9 @@ import routes from "../router/routes"
         },
         created() {
             const currentPath = window.location.hash.split('#')[1];
+
+            // console.log( "currentPath>>>>", currentPath );
+
             if(currentPath.indexOf("addAndEditEmployee") != -1) {
                 this.title = "机构自行新增员工"
                 return;

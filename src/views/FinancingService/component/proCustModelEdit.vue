@@ -93,21 +93,24 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="担保人：" prop="guarantorName">
+                <el-form-item prop="guaranteeMethod" v-if="proEditData.guaranteeMethod==2">
+                </el-form-item>
+
+                <el-form-item label="担保人：" prop="guarantorName" v-if="proEditData.guaranteeMethod!=2">
                     <el-input
                         v-model="proEditData.guarantorName" 
                         placeholder="请输入担保人姓名">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="担保人身份证件：" prop="guarantorIdNum">
+                <el-form-item label="担保人身份证件：" prop="guarantorIdNum" v-if="proEditData.guaranteeMethod!=2">
                     <el-input 
                         v-model="proEditData.guarantorIdNum" 
                         placeholder="请输入证件号">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="担保人电话：" prop="guarantorPhone">
+                <el-form-item label="担保人电话：" prop="guarantorPhone" v-if="proEditData.guaranteeMethod!=2">
                     <el-input 
                         v-model="proEditData.guarantorPhone" 
                         placeholder="请输入电话">
@@ -117,7 +120,7 @@
             </div>
 
             <div class="form-line textare">
-                <el-form-item label="担保人其他信息：" prop="guarantorOtherInfo">
+                <el-form-item label="担保人其他信息：" prop="guarantorOtherInfo" v-if="proEditData.guaranteeMethod!=2">
                     <el-input 
                         type="textarea" 
                         v-model="proEditData.guarantorOtherInfo" 
@@ -337,12 +340,43 @@ export default {
         handleSave (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let requiredParam = JSON.parse(JSON.stringify(this.proEditData));
+                    // let requiredParam = JSON.parse(JSON.stringify(this.proEditData));
 
-                    requiredParam.actionCode = this.data.childActionCode;
+                    // requiredParam.actionCode = this.data.childActionCode;
 
-                    requiredParam.qzCharge = `${ requiredParam.qzCharge }${ this.beforeTollUnit }`
-                    requiredParam.servCharge = `${ requiredParam.servCharge }${ this.serverTollUnit }`
+                    // requiredParam.qzCharge = `${ requiredParam.qzCharge }${ this.beforeTollUnit }`
+                    // requiredParam.servCharge = `${ requiredParam.servCharge }${ this.serverTollUnit }`
+
+                    let requiredParam = {
+                        actionCode: this.data.childActionCode,
+                    };
+
+                    let {loanCycle, interestRate, repayment, finalAmount, qzCharge,servCharge, guaranteeMethod, guarantorName, guarantorIdNum, guarantorPhone, guarantorOtherInfo} = this.proEditData;
+
+                    // 根据担保方式处理提交数据
+                    if( guaranteeMethod == 1 ){ // 需要担保人
+                        requiredParam.loanCycle = loanCycle;
+                        requiredParam.interestRate = interestRate;
+                        requiredParam.repayment = repayment;
+                        requiredParam.finalAmount = finalAmount;
+                        requiredParam.qzCharge = `${ qzCharge }${ this.beforeTollUnit }`;
+                        requiredParam.servCharge = `${ servCharge }${ this.serverTollUnit }`;
+                        requiredParam.guaranteeMethod = guaranteeMethod;
+                        requiredParam.guarantorName = guarantorName;
+                        requiredParam.guarantorIdNum = guarantorIdNum;
+                        requiredParam.guarantorPhone = guarantorPhone;
+                        requiredParam.guarantorOtherInfo = guarantorOtherInfo;
+
+                    }else if( guaranteeMethod == 2 ){ // 可申请免担保
+                        requiredParam.loanCycle = loanCycle;
+                        requiredParam.interestRate = interestRate;
+                        requiredParam.repayment = repayment;
+                        requiredParam.finalAmount = finalAmount;
+                        requiredParam.qzCharge = `${ qzCharge }${ this.beforeTollUnit }`;
+                        requiredParam.servCharge = `${ servCharge }${ this.serverTollUnit }`;
+                        requiredParam.guaranteeMethod = guaranteeMethod;
+                        
+                    }
 
 
 
@@ -376,6 +410,7 @@ export default {
                         })
 
 
+                
                 } else {
                     return false;
                 }
