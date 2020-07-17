@@ -105,12 +105,12 @@
             </el-select>
           </el-form-item>
           <el-form-item label="贷款机构" prop="lendingProviderId">
-            <el-select v-model="form.product.lendingProviderId" placeholder="">
+            <el-select v-model="form.product.lendingProviderId" multiple collapse-tags placeholder="">
               <el-option
                       v-for="item in lendingList"
                       :key="item.id"
                       :label="item.name"
-                      :value="item.id">
+                      :value="item.id.toString()">
               </el-option>
             </el-select>
           </el-form-item>
@@ -260,7 +260,7 @@ export default {
           "guaranteeMethod": [], // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
           "isCreditInvestigation": true,// 是否上征信
-          "lendingProviderId": undefined,// 贷款机构
+          "lendingProviderId": [],// 贷款机构
           "loanInterestMax": undefined,// 最高贷款利息
           "loanInterestMin": undefined,// 最低贷款利息
           "loanPeriodMax": undefined,// 借款最大周期(月)
@@ -398,6 +398,7 @@ export default {
                     data.product.guaranteeMethod = data.product.guaranteeMethod ? data.product.guaranteeMethod.split(',').map(v => Number(v)) : []
                     data.product.repaymentMethod = data.product.repaymentMethod ? data.product.repaymentMethod.split(',').map(v => Number(v)) : []
                     data.product.applicationMethod = data.product.applicationMethod ? data.product.applicationMethod.split(',').map(v => Number(v)) : []
+                    data.product.lendingProviderId = data.product.lendingProviderId ? data.product.lendingProviderId.split(',') : []
                     data.productApplyCondition.excludeArea = data.productApplyCondition.excludeArea ? data.productApplyCondition.excludeArea.split(',') : []
                     data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry ? data.productApplyCondition.excludeIndustry.split(',') : []
                     // data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
@@ -422,6 +423,7 @@ export default {
         obj.product.guaranteeMethod = obj.product.guaranteeMethod.toString()
         obj.product.repaymentMethod = obj.product.repaymentMethod.toString()
         obj.product.applicationMethod = obj.product.applicationMethod.toString()
+        obj.product.lendingProviderId = obj.product.lendingProviderId.toString()
         obj.productApplyCondition.excludeArea = obj.productApplyCondition.excludeArea.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
         // if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
