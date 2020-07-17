@@ -1,8 +1,3 @@
-<!--
-    其实这个form表单可以遍历的，通过对象状态来控制select 和 input 还有 必填项和选填项，但是我懒得改了。你要想改你改吧!
-    2020年7月10日23:29:29   emmmmmmm......
--->
-
 <template>
   <div id="AddOrganization" v-loading="loading">
     <div class="form-title">
@@ -15,21 +10,49 @@
       <el-form ref="form" :model="form.product" :rules="rules" label-position="top">
         <h4>产品信息</h4>
         <div class="form-line">
-          <el-form-item label="融资方式" prop="financingMethodJson">
-            <el-cascader
-                    v-model="form.product.financingMethodJson"
-                    placeholder=""
-                    :options="typeTree"
-                    :props="{
-                                  expandTrigger: 'hover',
-                                  value: 'pkId',
-                                  label: 'name',
-                                  emitPath: false
-                                }"
-                    collapse-tags
-                    :show-all-levels="false"
-                    :disabled="!!form.product.pkId"
-            ></el-cascader>
+          <el-form-item label="融资分类" prop="type">
+            <el-select v-model="form.product.type" placeholder="" @change="handleChangeFinancingType">
+              <el-option
+                      v-for="item in typeTree"
+                      :key="item.code"
+                      :label="item.name"
+                      :value="Number(item.code)">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="产品类型" prop="financingMethodJson">
+            <el-select v-model="form.product.financingMethodJson" placeholder="">
+              <el-option
+                      v-for="item in productTypeComp"
+                      :key="item.pkId"
+                      :label="item.name"
+                      :value="item.pkId.toString()">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="产品名称" prop="productName">
+            <el-input v-model="form.product.productName" placeholder=""></el-input>
+          </el-form-item>
+        </div>
+        <div class="form-line">
+<!--          <el-form-item label="融资方式" prop="financingMethodJson">-->
+<!--            <el-cascader-->
+<!--                    v-model="form.product.financingMethodJson"-->
+<!--                    placeholder=""-->
+<!--                    :options="typeTree"-->
+<!--                    :props="{-->
+<!--                                  expandTrigger: 'hover',-->
+<!--                                  value: 'pkId',-->
+<!--                                  label: 'name',-->
+<!--                                  emitPath: false-->
+<!--                                }"-->
+<!--                    collapse-tags-->
+<!--                    :show-all-levels="false"-->
+<!--                    :disabled="!!form.product.pkId"-->
+<!--            ></el-cascader>-->
+<!--          </el-form-item>-->
+          <el-form-item label="产品描述">
+            <el-input v-model="form.product.productDescribe" placeholder=""></el-input>
           </el-form-item>
           <el-form-item label="申请方式" prop="applicationMethod">
             <el-select v-model="form.product.applicationMethod" multiple collapse-tags placeholder="">
@@ -93,15 +116,12 @@
           </el-form-item>
         </div>
         <div class="form-line">
-          <el-form-item label="产品描述">
-            <el-input v-model="form.product.productDescribe" placeholder=""></el-input>
-          </el-form-item>
           <el-form-item label="产品收费项" prop="chargeItems">
             <el-checkbox-group v-model="form.product.chargeItems">
-              <el-checkbox v-for="(v,i) in charge_items" :label="v.key" :key="i">{{v.value}}</el-checkbox>
+              <el-checkbox v-for="(v,i) in charge_items" :label="v.key.toString()" :key="i">{{v.value}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-          <div></div>
+<!--          <div></div>-->
         </div>
       </el-form>
       <el-form ref="form1" :model="form.productApplyCondition" :rules="rules1" label-position="top">
@@ -235,7 +255,7 @@ export default {
           "approvalAmountMin": 0, //审批最小额度(万)
           "chargeItems": [], // 收费项
           "chargeStandard": "", // 收费标准
-          "financingMethodJson": "", // 融资方式
+          "financingMethodJson": "", // 产品类型 string
           "fkApplicationCondition": "", // 申请条件-与申请条件表关联
           "guaranteeMethod": [], // 担保方式，关联数据字典
           "interestRate": 0,// (参考)利率，并不作为最终子方案的利率，执行方案生成人员可根据此利率上下浮动进行定价。
@@ -251,7 +271,7 @@ export default {
           "productName": "", // 产品名称
           "repaymentMethod": [],// 还款方式，关联数据字典
           "status": 0, //状态：-1 下架 0 上架 2注销（删除）
-          // "type": undefined// 产品类型(1.短期 2.中期 3.长期)
+          "type": undefined// 融资类型(1.短期 2.中期 3.长期) int
         },
         "productApplyCondition": {
           "applicableCareer": "",// 适用职业： 1 公务员或企事业单位 2 世界五百强企业 3 其他
@@ -308,7 +328,7 @@ export default {
       rules: {
         productName: [{required: true, message: ' '}],
         productDescribe: [{required: true, message: ' '}],
-        // type: [{required: true, message: '请选中产品类型'}],
+        type: [{required: true, message: ' '}],
         financingMethodJson: [{required: true, message: ' '}],
         loanInterestMin: [{required: true, validator: validateNum}],
         loanInterestMax: [{required: true, validator: validateNum}],
@@ -357,6 +377,9 @@ export default {
     }
   },
   methods: {
+    handleChangeFinancingType (val) {
+      val && this.form.product.financingMethodJson && (this.form.product.financingMethodJson = null)
+    },
     // 获取字典方法
     getDic (code, key) {
       this.$axios.post('/api/mgm/dict/listDictByParentCode', {code})
@@ -377,7 +400,7 @@ export default {
                     data.product.applicationMethod = data.product.applicationMethod ? data.product.applicationMethod.split(',').map(v => Number(v)) : []
                     data.productApplyCondition.excludeArea = data.productApplyCondition.excludeArea ? data.productApplyCondition.excludeArea.split(',') : []
                     data.productApplyCondition.excludeIndustry = data.productApplyCondition.excludeIndustry ? data.productApplyCondition.excludeIndustry.split(',') : []
-                    data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
+                    // data.product.financingMethodJson && (data.product.financingMethodJson = Number(data.product.financingMethodJson))
                     this.form.product = Object.assign(this.form.product, data.product)
                     this.form.productApplyCondition = Object.assign(this.form.productApplyCondition, data.productApplyCondition)
                   }
@@ -401,9 +424,9 @@ export default {
         obj.product.applicationMethod = obj.product.applicationMethod.toString()
         obj.productApplyCondition.excludeArea = obj.productApplyCondition.excludeArea.toString()
         obj.productApplyCondition.excludeIndustry = obj.productApplyCondition.excludeIndustry.toString()
-        if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
-          obj.product.financingMethodJson = obj.product.financingMethodJson.toString()
-        }
+        // if (obj.product.financingMethodJson || obj.product.financingMethodJson === 0) {
+        //   obj.product.financingMethodJson = obj.product.financingMethodJson.toString()
+        // }
         let url = this.form.product.pkId ? '/api/mgm/product/update' : '/api/mgm/product/add'
         this.$axios.post(url, obj)
                 .then(()=>{
@@ -452,6 +475,16 @@ export default {
         }
         return v
       })
+    }
+  },
+  computed: {
+    productTypeComp () {
+      let list = []
+      if (this.form.product.type) {
+        let type = this.typeTree.find(v => Number(v.code) === this.form.product.type)
+        type && (list = type.children)
+      }
+      return list
     }
   },
   created () {
