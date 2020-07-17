@@ -4,7 +4,8 @@
         id="pro-cust-model"
         title="产品定制"
         :visible.sync="visible"
-        width="40%"
+        width="46%"
+        @open="proCustModelOpenEvent"
         :before-close="handleClose">
         <el-form ref="proCustData" :model="proCustData" label-position="" :rules="proCustDataRules">
             <div class="form-line">
@@ -54,7 +55,7 @@
                     <el-input 
                         v-model.number="proCustData.interestRate" 
                         placeholder="请输入贷款利息数字">
-                        <i slot="suffix" class="unit" style="font-size: 20px">%</i>
+                        <i slot="suffix" class="unit" style="font-size: 18px">%</i>
                     </el-input>
                 </el-form-item>
 
@@ -77,7 +78,7 @@
                     <el-input 
                         v-model.number="proCustData.finalAmount" 
                         placeholder="请输入申请额度数字">
-                        <i slot="suffix" class="unit"  style="font-size: 20px">万</i>
+                        <i slot="suffix" class="unit"  style="font-size: 18px">万</i>
                     </el-input>
                 </el-form-item>
 
@@ -156,7 +157,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button type="text" @click="handleClear('proCustData')">清除条件</el-button>
-            <el-button type="primary" :loading="loading" @click="handleSave('proCustData')">
+            <el-button type="primary" @click="handleSave('proCustData')">
                 确 定
             </el-button>
             <el-button @click="()=>{this.handleClear('proCustData');this.handleClose()}">取 消</el-button>
@@ -190,8 +191,6 @@ export default {
     },
     data () {
         return {
-            loading: false,
-            isNew: true,
 
             /**
              * @description: 枚举数据
@@ -199,12 +198,15 @@ export default {
              * @param {string} guarantee_method 【担保方式】
              * @Date Changed: 2020-07-16
              */
-            EnuData:{},
+            EnuData:{
+                "repayment_method": [],
+                "guarantee_method": []    
+            },
 
             // 表单数据
             proCustData: {
-                name: "AAAA",   // 产品名称   
-                lender: "CCCC", // 放款机构
+                // name: "AAAA",   // 产品名称   
+                // lender: "CCCC", // 放款机构
                 loanCycle: "", // 期数                 loanCycle
                 interestRate: "", // 贷款利息       interestRate
                 repayment: "", // 还款方式          repayment
@@ -251,7 +253,9 @@ export default {
                     {required: true, message: '请输服务收费项', trigger: 'blur'},
                     {type: 'number', message: '服务收费项必须为数字值', trigger: 'blur'}
                 ],
-                guaranteeMethod: [{required: true, message: '请选择担保方式', trigger: 'blur'}],
+                guaranteeMethod: [
+                    {required: true, message: '请选择担保方式', trigger: 'blur'}
+                ],
                 guarantorName: [
                     {required: true, message: '请输入担保人姓名', trigger: 'blur'},
                     {type: 'string', min: 1, max: 10, message: '姓名1~10位', trigger: 'blur'}
@@ -270,18 +274,9 @@ export default {
             }
         }
     },
-    computed: {
-
-    },
     created(){
-        // this.getAllEnumerate();
-
-        // 统一调用获取枚举数据方法
-        this.getEnuData();
-
-    },
-    mounted(){
         
+
     },
     methods: {
         // /**
@@ -295,6 +290,12 @@ export default {
         //             console.log("所有枚举的父级",res);
         //         })
         // },
+        proCustModelOpenEvent(){
+            // this.getAllEnumerate();
+
+            // 统一调用获取枚举数据方法
+            this.getEnuData();
+        },
 
         /**
          * @description: 方法：获取枚举数据基本函数
@@ -304,7 +305,7 @@ export default {
         getEnuDataMethods(code){
             this.$axios.post("/api/mgm/dict/listDictByParentCode",{code})
                 .then(res=>{
-                    // console.log("还款方式枚举",res);
+                    // console.log("枚举数据获取响应：",res);
                     if( res.code == 0 ){
                         this.EnuData[code] = !res.data ? [] : res.data;
                     }
@@ -347,7 +348,6 @@ export default {
          * @Date Changed: 
          */
         handleSave (formName) {
-            console.log( "提交~" ); 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let requiredParam = JSON.parse(JSON.stringify(this.proCustData));
@@ -421,6 +421,8 @@ export default {
                                         padding 0
                             /deep/ .el-form-item__content
                                         margin 0 !important
+                                        > .el-select
+                                            width 100%
                                         .input-with-select
                                             width: 100%
                                             .el-input-group__append
@@ -429,7 +431,7 @@ export default {
                         width: 100%
                         .el-form-item
                             box-sizing border-box
-                            padding 0 20px
+                            padding 0 40px
                             width: 100%
                             .el-textarea__inner
                                 min-height 100px !important
