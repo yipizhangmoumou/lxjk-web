@@ -64,14 +64,14 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="审批最小额度(万元)" prop="loanInterestMin">
-            <el-input-number v-model="form.product.loanInterestMin" :min="0"
+          <el-form-item label="审批最小额度(万元)" prop="approvalAmountMin">
+            <el-input-number v-model="form.product.approvalAmountMin" :min="0"
                              :controls="false"></el-input-number>
           </el-form-item>
         </div>
         <div class="form-line">
-          <el-form-item label="审批最大额度(万元)" prop="loanInterestMax">
-            <el-input-number v-model="form.product.loanInterestMax" :min="0"
+          <el-form-item label="审批最大额度(万元)" prop="approvalAmountMax">
+            <el-input-number v-model="form.product.approvalAmountMax" :min="0"
                              :controls="false"></el-input-number>
           </el-form-item>
           <el-form-item label="最小借款周期(期)" prop="loanPeriodMin">
@@ -116,6 +116,14 @@
           </el-form-item>
         </div>
         <div class="form-line">
+        <el-form-item label="最小年化利率(%)" prop="loanInterestMin">
+            <el-input-number v-model="form.product.loanInterestMin" :min="0"
+                             :controls="false"></el-input-number>
+        </el-form-item>
+        <el-form-item label="最大年化利率(%)" prop="loanInterestMax">
+        <el-input-number v-model="form.product.loanInterestMax" :min="0" :max="100"
+                             :controls="false"></el-input-number>
+        </el-form-item>
           <el-form-item label="产品收费项" prop="chargeItems">
             <el-checkbox-group v-model="form.product.chargeItems">
               <el-checkbox v-for="(v,i) in charge_items" :label="v.key.toString()" :key="i">{{v.value}}</el-checkbox>
@@ -251,8 +259,8 @@ export default {
         "product": {
           "applicationMethod": [], // 申请方式，关联数据字典
           "applyTemplateData": "", // 申请资料模板
-          "approvalAmountMax": 0, //审批最大额度(万)
-          "approvalAmountMin": 0, //审批最小额度(万)
+          "approvalAmountMax": undefined, //审批最大额度(万)
+          "approvalAmountMin": undefined, //审批最小额度(万)
           "chargeItems": [], // 收费项
           "chargeStandard": "", // 收费标准
           "financingMethodJson": "", // 产品类型 string
@@ -309,19 +317,19 @@ export default {
           "lossStatus": 0,//亏损状态
           "maxOverdueTime": 0,//最大逾期时长 /天
           "nearlyOneYearTaxRating": "",//1年纳税评级：A级 B级 C级 D级 M级 以上
-          "operateTime": 0,//经营时间
+          "operateTime": undefined,//经营时间
           "other": "string",//其他
           "personLoans": 0,//网贷次数
           "pkId": null,//主键
           "receivables": 0,//应收款总额
-          "registeredCapital": 0,//注册资本
+          "registeredCapital": undefined,//注册资本
           "rerevenueExcludeManage": 0,//上年度扣非营收
           "restrictedLand": "",//限制项目用地： 1 工业用地 2 物流仓储用地 3 科教用地
           "sellAmountsYear": 0,//核年销售总额
           "totalAmounts": 0,//核实总营收
           "vatMoney": 0,//增值税实际纳税
           "whetherPledgeAmount": 0,//质押应收款
-          "yearInvoiced": 0,//本年度开票收入
+          "yearInvoiced": undefined,//本年度开票收入
           "applicantAge": undefined //法人年龄
         }
       },
@@ -332,6 +340,8 @@ export default {
         financingMethodJson: [{required: true, message: ' '}],
         loanInterestMin: [{required: true, validator: validateNum}],
         loanInterestMax: [{required: true, validator: validateNum}],
+        approvalAmountMax: [{required: true, validator: validateNum}],
+        approvalAmountMin: [{required: true, validator: validateNum}],
         loanPeriodMin: [{required: true, validator: validateNum}],
         loanPeriodMax: [{required: true, validator: validateNum}],
         repaymentMethod: [{required: true, message: ' '}],

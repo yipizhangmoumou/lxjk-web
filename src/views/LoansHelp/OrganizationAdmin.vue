@@ -67,6 +67,8 @@
                   :total="listPage.total"
                   :page-sizes="[10, 20, 30, 50]"
                   layout="total, sizes, prev, pager, next, jumper"
+                  @current-change="onPageIndexChange"
+                  @size-change="onPageSizeChange"
           ></el-pagination>
         </div>
       </div>
