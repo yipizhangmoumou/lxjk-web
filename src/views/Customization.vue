@@ -13,9 +13,9 @@
     <div class="table-info">
       <div class="table-title">
         <div class="divColor">
-          <span>服务编号：201808196398345</span>
-          <span>融资顾问：丁昱</span>
-          <span>开始服务时间：2020.07.10 12:22:22</span>
+          <span>服务编号：{{planCode}}</span>
+          <span>融资顾问：{{custServName}}</span>
+          <span>开始服务时间：{{createTime}}</span>
         </div>
         <div class="title-btn">
           <el-button type="primary" icon="el-icon-s-check">定制完成，提交审核</el-button>
@@ -79,7 +79,7 @@
             <span>企业信息</span>
           </div>
           <div>
-              <el-button type="primary" icon="el-icon-s-open" @click="writeCompany">完善企业信息</el-button>
+              <el-button type="primary" icon="el-icon-s-open" v-show="!showwrite" @click="writeCompany">完善企业信息</el-button>
           </div>
         </div>
         <div>
@@ -496,7 +496,7 @@
   :http-request="uploadC"
   :file-list="fileListC"
   >
-  <span>背面</span>
+  <span>上传图片</span>
 </el-upload>
 <el-dialog :visible.sync="dialogVisible">
   <img width="100%" :src="dialogImageUrl" alt="">
@@ -587,9 +587,10 @@
   </el-form>  
   </el-tab-pane>
 </el-tabs>
-  <div style="text-align:center;margin-top:20px">
+  <div v-show="showwrite" style="text-align:center;margin-top:20px">
      <el-button type="primary" @click="saveNew">完善提交</el-button>
      <el-button plain>重置</el-button>
+     <el-button @click="showwrite=false">返回</el-button>
   </div>
         </div>
         </div>
@@ -616,7 +617,11 @@ export default {
           area_code:'',//金做校验--区域
           comfinan_areaCode:'',//仅做校验--银行区域
       },
+      custServName:'',
+      createTime:'',
+      planCode:'',
       showwrite:false,
+      writeCompany_show:false,
       writeForm:{},
       companyTypeArr:[
         {value:'1',label:'有限公司'},
@@ -850,6 +855,9 @@ export default {
             })
           }
           console.log(this.numAll);
+          this.planCode = datas.planCode||'';
+          this.custServName = datas.custServName||'';
+          this.createTime = datas.createTime||null;
           this.companyInfo.enterpriseInfo = datas.enterpriseInfo||{};//企业信息
           this.companyInfo.financialInformation = datas.financialInformation||{};//财务账户
           this.companyInfo.legalRepresentative = datas.legalRepresentative||{};//法人信息
@@ -860,16 +868,16 @@ export default {
           this.companyInfo.comfinan_areaCode = [this.companyInfo.financialInformation.provinceCode,this.companyInfo.financialInformation.cityCode,this.companyInfo.financialInformation.regionCode]
           this.companyInfo.enterpriseAssetInfo.realEstateVal = parseInt(this.companyInfo.enterpriseAssetInfo.realEstateVal)
           this.companyInfo.enterpriseAssetInfo.equipmentVal = parseInt(this.companyInfo.enterpriseAssetInfo.equipmentVal) 
-          this.companyInfo.enterpriseAssetInfo.patentVal = parseInt(this.companyInfo.enterpriseAssetInfo.patentVal)                   
+          this.companyInfo.enterpriseAssetInfo.patentVal = parseInt(this.companyInfo.enterpriseAssetInfo.patentVal)
           this.thattreeFn(this.companyInfo.enterpriseInfo.provinceCode,this.areaTree,1)
           this.thattreeFn(this.companyInfo.financialInformation.provinceCode,this.areaTree,2)
           this.thatindustryFn(this.companyInfo.enterpriseInfo.industryCode)
-          this.fileList.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.frontIdCardBase64})
-          this.fileListB.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.reverseIdCardBase64})
-          this.fileListC.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.businessLicenseBase64})
-          this.frontIdCard= this.companyInfo.enterpriseInfo.frontIdCard
-          this.reverseIdCard= this.companyInfo.enterpriseInfo.reverseIdCard
-          this.businessLicense= this.companyInfo.enterpriseInfo.businessLicense          
+          this.fileList.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.frontIdCardBase64||''})
+          this.fileListB.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.reverseIdCardBase64||''})
+          this.fileListC.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.businessLicenseBase64||''})
+          this.frontIdCard= this.companyInfo.enterpriseInfo.frontIdCard||''
+          this.reverseIdCard= this.companyInfo.enterpriseInfo.reverseIdCard||''
+          this.businessLicense= this.companyInfo.enterpriseInfo.businessLicense||''
         }else{
           console.log(res);
         }
