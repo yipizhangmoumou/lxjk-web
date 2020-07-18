@@ -124,7 +124,7 @@
         <el-input-number v-model="form.product.loanInterestMax" :min="0" :max="100"
                              :controls="false"></el-input-number>
         </el-form-item>
-          <el-form-item label="产品收费项" prop="chargeItems">
+          <el-form-item label="前置费用" prop="chargeItems">
             <el-checkbox-group v-model="form.product.chargeItems">
               <el-checkbox v-for="(v,i) in charge_items" :label="v.key.toString()" :key="i">{{v.value}}</el-checkbox>
             </el-checkbox-group>
