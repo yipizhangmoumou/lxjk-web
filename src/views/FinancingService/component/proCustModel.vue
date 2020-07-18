@@ -444,14 +444,7 @@ export default {
                         justify-content space-around
                         width: 100%;
                         margin: 0 auto;
-                        // display: grid;
-                        // display: -ms-grid;
-                        // grid-template-columns: repeat(2, 1fr);
-                        // -ms-grid-columns: (1fr)[2];
-                        // grid-gap: .5rem;
                         .el-form-item
-                            // margin 0 auto
-                            // margin-bottom 22px
                             width 240px
                             /deep/ .el-form-item__label 
                                         padding 0

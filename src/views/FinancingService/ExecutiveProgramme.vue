@@ -11,6 +11,7 @@
                 <div class="table-btn">
                     <el-button size="small" icon="el-icon-upload2">导出</el-button>
                     <el-button
+                        v-if="isAdminRole"
                         size="small"
                         icon="el-icon-s-check"
                         type="primary"
@@ -18,12 +19,14 @@
                         机构审核结果确认
                     </el-button>
                     <el-button
+                        v-if="isAdminRole"
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
                         @click="LendingInstitutions"
                     >机构放款结果确认</el-button>
                     <el-button
+                        v-if="isReceivables"
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
@@ -250,6 +253,9 @@ export default {
     name: "ExecutiveProgramme",
     data() {
         return {
+            isAdminRole: false,
+            isReceivables: false,
+            
             // 融资执行方案管理统计数据
             executiveCount: [
                 {
@@ -402,19 +408,42 @@ export default {
 
     },
     mounted(){
-        console.log(this.loginUserInfo);
-        if(this.loginUserInfo=='platform_cust_ser'){
-            this.showpay1=true;
-        }else{
-            this.showpay1 = false;
-        }
-        if(this.loginUserInfo=='receivables'){
-            this.showpay2 = true;
-        }else{
-            this.showpay2 = false
-        }
+        /**
+         * @description: 判断用户当前权限
+         * @param {string} loginUserInfo 用户信息
+         * @Date Changed: 2020-07-18
+         */
+        this.getUseRole(this.loginUserInfo);
+
+        // if(this.loginUserInfo=='platform_cust_ser'){
+        //     this.showpay1=true;
+        // }else{
+        //     this.showpay1 = false;
+        // }
+
+        // if(this.loginUserInfo=='receivables'){
+        //     this.showpay2 = true;
+        // }else{
+        //     this.showpay2 = false
+        // }
     },
     methods: {
+        getUseRole(loginUserInfo){
+            let {role} = loginUserInfo;
+            console.log("role>>>>>",role)
+            switch(role){
+                case 'platform_cust_ser':  // admin  放款机构审核确认  放款机构审核确认
+                    this.isAdminRole = true;
+                    break;
+                case 'receivables': // 付款财务审核确认
+                    this.isReceivables = true;
+                    break;
+                default:
+                    this.isAdminRole = false;
+                    this.isReceivables = false;
+            }
+        },
+
         /**
          * @description: 初始数据加载：全部执行单 前置收款待审核 待放款机构审核 服务收款待审核 已完成 已关闭
          * @Date Changed: 2020-07-12

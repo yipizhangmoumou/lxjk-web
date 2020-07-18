@@ -13,16 +13,19 @@
         :before-close="handleClose">
         <el-form 
             ref="confirmationFromData" 
+            label-position="left"
+            label-width="100px"
             :model="confirmationFromData" 
-            label-position="" 
             :rules="auditConfirmationFromDataRules">
 
-            <el-form-item label="产品名称：">
-                <el-link v-model="confirmationFromData.name">{{confirmationFromData.name}}</el-link>
+            <el-form-item label="产品名称：" prop="name">
+                <!-- <el-link v-model="confirmationFromData.name">{{confirmationFromData.name}}</el-link> -->
+                <el-input v-model="confirmationFromData.name" disabled></el-input>
             </el-form-item>
 
-            <el-form-item label="放款机构：">
-                <el-link v-model="confirmationFromData.org">{{confirmationFromData.org}}</el-link>
+            <el-form-item label="放款机构：" prop="org">
+                <!-- <el-link v-model="confirmationFromData.org">{{confirmationFromData.org}}</el-link> -->
+                <el-input v-model="confirmationFromData.org" disabled></el-input>
             </el-form-item>
 
              <el-form-item label="审核结果：" prop="result">
@@ -36,7 +39,7 @@
                 <el-input 
                     type="textarea" 
                     maxlength="30" 
-                    :rows="4" 
+                    :rows="3" 
                     v-model="confirmationFromData.remake" 
                     placeholder="请输入内容">
                 </el-input>
@@ -87,7 +90,9 @@ export default {
             },
 
             // 表单校验
-            auditConfirmationFromDataRules: []
+            auditConfirmationFromDataRules: {
+                
+            }
      
         }
     },
@@ -140,5 +145,17 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+    #auditConfirmationModel
+        /deep/ .el-dialog
+            /deep/ .el-dialog__header
+                background #f2f2f2
+                border-bottom 1px solid #e5e5e5
+            .el-dialog__body
+                
+                max-height 300px
+                overflow-y: auto
 
+            .el-dialog__footer
+                border-top 1px solid #e5e5e5
+        
 </style>
