@@ -2,7 +2,7 @@
     <div id="ApplyForAssess">
         <StatusList :ArrayList="assessCount" />
 
-        <SearchFour />
+        <SearchFour @simpleQuery="getBySimpleQuery"/>
         
         <div class="table-container">
             <div class="table-header">
@@ -21,7 +21,7 @@
                     :border="true">
                     <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column label="评估单号" prop="code"></el-table-column>
-                    <el-table-column label="评估时间" prop="assessTime"></el-table-column>
+                    <!-- <el-table-column label="评估时间" prop="assessTime"></el-table-column> -->
                     <el-table-column label="用户账号" prop="userAccount"></el-table-column>
                     <el-table-column label="企业名称" prop="enterpriseName"></el-table-column>
                     <el-table-column label="申请额度" prop="financingAmount"></el-table-column>
@@ -200,8 +200,8 @@ export default {
             }
 
             if( !!filterObj && filterObj.type == "simple" ){
-                data.planCode = !filterObj.planCode ? null : filterObj.planCode;
-                data.actionStatus  = !filterObj.actionStatus ? null : filterObj.actionStatus;
+                data.code = !filterObj.code ? null : filterObj.code;
+                data.applyResult  = filterObj.applyResult === ""  ? null : filterObj.applyResult;
                 data.startTime = !filterObj.startTime ? null : filterObj.startTime;
             }
 
@@ -225,7 +225,7 @@ export default {
                         return {
                             id: item.id,
                             code: !item.code ? "-" : item.code,// 评估单号
-                            assessTime: !item.assessTime? "-" : item.assessTime,// 评估时间   
+                            // assessTime: !item.assessTime? "-" : item.assessTime,// 评估时间   
                             userAccount: !item.userAccount ? "-" : item.userAccount,// 用户账号
                             enterpriseName: !item.enterpriseName ? "-" : item.enterpriseName,// 企业名称
                             financingAmount: item.financingAmount == null ? "-" : `￥${item.financingAmount}万`,// 申请额度
@@ -241,7 +241,21 @@ export default {
                 }
             })
 
-        },        
+        },     
+        
+        /**
+         * @description: 数据筛选加载：简略筛选
+         * @param {json} filterObj  
+         * @Date Changed: 2020-07-13
+         */
+        getBySimpleQuery(filterObj){
+            // 筛选参数中加入筛选类型
+            filterObj.type = "simple";
+
+            console.log("父组件接收；", filterObj)
+
+            this.getTableData(filterObj); 
+        },
 
 
         /**

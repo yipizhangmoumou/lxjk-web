@@ -4,7 +4,7 @@
         id="pro-cust-model"
         title="产品定制"
         :visible.sync="visible"
-        width="46%"
+        width="600px"
         @open="proCustModelOpenEvent"
         :before-close="handleClose">
         <el-form ref="proCustData" :model="proCustData" label-position="" :rules="proCustDataRules">
@@ -51,7 +51,7 @@
                 </el-form-item>
         
                 <el-form-item label="贷款利息：" prop="interestRate">
-                    <samp style="font-size: 8px">(7-9%)</samp>
+                    <samp style="font-size: 8px">{{ data.loanInterest }}</samp>
                     <el-input 
                         v-model.number="proCustData.interestRate" 
                         placeholder="请输入贷款利息数字">
@@ -73,7 +73,7 @@
                 </el-form-item>
 
                 <el-form-item label="申请额度：" prop="finalAmount">
-                    <samp style="font-size: 8px">(10-100万)</samp>
+                    <samp style="font-size: 8px">{{ data.amountRegin }}</samp>
                     <el-input 
                         v-model.number="proCustData.finalAmount" 
                         placeholder="请输入申请额度数字">
@@ -187,6 +187,8 @@ export default {
                     productId: "", 
                     productName: "",
                     orgName: "",
+                    loanInterest: "",
+                    amountRegin: ""
                 }
             }
         }
@@ -467,7 +469,7 @@ export default {
                         width: 100%
                         .el-form-item
                             box-sizing border-box
-                            padding 0 40px
+                            padding 0 20px
                             width: 100%
                             .el-textarea__inner
                                 min-height 100px !important

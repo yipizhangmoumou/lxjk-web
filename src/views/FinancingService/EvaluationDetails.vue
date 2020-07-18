@@ -309,13 +309,13 @@ export default {
                 /*** ------ 基本信息：开始 ------ ***/ 
                 baseInfoTableData: [
                     {
-                        uid: "123",
-                        enterpriseName: "湖南XXXXXX有限公司",
-                        financingType: "债券融资",
-                        financingAmount: "¥200万",
-                        applyResult: "成功",
-                        meetProductNum: "9项",
-                        applyLength: "未申请"
+                        uid: "",
+                        enterpriseName: "",
+                        financingType: "",
+                        financingAmount: "",
+                        applyResult: "",
+                        meetProductNum: "",
+                        applyLength: ""
 
                     }
                 ],
@@ -425,7 +425,7 @@ export default {
                                 financingAmount: !item.financingAmount == null ? "-" : `￥${item.financingAmount}万`,// 申请金额
                                 applyResult: !item.applyResult == null ? "-" : item.applyResult ? "成功" : "失败",// 评估结果
                                 meetProductNum: item.meetProductNum == null ? "-" : `${item.meetProductNum}项`,// 评估适用产品
-                                applyLength: item.applyLength == null ? "-" : `已申请${item.applyLength}项`// 正式申请状态 ！！！！无
+                                financingPlanStatus: item.financingPlanStatus == null ? "-" : item.financingPlanStatus === 1 ? "未申请" : `已申请${item.applyLength}项`// 正式申请状态 ！！！！无
                             }
                         })
                         /** ------ 基本信息 数据重构：结束------ **/
@@ -478,7 +478,6 @@ export default {
 
                         /** ------ 评估申请选定产品 数据重构：开始------ **/ 
                         this.initData.selectedProducts.shotTerms = !data.selectedShortTerms ? [] : data.selectedShortTerms.map((item,idx)=>{
-                            console.log( item );
                             return {
                                 idx: idx,// 序号
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
@@ -495,7 +494,6 @@ export default {
                             }
                         });
                         this.initData.selectedProducts.middleTerms = !data.selectedMiddleTerms ? [] : data.selectedMiddleTerms.map((item,idx)=>{
-                            console.log( item );
                             return {
                                 idx: idx,// 序号
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
@@ -512,7 +510,6 @@ export default {
                             }
                         });
                         this.initData.selectedProducts.longTerms = !data.selectedLongTerms ? [] : data.selectedLongTerms.map((item,idx)=>{
-                            console.log( item );
                             return {
                                 idx: idx,// 序号
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取

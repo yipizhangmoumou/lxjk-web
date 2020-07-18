@@ -322,11 +322,14 @@ export default {
                                 productType: item.productType === null ? "-" : this.productTypeObj[item.productType],// 产品类型
                                 orgName: !item.orgName ? "-" : item.orgName,// 放款机构
                                 loanCycle: !item.loanCycle ? "-" : item.loanCycle,// 期数
-                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
+                                loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息(列表中) | 贷款利息说明(弹窗中)
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制",// 定制状态
+
+                                amountRegin: !item.amountRegin ? "" : item.amountRegin,  // 申请额度范围
+                                
                             }
                         });
                         // 中期
@@ -343,7 +346,9 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制",// 定制状态
+
+                                amountRegin: !item.amountRegin ? "" : item.amountRegin,  // 申请额度范围
                             }
                         });
                         // 长期
@@ -360,7 +365,9 @@ export default {
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 financingAmount: !item.financingAmount ? "-" : item.financingAmount,// 最高申请额度
-                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制"// 定制状态
+                                actionStatus: item.actionStatus === null ? "-" : item.actionStatus == "-1" ? "-" : "已定制",// 定制状态
+
+                                amountRegin: !item.amountRegin ? "" : item.amountRegin,  // 申请额度范围
                             }
                         });
                         
@@ -382,7 +389,12 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount,// 申请额度
+
+                                interestRateRegion: !item.interestRateRegion ? "": item.interestRateRegion,  // 贷款利息范围
+                                finalAmountRegion: !item.finalAmountRegion ? "": item.finalAmountRegion,    // 最高申请额度范围
+                                qzChargeItemRate: !item.qzChargeItemRate ? "" : item.qzChargeItemRate,  // 前置费用利率范围
+                                servChargeItemRate: !item.servChargeItemRate ? "" : item.servChargeItemRate // 服务费利率范围
                             }
                         });
                         // 短期申请额度小计
@@ -403,7 +415,12 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount,// 申请额度
+
+                                interestRateRegion: !item.interestRateRegion ? "": item.interestRateRegion,  // 贷款利息范围
+                                finalAmountRegion: !item.finalAmountRegion ? "": item.finalAmountRegion,    // 最高申请额度范围
+                                qzChargeItemRate: !item.qzChargeItemRate ? "" : item.qzChargeItemRate,  // 前置费用利率范围
+                                servChargeItemRate: !item.servChargeItemRate ? "" : item.servChargeItemRate // 服务费利率范围
                             }
                         });
                         // 中期申请额度小计
@@ -424,7 +441,12 @@ export default {
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
                                 qzChargeItem: item.qzChargeItem === null ? "-" : item.qzChargeItem,// 前置付款项
                                 servChargeItem: item.servChargeItem === null ? "-" : item.servChargeItem,// 服务费
-                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount// 申请额度
+                                finalAmount: item.finalAmount === null ? "-" : item.finalAmount, // 申请额度
+
+                                interestRateRegion: !item.interestRateRegion ? "": item.interestRateRegion,  // 贷款利息范围
+                                finalAmountRegion: !item.finalAmountRegion ? "": item.finalAmountRegion,    // 最高申请额度范围
+                                qzChargeItemRate: !item.qzChargeItemRate ? "" : item.qzChargeItemRate,  // 前置费用利率范围
+                                servChargeItemRate: !item.servChargeItemRate ? "" : item.servChargeItemRate // 服务费利率范围
                             }
                         });
                         // 长期申请额度小计
@@ -479,14 +501,16 @@ export default {
          */
         productCustomize(row){
             console.log( "当前数据", row );
-            let { productId, productName, orgName } = row;
+            let { productId, productName, orgName, loanInterest, amountRegin  } = row;
 
 
             this.proCustData.data = {
                 planCode: this.planCode,
                 productId,
                 productName,
-                orgName
+                orgName,
+                loanInterest,
+                amountRegin
             }
             this.proCustData.visible = true
         },
@@ -498,33 +522,22 @@ export default {
          */  
         aleryProEdit(row){
             console.log( row );
-            let { childActionCode, productName, orgName } = row;
+            let { childActionCode, productName, orgName, interestRateRegion, finalAmountRegion, qzChargeItemRate, servChargeItemRate} = row;
+
+
+
 
             this.proCustEditData.data = {
                 planCode: this.planCode,
                 childActionCode,
                 productName,
-                orgName
+                orgName,
+                interestRateRegion,
+                finalAmountRegion,
+                qzChargeItemRate,
+                servChargeItemRate
             }
             this.proCustEditData.visible = true;
-
-
-            
-            // this.proCustEditData.data = {
-            //     finalAmount, //申请额度
-            //     financingPlanCode, // 融资申请code
-            //     guaranteeMethod, // 担保方式
-            //     guarantorIdNum, // 担保人身份证号码
-            //     guarantorName, // 担保人姓名
-            //     guarantorOtherInfo, // 担保人其他信息
-            //     guarantorPhone, // 担保人电话
-            //     interestRate, // 利息
-            //     loanCycle, // 期数
-            //     productId, // 产品id
-            //     qzCharge, // 前置收费
-            //     repayment,  // 还款方式
-            //     servCharge, // 咨询服务费
-            // }
         },
 
         /**

@@ -4,7 +4,7 @@
         id="pro-cust-model"
         title="产品定制-编辑"
         :visible.sync="visible"
-        width="40%"
+        width="600px"
         @open="editModelOpen"
         :before-close="handleClose">
         <el-form ref="proEditData" :model="proEditData" label-position="" :rules="proCustEditDataRules">
@@ -35,7 +35,7 @@
                 </el-form-item>
         
                 <el-form-item label="贷款利息：" prop="interestRate">
-                    <samp style="font-size: 10px">（7-9%）</samp>
+                    <samp style="font-size: 10px">{{ data.interestRateRegion }}</samp>
                     <el-input 
                         v-model.number="proEditData.interestRate" 
                         placeholder="请输入贷款利息数字">
@@ -56,14 +56,14 @@
                 <el-form-item 
                     label="申请额度："
                     prop="applySalary">
-                    <samp style="font-size: 10px">（10-100万）</samp>
+                    <samp style="font-size: 10px">{{ data.finalAmountRegion }}</samp>
                     <el-input v-model.number="proEditData.finalAmount" placeholder="请输入申请额度数字">
                         <i slot="suffix" class="unit"  style="font-size: 18px">万</i>
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="前置收费：" prop="beforeToll">
-                    <samp style="font-size: 10px">（0即是无收费项）</samp>
+                    <samp style="font-size: 10px">{{ data.qzChargeItemRate }}</samp>
                     <el-input placeholder="请输入数字" v-model.number="proEditData.qzCharge" class="input-with-select">
                         <el-select v-model="beforeTollUnit" slot="append" placeholder="请选择">
                             <el-option label="元" value="元"></el-option>
@@ -73,7 +73,7 @@
                 </el-form-item>
 
                 <el-form-item label="服务收费项：" prop="serverToll">
-                    <samp style="font-size: 10px">（元或%，百分比为申请额度%）</samp>
+                    <samp style="font-size: 10px">{{ data.servChargeItemRate }}</samp>
                     <el-input placeholder="请输入数字" v-model.number="proEditData.servCharge" class="input-with-select">
                         <el-select v-model="serverTollUnit" slot="append" placeholder="请选择">
                             <el-option label="元" value="元"></el-option>
@@ -157,7 +157,11 @@ export default {
                     planCode: "",
                     childActionCode: "",
                     productName: "",
-                    orgName: ""
+                    orgName: "",
+                    interestRateRegion: "",
+                    finalAmountRegion: "",
+                    qzChargeItemRate: "",
+                    servChargeItemRate: ""
                 }
             }
         }

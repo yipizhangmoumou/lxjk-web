@@ -12,23 +12,29 @@
         </div>
         <div class="search-form">
             <el-form ref="search" :model="search" label-width="80px">
-                <!-- <slot name="baseSearch"></slot> -->
-                <el-form-item label="输入查询：">
-                <el-input placeholder="评估单号" v-model="search.name"></el-input>
+                
+                <el-form-item label="输入查询：" prop="code">
+                    <el-input placeholder="评估单号" v-model="search.code"></el-input>
                 </el-form-item>
-                <el-form-item label="评估结果：">
-                <el-select placeholder="全部" v-model="search.region">
-                    <el-option label="全部" value></el-option>
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
+
+                <el-form-item label="评估结果：" prop="applyResult">
+                    <el-select placeholder="全部" v-model="search.applyResult">
+                        <el-option 
+                            v-for="(status,idx) in applyResultList"  
+                            :key = "idx"
+                            :label="status.label" 
+                            :value="status.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
+
                 <el-form-item label="评估时间：">
-                <el-date-picker v-model="search.region" type="date" placeholder="选择评估时间-区间"></el-date-picker>
+                    <el-date-picker v-model="search.startTime" type="date" value-format="yyyy-MM-dd" placeholder="选择评估时间-区间"></el-date-picker>
                 </el-form-item>
+
                 <el-form-item class="btn-box">
-                <el-button size="small" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-                <el-button size="small" icon="el-icon-back">重置</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-search" @click="abbreviatedQuery">查询</el-button>
+                    <el-button size="small" icon="el-icon-back" @click="resetAbbreviatedQuery('search')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -91,11 +97,23 @@ export default {
     name: "SearchOne",
     data() {
         return {
-                
+            // 评估结果列表
+            applyResultList: [
+                {
+                    label: "成功",
+                    value: 1
+                },
+                {
+                    label: "失败",
+                    value: 0
+                }
+            ],
+
+            // 简略筛选     
             search: {
                 code: "",
-                region: "",
-                jb: ""
+                applyResult: "",
+                startTime: ""
             },
 
             dialogVisible: false,
@@ -111,9 +129,25 @@ export default {
     },
     methods: {
 
-        onSubmit() {
-            console.log("submit!");
+        /**
+         * @description: 缩略查询按钮
+         * @param {json} search
+         * @Date Changed: 2020-07-13
+         */
+        abbreviatedQuery() {
+            this.$emit("simpleQuery", this.search)
         },
+
+        /**
+         * @description: 缩略重置按钮
+         * @param {string} formName 表单名 
+         * @Date Changed: 2020-07-13
+         */ 
+        resetAbbreviatedQuery(formName){
+            this.$refs[formName].resetFields();
+
+            this.$emit("simpleQuery", this.search);
+        }, 
 
 
         submitSearch() {
