@@ -1,21 +1,17 @@
 <template>
   <div id="Customization">
-    <div class="speed-container">
+    <!-- <div class="speed-container">
       <div class="speed">
-        <el-steps :active="1" align-center finish-status="success">
-          <el-step title="定制融资产品" description="2020.07.10 15:43:23"></el-step>
-          <el-step title="完善企业信息" description="待完善"></el-step>
-          <el-step title="服务定制结果审核" description="待审核"></el-step>
-          <el-step title="完成定制" description></el-step>
-        </el-steps>
+        
       </div>
-    </div>
+    </div> -->
+    <ElSteps :stepArr='stepArr' :stepActive="stepActive" />
     <div class="table-info">
       <div class="table-title">
         <div class="divColor">
           <span>服务编号：{{planCode}}</span>
           <span>融资顾问：{{custServName}}</span>
-          <span>开始服务时间：{{createTime}}</span>
+          <!-- <span>开始服务时间：{{createTime}}</span> -->
         </div>
         <div class="title-btn">
           <el-button type="primary" icon="el-icon-s-check">定制完成，提交审核</el-button>
@@ -57,19 +53,19 @@
         </div>
         <div class="table">
           <el-table :data="childPlanList" border style="width: 100%" align-center>
-            <el-table-column prop="date" align="center" label="序号"></el-table-column>
+            <el-table-column type="index" align="center" label="序号"></el-table-column>
             <el-table-column prop="productName" align="center" label="产品名称"></el-table-column>
             <el-table-column prop="productTypeName" align="center" label="产品类型"></el-table-column>
             <el-table-column prop="orgName" align="center" label="放款机构"></el-table-column>
             <el-table-column prop="loanCycle" align="center" label="期数"></el-table-column>
             <el-table-column prop="interestRate" align="center" label="贷款利息"></el-table-column>
             <el-table-column prop="repaymentStr" align="center" label="还款方式"></el-table-column>
-            <el-table-column prop="applicationMethodStr" align="center" label="担保方式"></el-table-column>
-            <el-table-column prop="qzChargeItemStatus" align="center" label="前置付款项"></el-table-column>
+            <el-table-column prop="guaranteeMethodStr" align="center" label="担保方式"></el-table-column>
+            <el-table-column prop="qzChargeItem" align="center" label="前置付款项"></el-table-column>
             <el-table-column prop="servChargeItem" align="center" label="服务费"></el-table-column>
             <el-table-column prop="finalAmount" align="center" label="申请额度"></el-table-column>
           </el-table>
-          <div class="total">申请额度合计：<span style="color:red"> ￥{{numAll}}.00万</span></div>
+          <div class="total">申请额度合计：<span style="color:red"> ￥{{numAll}}万元</span></div>
         </div>
 
 
@@ -205,7 +201,7 @@
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 所在区域</div>
       <el-form-item prop="area_code">
-      <el-cascader :options="areaTree" v-model="companyInfo.area_code" :props="props" clearable></el-cascader>
+      <el-cascader @change="areaCascader" :options="areaTree" v-model="companyInfo.area_code" :props="props" clearable></el-cascader>
       </el-form-item>
     </el-col>
     <el-col :span="8">
@@ -402,8 +398,8 @@
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
         
-        <el-image :src="'data:image/png;base64,'+companyInfo.enterpriseInfo.frontIdCardBase64"></el-image>
-        <el-image :src="'data:image/png;base64,'+companyInfo.enterpriseInfo.reverseIdCardBase64"></el-image>
+        <el-image :src="'data:image/png;base64,'+frontIdCardBase64"></el-image>
+        <el-image :src="'data:image/png;base64,'+reverseIdCardBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
@@ -477,7 +473,7 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 企业营业证件</div>
-         <el-image class="pdl10" :src="'data:image/png;base64,'+companyInfo.enterpriseInfo.businessLicenseBase64"></el-image>
+         <el-image class="pdl10" :src="'data:image/png;base64,'+businessLicenseBase64"></el-image>
     </el-col>
   </el-row>
   </el-form>
@@ -560,7 +556,7 @@
     <el-col :span="8">
       <div class=""><i class="redrules">*</i> 所在区域</div>
       <el-form-item prop="comfinan_areaCode">
-      <el-cascader :options="areaTree" v-model="companyInfo.comfinan_areaCode" :props="props" clearable></el-cascader>
+      <el-cascader :options="areaTree" @change="bankCascader" v-model="companyInfo.comfinan_areaCode" :props="props" clearable></el-cascader>
       </el-form-item>
     </el-col>
   </el-row>
@@ -589,8 +585,8 @@
 </el-tabs>
   <div v-show="showwrite" style="text-align:center;margin-top:20px">
      <el-button type="primary" @click="saveNew">完善提交</el-button>
-     <el-button plain>重置</el-button>
-     <el-button @click="showwrite=false">返回</el-button>
+     <el-button plain @click="clearBtn">重置</el-button>
+     <el-button @click="goback()">返回</el-button>
   </div>
         </div>
         </div>
@@ -602,6 +598,7 @@
 
 <script>
 import CopyRight from "components/CopyRight";
+import ElSteps from "components/ElSteps";
 export default {
     name: "Customization",
     data() {
@@ -614,8 +611,8 @@ export default {
           enterpriseAssetInfo:{},//是否字典特 对象
           businessInfo:{},//年度对象
           industryType:'',//仅做校验--类型
-          area_code:'',//金做校验--区域
-          comfinan_areaCode:'',//仅做校验--银行区域
+          area_code:[],//金做校验--区域
+          comfinan_areaCode:[],//仅做校验--银行区域
       },
       custServName:'',
       createTime:'',
@@ -725,17 +722,20 @@ export default {
       currentYearRevenue:{
         1:'200万以内',
         2:'200万-1000万',
-        3:'1000以上'
+        3:'1000万-3000万',
+        4:'3000万以上'
       },
       lastYearRevenue:{
         1:'200万以内',
         2:'200万-1000万',
-        3:'1000以上'
+        3:'1000万-3000万',
+        4:'3000万以上'
       },
       lastYearInvoiceAmount:{
         1:'200万以内',
         2:'200万-1000万',
-        3:'1000以上'
+        3:'1000万-3000万',
+        4:'3000万以上'
       },
       areaText:[],   
       areaTextinfo:'',
@@ -797,25 +797,27 @@ export default {
           [`financialInformation.depositBank`]:[{ required: true, message: '请输入开户支行', trigger: 'blur' }],
           [`financialInformation.taxNumber`]:[{ required: true, message: '请输入税号', trigger: 'blur' }],
       },
+      stepArr:[
+        {name:'融资顾问服务',time:''},
+        {name:'服务定制',time:''},
+        {name:'服务执行',time:''},
+        {name:'完成',time:''},
+      ],
+      stepActive: 0,
+      changeObj:{},
+      frontIdCardBase64:'',
+      reverseIdCardBase64:'',
+      businessLicenseBase64:'',
         };
     },
     components: {
-        CopyRight
+        CopyRight,
+        ElSteps
     },
-    created:async function(){
-        try{
-            await this.getAreaTree();
-            await this.getIndustryTree();
-            await this.initData();
-        } catch(e){
-            console.log(e);
-            
-        }
+    created(){
+        this.initData();
     },
     mounted(){
-        
-    //   this.getAreaTree();
-    //   this.getIndustryTree();
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -830,19 +832,10 @@ export default {
 
     },
     methods: {
-        initData(){
-      let planCode = this.$route.params.financingCode;
-
-      let url ='/api/mgm/financingPlan/serviceCustomization'
-       this.$axios.post(url,{
-         planCode:planCode
-       })
-      .then(res=>{
-        console.log(res);
-        if(res.code == 0){
-          let datas =res.data;
-          console.log(datas);
-          this.baseData = [datas.financingPlan];//基本信息
+      async changeData(datas){
+        this.industryTypeArr = await this.getIndustryTree();
+        this.areaTree = await this.getAreaTree();
+        this.baseData = [datas.financingPlan];//基本信息
           
           // ---
           // 企业code要组合 provinceCode cityCode
@@ -851,10 +844,11 @@ export default {
           
           if(this.childPlanList.length>0){
             this.childPlanList.map(item=>{
-              this.numAll +=item.finalAmount;
+              this.numAll +=parseInt(item.finalAmount.slice(0,-3));
             })
           }
-          console.log(this.numAll);
+          console.log(datas);
+          this.stepActive = parseInt(datas.status.slice(-1));
           this.planCode = datas.planCode||'';
           this.custServName = datas.custServName||'';
           this.createTime = datas.createTime||null;
@@ -864,20 +858,53 @@ export default {
           this.companyInfo.enterpriseAssetInfo = datas.enterpriseAssetInfo||{};
           this.companyInfo.businessInfo = datas.businessInfo||{};
           this.status = datas.status;
+          this.companyInfo.enterpriseInfo.enterpriseNature = datas.enterpriseInfo.enterpriseNature;
+          this.companyInfo.enterpriseInfo.regAddress = datas.enterpriseInfo.regAddress;
+          this.companyInfo.enterpriseInfo.enterpriseNature = datas.enterpriseInfo.enterpriseNature;
           this.companyInfo.area_code = [this.companyInfo.enterpriseInfo.provinceCode,this.companyInfo.enterpriseInfo.cityCode,this.companyInfo.enterpriseInfo.areaCode]
           this.companyInfo.comfinan_areaCode = [this.companyInfo.financialInformation.provinceCode,this.companyInfo.financialInformation.cityCode,this.companyInfo.financialInformation.regionCode]
-          this.companyInfo.enterpriseAssetInfo.realEstateVal = parseInt(this.companyInfo.enterpriseAssetInfo.realEstateVal)
-          this.companyInfo.enterpriseAssetInfo.equipmentVal = parseInt(this.companyInfo.enterpriseAssetInfo.equipmentVal) 
-          this.companyInfo.enterpriseAssetInfo.patentVal = parseInt(this.companyInfo.enterpriseAssetInfo.patentVal)
+          console.log(this.companyInfo.area_code,this.companyInfo.comfinan_areaCode);
+          this.companyInfo.enterpriseAssetInfo.realEstateVal = this.companyInfo.enterpriseAssetInfo.realEstateVal !=null?parseInt(this.companyInfo.enterpriseAssetInfo.realEstateVal):''
+          this.companyInfo.enterpriseAssetInfo.equipmentVal = this.companyInfo.enterpriseAssetInfo.equipmentVal!=null?parseInt(this.companyInfo.enterpriseAssetInfo.equipmentVal) :'';
+          this.companyInfo.enterpriseAssetInfo.patentVal = this.companyInfo.enterpriseAssetInfo.patentVal!=null?parseInt(this.companyInfo.enterpriseAssetInfo.patentVal):'';
           this.thattreeFn(this.companyInfo.enterpriseInfo.provinceCode,this.areaTree,1)
           this.thattreeFn(this.companyInfo.financialInformation.provinceCode,this.areaTree,2)
           this.thatindustryFn(this.companyInfo.enterpriseInfo.industryCode)
-          this.fileList.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.frontIdCardBase64||''})
-          this.fileListB.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.reverseIdCardBase64||''})
-          this.fileListC.push({url:'data:image/png;base64,'+this.companyInfo.enterpriseInfo.businessLicenseBase64||''})
+          this.frontIdCardBase64= datas.enterpriseInfo.frontIdCardBase64||null
+          this.reverseIdCardBase64= datas.enterpriseInfo.reverseIdCardBase64||null
+          this.businessLicenseBase64= datas.enterpriseInfo.businessLicenseBase64||null
+          this.frontIdCardBase64!=null?this.fileList.push({url:'data:image/png;base64,'+this.frontIdCardBase64}):this.fileList=[];
+          this.reverseIdCardBase64!=null?this.fileListB.push({url:'data:image/png;base64,'+this.reverseIdCardBase64}):this.fileListB=[];
+          this.businessLicenseBase64!=null?this.fileListC.push({url:'data:image/png;base64,'+this.businessLicenseBase64}):this.fileListC=[];
           this.frontIdCard= this.companyInfo.enterpriseInfo.frontIdCard||''
           this.reverseIdCard= this.companyInfo.enterpriseInfo.reverseIdCard||''
           this.businessLicense= this.companyInfo.enterpriseInfo.businessLicense||''
+      },
+      areaCascader(val){
+        this.companyInfo.area_code = val;
+      },
+      // typeCascader(val){
+      //   this.companyInfo.area_code = val;
+      // },
+      bankCascader(val){
+        this.companyInfo.comfinan_areaCode = val;
+      },
+      initData(){
+        
+      let planCode = this.$route.params.financingCode;
+
+      let url ='/api/mgm/financingPlan/serviceCustomization'
+       this.$axios.post(url,{
+         planCode:planCode
+       })
+      .then(res=>{
+        if(res.code == 0){
+          let datas =res.data;
+          let objclone = JSON.stringify(datas);
+
+          this.changeObj = JSON.parse(objclone);
+          this.changeData(datas);
+           return
         }else{
           console.log(res);
         }
@@ -885,11 +912,9 @@ export default {
         },
     thattreeFn(showData,listData,type){
       listData.forEach((item)=>{
-        
         if(showData == item.code){
             if(type == 1){
                 this.areaText.push(item.name)
-                console.log(this.areaText)
                 if(this.areaText.length==1){
                 this.thattreeFn(this.companyInfo.enterpriseInfo.cityCode,item.children,1)
                 }else
@@ -899,6 +924,7 @@ export default {
                 if(this.areaText.length==3){
                     return
                 }
+                console.log(this.areaText)
             }else
             if(type == 2){
                 this.areaTextbank.push(item.name);
@@ -917,10 +943,9 @@ export default {
    
         }
       })
-      console.log(this.areaText)
-      console.log(this.areaTextbank)
       if(type==1){
         this.areaTextinfo = this.areaText.join('/');
+        console.log(22,this.areaText);
         // this.areaText = [];
       }else{
         this.areaTextinfoBank = this.areaTextbank.join('/');
@@ -941,9 +966,13 @@ export default {
             this.industryTextinfo = this.industryText[0]
         },
     getIndustryTree () {
-      this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
-        this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
+      return new Promise(resolve=>{
+        this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
+          this.industryTypeArr = this.deleteEmpty(res.data.industryTreeList)
+        })
+        resolve(this.industryTypeArr)
       })
+
     },      
     deleteEmpty (arr) {
       return arr.map(v => {
@@ -956,10 +985,13 @@ export default {
       })
     },     
      getAreaTree () {
+       return new Promise(resolve=>{
         this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
           this.areaTree = this.deleteEmpty(res.data.areaTree)
-          console.log(this.areaTree);
+          resolve(this.areaTree);
         })
+       })
+
       },
           // 获取字典方法
     getDic (code, key) {
@@ -982,29 +1014,39 @@ export default {
         writeCompany(){
           this.showwrite=!this.showwrite;
         },
+        goback(){
+          this.showwrite = false;
+          this.changeData(this.changeObj);
+        },
+        clearBtn(){
+          this.changeData({});
+        },
         saveNew(){
-          console.log(this.enterpriseInfo);
-          this.companyInfo.enterpriseInfo.provinceCode = this.area_code[0]
-          this.companyInfo.enterpriseInfo.cityCode = this.area_code[1]
-          this.companyInfo.enterpriseInfo.areaCode = this.area_code[2]
+          console.log(this.area_code);
+          this.companyInfo.enterpriseInfo.provinceCode = this.companyInfo.area_code[0]
+          this.companyInfo.enterpriseInfo.cityCode = this.companyInfo.area_code[1]
+          this.companyInfo.enterpriseInfo.areaCode = this.companyInfo.area_code[2]
           this.companyInfo.enterpriseInfo.businessLicense = this.businessLicense;
         //   this.enterpriseInfo.companyImg=------
 
-          this.companyInfo.financialInformation.provinceCode = this.finan_areaCode[0]
-          this.companyInfo.financialInformation.cityCode = this.finan_areaCode[1]
-          this.companyInfo.financialInformation.regionCode = this.finan_areaCode[2]
+          this.companyInfo.financialInformation.provinceCode = this.companyInfo.comfinan_areaCode[0]
+          this.companyInfo.financialInformation.cityCode = this.companyInfo.comfinan_areaCode[1]
+          this.companyInfo.financialInformation.regionCode = this.companyInfo.comfinan_areaCode[2]
           
           this.companyInfo.enterpriseInfo.frontIdCard = this.frontIdCard;
           this.companyInfo.enterpriseInfo.reverseIdCard = this.reverseIdCard;
           
           // return false
+          this.$delete(this.companyInfo.enterpriseInfo,'frontIdCardBase64')
+          this.$delete(this.companyInfo.enterpriseInfo,'reverseIdCardBase64')
+          this.$delete(this.companyInfo.enterpriseInfo,'businessLicenseBase64')
           let obj = {
               enterpriseInfo:this.companyInfo.enterpriseInfo,
               financialInformation:this.companyInfo.financialInformation,
               legalRepresentative:this.companyInfo.legalRepresentative,
               enterpriseAssetInfo:this.companyInfo.enterpriseAssetInfo,
               planCode:this.$route.params.financingCode,
-              businessInfo:this.businessInfo
+              businessInfo:this.companyInfo.businessInfo
           }
         this.$refs.companyInfo.validate((valid) => {
           if (valid) {
