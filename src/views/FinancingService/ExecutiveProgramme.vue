@@ -23,7 +23,7 @@
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
-                        @click="LendingInstitutions"
+                        @click="loanConfirmationEvent"
                     >机构放款结果确认</el-button>
                     <el-button
                         v-if="isReceivables"
@@ -99,7 +99,17 @@
 
         <CopyRight />
 
-        <AuditConfirmationModel  v-model="auditConfirmationData.visible"/>
+        <!-- 
+            * desc:  机构审核结果确认 
+                在列表数据处于【已申请】状态 才可以审核
+         -->
+        <AuditConfirmationModel  v-model="auditConfirmationData.visible" :data="auditConfirmationData.data" @getInitData="getTableData"/>
+
+        <!-- 
+            * desc:  机构放款结果确认 
+                在列表数据处于【已申请】状态 才可以审核
+         -->
+        <LoanConfirmationModel  v-model="loanConfirmationData.visible" :data="loanConfirmationData.data" @getInitData="getTableData"/>
 
         <!-- <el-dialog class="j_dailog" title="放款机构审核结果确认" :visible.sync="InstitutionalReview_show">
             <el-form :model="InstitutionalReview_form" ref="InstitutionalReview_form" :rules="rules" label-position="right" label-width="110px">
@@ -247,6 +257,7 @@ import StatusList from "components/StatusList";
 
 // 机构审核结果确认弹出窗组件
 import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
+import LoanConfirmationModel from './executiveManagement/LoanConfirmationModel';
 
 import dateFormat from './../../unit/dataForamt'
 export default {
@@ -339,6 +350,12 @@ export default {
                 data: {}
             },
 
+            // 机构放款结果弹窗数据
+            loanConfirmationData: {
+                visible: false,
+                data: {}
+            },
+
 
 
 
@@ -394,7 +411,8 @@ export default {
         SearchSix,
         CopyRight,
         StatusList,
-        AuditConfirmationModel
+        AuditConfirmationModel,
+        LoanConfirmationModel
     },
 
     created() {
@@ -428,9 +446,14 @@ export default {
         // }
     },
     methods: {
+
+        /**
+         * @description: 根据用户信息【userInfo】中得role属性判断当前用户权限
+         * @param {type} userInfo 用户信息
+         * @Date Changed: 2020-07-19
+         */
         getUseRole(loginUserInfo){
             let {role} = loginUserInfo;
-            console.log("role>>>>>",role)
             switch(role){
                 case 'platform_cust_ser':  // admin  放款机构审核确认  放款机构审核确认
                     this.isAdminRole = true;
@@ -512,7 +535,8 @@ export default {
                 console.log( "获取数据列表", res );
                 if( res.code == 0 ){
                     let data = res.data;
-                    this.tableData = data != null ? data.mgmActionChildPlanList.map(item=>{
+                    this.tableData = data != null ? data.mgmActionChildPlanList.map((item)=>{
+                        console.log(item.servChargeItemStatus === null ? "-" : this.servChargeItemStatusObj[item.servChargeItemStatus])
                         return {
                             childPlanCode: !item.childPlanCode ? "-" : item.childPlanCode ,//执行单号 
                             productId: !item.productId ? "-" : item.productId,//产品ID 
@@ -529,11 +553,12 @@ export default {
                             qzChargeItem: !item.qzChargeItem ? "-" : item.qzChargeItem,//前置付款项 
                             qzChargeItemStatus: item.qzChargeItemStatus === null ? "-" : this.qzChargeItemStatusObj[item.qzChargeItemStatus],//前置付款状态 
                             servChargeItem: !item.servChargeItem ? "-" : item.servChargeItem,//服务费
-                            servChargeItemStatus: item.servChargeItemStatus === null ? "-" : this.servChargeItemStatus[item.servChargeItemStatus],//服务费支付状态 
+                            servChargeItemStatus: item.servChargeItemStatus === null ? "-" : this.servChargeItemStatusObj[item.servChargeItemStatus],//服务费支付状态 
                             createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),//方案执行时间 
                             custSerName: !item.custSerName ? "-" : item.custSerName,//融资顾问 
                             promoterName: !item.promoterName ? "-" : item.promoterName,//来源 
                             actionStatus: item.actionStatus === null ? "" : this.actionStatusObj[item.actionStatus],//状态 
+                            actionStatusValue: item.actionStatus,//状态 原始值
                             finishTime: !item.finishTime ? "-" : dateFormat.dateFmt(item.finishTime)//完成时间 
                         }
                     }) : [];
@@ -607,13 +632,108 @@ export default {
 
         /**
          * @description: 【机构审核结果确认】按钮事件
-         * @Date Changed: 
+         * @Date Changed: 2020-07-19
          */
         auditConfirmationEvent(){
+            console.log( "选定的数据：", this.$refs.tableData.selection );
 
-            this.auditConfirmationData.visible = true;
+            let selectedData = this.$refs.tableData.selection;
+
+            if( selectedData.length < 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '请选定需要放款审核结果确认的数据项！',
+                    type: 'warning'
+                });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量审核！',
+                    type: 'warning'
+                });
+            } else{
+
+                let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
+
+                if(actionStatusValue !==0){
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号已审批，请勿重复审批！',
+                        type: 'warning'
+                    });
+                }else{
+                    this.auditConfirmationData.data = {
+                        childPlanCode,
+                        productName,
+                        orgName,
+                    }
+
+                    this.auditConfirmationData.visible = true;
+                }
+
+
+                
+
+                
+
+            }
+
+
+
+            
         },
 
+        /**
+         * @description: 
+         * @param {type} 
+         * @return: 
+         * @Date Changed: 
+         */        
+        loanConfirmationEvent(){
+            console.log( "选定的数据：", this.$refs.tableData.selection );
+
+            let selectedData = this.$refs.tableData.selection;
+
+            if( selectedData.length < 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '请选定需要放款审核结果确认的数据项！',
+                    type: 'warning'
+                });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量审核！',
+                    type: 'warning'
+                });
+            } else{
+
+                let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
+
+                if(actionStatusValue !==0){
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号已审批，请勿重复审批！',
+                        type: 'warning'
+                    });
+                }else{
+                    this.auditConfirmationData.data = {
+                        childPlanCode,
+                        productName,
+                        orgName,
+                        actionStatusValue
+                    }
+
+                    
+                }
+
+
+                this.loanConfirmationData.visible = true;
+
+                
+
+            }            
+        },
 
 
         InstitutionalReview(){

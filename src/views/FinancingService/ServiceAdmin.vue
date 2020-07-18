@@ -517,9 +517,9 @@ export default {
                         financingPlanId: selectedData[0].financingPlanId
                     }
 
-                    console.log( "selectedData", selectedData );
+                    // console.log( "selectedData", selectedData );
 
-                    console.log( "requiredParams", requiredParams );
+                    // console.log( "requiredParams", requiredParams );
 
                     this.$axios.post("/api/mgm/financingPlan/updataFinancingAdviser",requiredParams)
                         .then(res=>{

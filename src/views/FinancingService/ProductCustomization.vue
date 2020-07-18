@@ -148,11 +148,14 @@
  
         <CopyRight />
 
-        <!-- :data="editData.data" 
-            :dataCodeList="dataCodeList" 
-            :parentObj="codeObj"
-            @queryList="getTableData" -->
+        <!-- 
+            @desc: 产品定制弹窗
+         -->
         <ProCustModel v-model="proCustData.visible" :data="proCustData.data" @getInitData="getInitData"/>
+
+        <!-- 
+            @desc: 产品定制编辑弹窗
+         -->
         <ProCustModelEdit v-model="proCustEditData.visible" :data="proCustEditData.data" @getInitData="getInitData"/>
   </div>
 </template>

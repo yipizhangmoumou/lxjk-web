@@ -1,64 +1,39 @@
 /**
- * @description: 机构审核结果确认
+ * @description: 机构放款结果确认
  * @Date Changed: 2020-07-18
  */
 <template>
     <!---->
     <el-dialog
-        id="auditConfirmationModel"
-        title="放款机构审核结果确认"
+        id="loanConfirmationModel"
+        title="机构放款结果确认"
         :visible.sync="visible"
         width="600px"
-        @open="auditConfirmationOpenEvent"
+        @open="loanConfirmationOpenEvent"
         :before-close="handleClose">
         <el-form 
-            ref="confirmationFromData" 
+            ref="loanConfirmationFromData" 
             label-position="left"
             label-width="100px"
-            :model="confirmationFromData" 
-            :rules="auditConfirmationFromDataRules">
+            :model="loanConfirmationFromData" 
+            :rules="loanConfirmationFromDataRules">
 
-            <el-form-item label="产品名称：" prop="name">
-                <!-- <el-link v-model="confirmationFromData.name">{{confirmationFromData.name}}</el-link> -->
-                <el-input v-model="data.productName" disabled></el-input>
-            </el-form-item>
 
-            <el-form-item label="放款机构：" prop="org">
-                <!-- <el-link v-model="confirmationFromData.org">{{confirmationFromData.org}}</el-link> -->
-                <el-input v-model="data.orgName" disabled></el-input>
-            </el-form-item>
-
-             <el-form-item label="审核结果：" prop="result">
-                <el-radio-group v-model="confirmationFromData.result">
-                    <el-radio :label="0">通过</el-radio>
-                    <el-radio :label="1">未通过</el-radio>
-                </el-radio-group>
-            </el-form-item>
-
-            <el-form-item label="备注：" prop="remake">
-                <el-input 
-                    type="textarea" 
-                    maxlength="30" 
-                    :rows="3" 
-                    v-model="confirmationFromData.remake" 
-                    placeholder="请输入内容">
-                </el-input>
-            </el-form-item>
 
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button 
                 type="text" 
-                @click="handleClear('confirmationFromData')">
+                @click="handleClear('loanConfirmationFromData')">
                 清除条件
             </el-button>
             <el-button 
                 type="primary" 
-                @click="handleSave('confirmationFromData')">
+                @click="handleSave('loanConfirmationFromData')">
                 确 定
             </el-button>
             <el-button 
-                @click="()=>{this.handleClear('confirmationFromData');this.handleClose()}">
+                @click="()=>{this.handleClear('loanConfirmationFromData');this.handleClose()}">
                 取 消
             </el-button>
         </span>
@@ -67,7 +42,7 @@
 
 <script>
 export default {
-    name: 'auditConfirmationModel',
+    name: 'loanConfirmationModel',
     model: {
         prop: 'visible',
         event: 'changeVisible'
@@ -83,7 +58,8 @@ export default {
                 return {
                     childPlanCode: "",
                     productName: "",
-                    orgName: ""
+                    orgName: "",
+                    actionStatusValue: 0
                 }
             }
         }
@@ -92,14 +68,14 @@ export default {
         return {
 
             // 表单数据
-            confirmationFromData: {
+            loanConfirmationFromData: {
                 result: 0,
                 remake: ""
 
             },
 
             // 表单校验
-            auditConfirmationFromDataRules: {
+            loanConfirmationFromDataRules: {
                 
             },
 
@@ -124,8 +100,8 @@ export default {
          * @description: 弹出窗被打开后的回调
          * @Date Changed: 
          */
-        auditConfirmationOpenEvent(){
-            console.log("机构审核结果确认弹出窗被打开了~~~");
+        loanConfirmationOpenEvent(){
+            console.log("机构放款结果确认弹出窗被打开了~~~");
         },
 
         /**
@@ -161,33 +137,12 @@ export default {
                         actionCode: this.data.childPlanCode,
                         auditDesc: this.confirmationFromData.remake,     
                         result: this.confirmationFromData.result,
-                        status: 1           // 1风控审核
+                        status: this.data.actionStatusValue
                     }
 
                     this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
                         .then(res=>{
                             console.log("放款机构审核结果确认", res);
-                            if(res.code == 0){
-                                this.$notify({
-                                    title: '成功',
-                                    message: '确认结果提交成功！',
-                                    type: 'success'
-                                });
-                            }else{
-                                this.$notify.error({
-                                    title: '失败',
-                                    message: '确认结果提交失败！'
-                                });
-                            }
-
-                            // 清除填写数据
-                            this.handleClear('confirmationFromData');
-
-                            // 关闭弹窗
-                            this.handleClose();
-
-                            // 刷新父组件表格数据
-                            this.$emit('getInitData');
                         })
 
                 } else {
@@ -202,7 +157,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-    #auditConfirmationModel
+    #loanConfirmationModel
         /deep/ .el-dialog
             /deep/ .el-dialog__header
                 background #f2f2f2
