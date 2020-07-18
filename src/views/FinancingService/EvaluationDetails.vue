@@ -22,13 +22,13 @@
                             style="width: 100%"
                             border
                             fit>
-                            <el-table-column label="用户ID" prop="uid" width="100px"></el-table-column>
+                            <el-table-column label="用户ID" prop="userId" width="100px"></el-table-column>
                             <el-table-column label="企业名称" prop="enterpriseName"></el-table-column>
                             <el-table-column label="融资方式" prop="financingType"></el-table-column>
                             <el-table-column label="申请金额" prop="financingAmount"></el-table-column>
                             <el-table-column label="评估结果" prop="applyResult"></el-table-column>
                             <el-table-column label="评估适用产品" prop="meetProductNum"></el-table-column>
-                            <el-table-column label="正式申请状态" prop="applyLength"></el-table-column>
+                            <el-table-column label="正式申请状态" prop="financingPlanStatus"></el-table-column>
                         </el-table>
                     </div>
                 </div>
@@ -309,13 +309,13 @@ export default {
                 /*** ------ 基本信息：开始 ------ ***/ 
                 baseInfoTableData: [
                     {
-                        uid: "",
+                        userId: "",
                         enterpriseName: "",
                         financingType: "",
                         financingAmount: "",
                         applyResult: "",
                         meetProductNum: "",
-                        applyLength: ""
+                        financingPlanStatus: ""
 
                     }
                 ],
@@ -419,13 +419,13 @@ export default {
                         arr.push(data.assessmentApply);
                         this.initData.baseInfoTableData = arr.map(item=>{
                             return {
-                                uid: !item.uid ? "-" : item.uid,// 用户ID   ！！！！无
+                                userId: !item.userId ? "-" : item.userId,// 用户ID  
                                 enterpriseName: !item.enterpriseName ? "-" : item.enterpriseName,// 企业名称
                                 financingType: item.financingType == null ? "-" : item.financingType,// 融资方式   ！！！！无
                                 financingAmount: !item.financingAmount == null ? "-" : `￥${item.financingAmount}万`,// 申请金额
                                 applyResult: !item.applyResult == null ? "-" : item.applyResult ? "成功" : "失败",// 评估结果
                                 meetProductNum: item.meetProductNum == null ? "-" : `${item.meetProductNum}项`,// 评估适用产品
-                                financingPlanStatus: item.financingPlanStatus == null ? "-" : item.financingPlanStatus === 1 ? "未申请" : `已申请${item.applyLength}项`// 正式申请状态 ！！！！无
+                                financingPlanStatus: item.financingPlanStatus == null ? "-" : item.financingPlanStatus == 1 ? "未申请" : `已申请${item.actionProductNum}项`// 正式申请状态 ！！！！无
                             }
                         })
                         /** ------ 基本信息 数据重构：结束------ **/

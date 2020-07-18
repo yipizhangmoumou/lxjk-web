@@ -14,8 +14,9 @@
                         size="small"
                         icon="el-icon-s-check"
                         type="primary"
-                        @click="InstitutionalReview"
-                    >机构审核结果确认</el-button>
+                        @click="auditConfirmationEvent">
+                        机构审核结果确认
+                    </el-button>
                     <el-button
                         size="small"
                         icon="el-icon-s-custom"
@@ -92,15 +93,14 @@
                 </div>
             </div>
         </div>
+
         <CopyRight />
-        <el-dialog class="j_dailog" title="放款机构审核结果确认" :visible.sync="InstitutionalReview_show">
+
+        <AuditConfirmationModel  v-model="auditConfirmationData.visible"/>
+
+        <!-- <el-dialog class="j_dailog" title="放款机构审核结果确认" :visible.sync="InstitutionalReview_show">
             <el-form :model="InstitutionalReview_form" ref="InstitutionalReview_form" :rules="rules" label-position="right" label-width="110px">
                 <el-row class="">
-                    <!-- <el-col :span="24">
-                            <el-form-item label="名称：">
-                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
-                            </el-form-item>
-                        </el-col> -->
                     <el-col :span="12">
                         <el-form-item label="产品名称：" class="j_appinput">
                             <el-link v-model="InstitutionalReview_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
@@ -116,7 +116,7 @@
                 </el-row>
                 <el-row>
                         <el-col :span="24">
-                            <el-form-item label="审核结果">
+                            <el-form-item label="审核结果：">
                                 <el-radio-group v-model="InstitutionalReview_form.result">
                                     <el-radio :label="0">通过</el-radio>
                                     <el-radio :label="1">未通过</el-radio>
@@ -127,7 +127,12 @@
                 <el-row class="j_elrow j_elrow1">
                     <el-col :span="24">
                         <el-form-item label="备注：" prop="requestReason">
-                            <el-input type="textarea" maxlength="30" :rows="2" v-model="InstitutionalReview_form.remake" placeholder="请输入内容">
+                            <el-input 
+                                type="textarea" 
+                                maxlength="30" 
+                                :rows="4" 
+                                v-model="InstitutionalReview_form.remake" 
+                                placeholder="请输入内容">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -137,15 +142,11 @@
                 <el-button size="small" @click="InstitutionalReview_cancel">取消</el-button>
                 <el-button size="small" type="primary" @click="InstitutionalReview_save()">确定</el-button>
             </div>
-        </el-dialog>
-        <el-dialog class="j_dailog" title="放款机构放款结果确认" :visible.sync="LendingInstitutions_show">
+        </el-dialog> -->
+
+        <!-- <el-dialog class="j_dailog" title="放款机构放款结果确认" :visible.sync="LendingInstitutions_show">
             <el-form :model="LendingInstitutions_form" ref="LendingInstitutions_form" :rules="rules" label-position="right" label-width="110px">
                 <el-row class="">
-                    <!-- <el-col :span="24">
-                            <el-form-item label="名称：">
-                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
-                            </el-form-item>
-                        </el-col> -->
                     <el-col :span="12">
                         <el-form-item label="产品名称：" class="j_appinput">
                             <el-link v-model="LendingInstitutions_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
@@ -174,15 +175,11 @@
                 <el-button size="small" @click="LendingInstitutions_cancel">取消</el-button>
                 <el-button size="small" type="primary" @click="LendingInstitutions_save()">确定</el-button>
             </div>
-        </el-dialog>
-        <el-dialog class="j_dailog" title="付款项收款审核" :visible.sync="collection_show">
+        </el-dialog> -->
+
+        <!-- <el-dialog class="j_dailog" title="付款项收款审核" :visible.sync="collection_show">
             <el-form :model="collection_form" ref="collection_form" :rules="rules" label-position="right" label-width="110px">
                 <el-row class="">
-                    <!-- <el-col :span="24">
-                            <el-form-item label="名称：">
-                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
-                            </el-form-item>
-                        </el-col> -->
                     <el-col :span="12">
                         <el-form-item label="产品名称：" class="j_appinput">
                             <el-link v-model="collection_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
@@ -214,7 +211,7 @@
                     <el-col :span="24">
                         <el-form-item label="审核收款项：" class="j_appinput">
                             <el-radio-group v-model="collection_form.type">
-                                <!-- --------------若无前置付款项，则默认只显示服务费； -->
+                                若无前置付款项，则默认只显示服务费； 
                                     <el-radio :label="0">前置付款项</el-radio>
                                     <el-radio :label="1">服务费</el-radio>
                                 </el-radio-group>
@@ -235,7 +232,8 @@
                 <el-button size="small" @click="collection_cancel">取消</el-button>
                 <el-button size="small" type="primary" @click="collection_save()">确定</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
+
     </div>
 </template>
 
@@ -243,6 +241,9 @@
 import CopyRight from "components/CopyRight";
 import SearchSix from "components/Search/SearchSix";
 import StatusList from "components/StatusList";
+
+// 机构审核结果确认弹出窗组件
+import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
 
 import dateFormat from './../../unit/dataForamt'
 export default {
@@ -326,57 +327,68 @@ export default {
                 "7": "服务取消"
             },
 
+            // 机构审核结果弹窗数据
+            auditConfirmationData: {
+                visible: false,
+                data: {}
+            },
+
 
 
 
             // curr: 1,
-            multipleSelection: [],
-            dialogFormVisible: false,
+
             options:{},
             value:"",
-            form: {
-                name: "",
-                region: "",
-                date1: "",
-                date2: "",
-                delivery: false,
-                type: [],
-                resource: "",
-                desc: ""
-            },
-            formLabelWidth: "120px",
-            InstitutionalReview_show:false,
-            LendingInstitutions_show:false,
-            collection_show:false,
+
+
+            // form: {
+            //     name: "",
+            //     region: "",
+            //     date1: "",
+            //     date2: "",
+            //     delivery: false,
+            //     type: [],
+            //     resource: "",
+            //     desc: ""
+            // },
+            // formLabelWidth: "120px",
+
+            // InstitutionalReview_show:false,
+
+            // LendingInstitutions_show:false,
+
+            // collection_show:false,
             
-            InstitutionalReview_form:{
-                name:"xxx银行",
-                org:'xxx机构',
-                remake:'xxx信息',
-                result:1,
-            },
-            LendingInstitutions_form:{
-                name:"xxx银行",
-                org:'xxx机构',
-                remake:'xxx信息',
-            },
-            collection_form:{
-                name:"xxx银行",
-                limit:'xxx万',
-                prePayment:'先xxx万',
-                serviceCharge:'',
-                type:1,
-                result:0
-            },
-            rules:{},
-            showpay1:false,
-            showpay2:false,
+            // InstitutionalReview_form:{
+            //     name:"xxx银行",
+            //     org:'xxx机构',
+            //     remake:'xxx信息',
+            //     result:1,
+            // },
+            // LendingInstitutions_form:{
+            //     name:"xxx银行",
+            //     org:'xxx机构',
+            //     remake:'xxx信息',
+            // },
+            // collection_form:{
+            //     name:"xxx银行",
+            //     limit:'xxx万',
+            //     prePayment:'先xxx万',
+            //     serviceCharge:'',
+            //     type:1,
+            //     result:0
+            // },
+            // rules:{},
+            // showpay1:false,
+            // showpay2:false,
         };
     },
     components: {
         SearchSix,
         CopyRight,
-        StatusList
+        StatusList,
+        AuditConfirmationModel
     },
 
     created() {
@@ -388,20 +400,6 @@ export default {
         this.getTableData();
 
 
-
-        // for (let index = 0; index < 11; index++) {
-        //     this.tableData.push({
-        //         number: parseInt(Math.random() * 1000000),
-        //         name: "机构名称" + index,
-        //         address: "地区" + index,
-        //         employee: "员工人数" + index,
-        //         linkman: "联系人" + index,
-        //         mobile: "联系方式" + index,
-        //         createTime: "2020-03-09 12:34:23",
-        //         status: index % 2 == 0 ? "已开通" : "未开通",
-        //         codeUrl: "http://www.baidu.com"
-        //     });
-        // }
     },
     mounted(){
         console.log(this.loginUserInfo);
@@ -424,7 +422,7 @@ export default {
         getCalNumData(){
             this.$axios.post('/api/mgm/actionChildPlan/calNum')
                 .then(res => {
-                    console.log(`/api/mgm/actionChildPlan/calNum`, res);
+                    // console.log(`/api/mgm/actionChildPlan/calNum`, res);
                     if(res.code===0){
                         let data = res.data;
                         this.executiveCount.forEach(item=>{
@@ -577,9 +575,23 @@ export default {
                 path: `/ServiceDetails/${financingCode}`
             });
         },
+
+        /**
+         * @description: 【机构审核结果确认】按钮事件
+         * @Date Changed: 
+         */
+        auditConfirmationEvent(){
+
+            this.auditConfirmationData.visible = true;
+        },
+
+
+
         InstitutionalReview(){
             this.InstitutionalReview_show = true;
         },
+
+
         LendingInstitutions(){
             this.LendingInstitutions_show = true;
         },
@@ -644,7 +656,7 @@ export default {
   #CopyRight
     copyRight()
 </style>
-<style>
+<style scoped>
 .j_dailog .el-dialog{
     width:600px
 }
@@ -659,6 +671,10 @@ export default {
     background: rgb(242,242,242);
 }
 .j_dailog .el-form{
-    padding-left:30px;
+    padding: 0 30px;
+}
+.el-dialog__footer{
+    padding: 16px;
+    border-top: 1px solid #e5e5e5;
 }
 </style>

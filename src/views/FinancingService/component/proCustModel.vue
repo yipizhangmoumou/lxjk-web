@@ -238,13 +238,13 @@ export default {
                 interestRate: [
                     {required: true, message: '请输入贷款利息数字', trigger: 'blur'},
                     {type: 'number', message: '贷款利息必须为数字值', trigger: 'blur'},
-                    {type: 'number', min: 7, max: 9, message: '贷款利息7%~9%', trigger: 'blur' }
+                    // {type: 'number', min: 7, max: 9, message: '贷款利息7%~9%', trigger: 'blur' }
                 ],
                 repayment: [{required: true, message: '请选择还款方式', trigger: 'blur'}],
                 finalAmount: [
                     {required: true, message: '请输入申请额度数字', trigger: 'blur'},
                     {type: 'number', message: '申请额度必须为数字值', trigger: 'blur'},
-                    {type: 'number', min: 10, max: 100, message: '申请额度10-100万', trigger: 'blur'},
+                    // {type: 'number', min: 10, max: 100, message: '申请额度10-100万', trigger: 'blur'},
                 ],
                 qzCharge: [
                     {required: true, message: '请输前置收费', trigger: 'blur'},
