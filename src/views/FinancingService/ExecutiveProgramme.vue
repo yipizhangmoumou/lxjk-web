@@ -10,21 +10,24 @@
                 <h5>数据列表</h5>
                 <div class="table-btn">
                     <el-button size="small" icon="el-icon-upload2">导出</el-button>
-                    <!-- <el-button
+                    <el-button
                         size="small"
                         icon="el-icon-s-check"
                         type="primary"
+                        @click="InstitutionalReview"
                     >机构审核结果确认</el-button>
                     <el-button
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
+                        @click="LendingInstitutions"
                     >机构放款结果确认</el-button>
                     <el-button
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
-                    >收款审核</el-button> -->
+                        @click="collection"
+                    >收款审核</el-button>
                 </div>
             </div>
             <div class="table">
@@ -90,6 +93,149 @@
             </div>
         </div>
         <CopyRight />
+        <el-dialog class="j_dailog" title="放款机构审核结果确认" :visible.sync="InstitutionalReview_show">
+            <el-form :model="InstitutionalReview_form" ref="InstitutionalReview_form" :rules="rules" label-position="right" label-width="110px">
+                <el-row class="">
+                    <!-- <el-col :span="24">
+                            <el-form-item label="名称：">
+                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
+                            </el-form-item>
+                        </el-col> -->
+                    <el-col :span="12">
+                        <el-form-item label="产品名称：" class="j_appinput">
+                            <el-link v-model="InstitutionalReview_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="放款机构：" class="j_appinput">
+                            <el-link v-model="InstitutionalReview_form.org" :underline="false">{{InstitutionalReview_form.org}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="审核结果">
+                                <el-radio-group v-model="InstitutionalReview_form.result">
+                                    <el-radio :label="0">通过</el-radio>
+                                    <el-radio :label="1">未通过</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                </el-row>
+                <el-row class="j_elrow j_elrow1">
+                    <el-col :span="24">
+                        <el-form-item label="备注：" prop="requestReason">
+                            <el-input type="textarea" maxlength="30" :rows="2" v-model="InstitutionalReview_form.remake" placeholder="请输入内容">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="InstitutionalReview_cancel">取消</el-button>
+                <el-button size="small" type="primary" @click="InstitutionalReview_save()">确定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog class="j_dailog" title="放款机构放款结果确认" :visible.sync="LendingInstitutions_show">
+            <el-form :model="LendingInstitutions_form" ref="LendingInstitutions_form" :rules="rules" label-position="right" label-width="110px">
+                <el-row class="">
+                    <!-- <el-col :span="24">
+                            <el-form-item label="名称：">
+                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
+                            </el-form-item>
+                        </el-col> -->
+                    <el-col :span="12">
+                        <el-form-item label="产品名称：" class="j_appinput">
+                            <el-link v-model="LendingInstitutions_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="放款机构：" class="j_appinput">
+                            <el-link v-model="LendingInstitutions_form.org" :underline="false">{{InstitutionalReview_form.org}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="放款结果：">
+                                <el-radio-group v-model="LendingInstitutions_form.result">
+                                    <el-radio :label="0">已放款</el-radio>
+                                    
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="LendingInstitutions_cancel">取消</el-button>
+                <el-button size="small" type="primary" @click="LendingInstitutions_save()">确定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog class="j_dailog" title="付款项收款审核" :visible.sync="collection_show">
+            <el-form :model="collection_form" ref="collection_form" :rules="rules" label-position="right" label-width="110px">
+                <el-row class="">
+                    <!-- <el-col :span="24">
+                            <el-form-item label="名称：">
+                                <el-input class="j_inputapplication" v-model="form.codeSystemName" placeholder="请输入名称"></el-input>
+                            </el-form-item>
+                        </el-col> -->
+                    <el-col :span="12">
+                        <el-form-item label="产品名称：" class="j_appinput">
+                            <el-link v-model="collection_form.name" :underline="false">{{InstitutionalReview_form.name}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="申请额度：" class="j_appinput">
+                            <el-link v-model="collection_form.limit" :underline="false">{{InstitutionalReview_form.org}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="前置付款项：" class="j_appinput">
+                            <el-link v-model="collection_form.prePayment" :underline="false">{{InstitutionalReview_form.org}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="服务费：" class="j_appinput">
+                            <el-link v-model="collection_form.serviceCharge" :underline="false">{{InstitutionalReview_form.org}}</el-link>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="审核收款项：" class="j_appinput">
+                            <el-radio-group v-model="collection_form.type">
+                                <!-- --------------若无前置付款项，则默认只显示服务费； -->
+                                    <el-radio :label="0">前置付款项</el-radio>
+                                    <el-radio :label="1">服务费</el-radio>
+                                </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="收款结果审核：">
+                                <el-radio-group v-model="collection_form.result">
+                                    <el-radio :label="0">已放款</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                        </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="collection_cancel">取消</el-button>
+                <el-button size="small" type="primary" @click="collection_save()">确定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -199,7 +345,32 @@ export default {
                 desc: ""
             },
             formLabelWidth: "120px",
+            InstitutionalReview_show:false,
+            LendingInstitutions_show:false,
+            collection_show:false,
             
+            InstitutionalReview_form:{
+                name:"xxx银行",
+                org:'xxx机构',
+                remake:'xxx信息',
+                result:1,
+            },
+            LendingInstitutions_form:{
+                name:"xxx银行",
+                org:'xxx机构',
+                remake:'xxx信息',
+            },
+            collection_form:{
+                name:"xxx银行",
+                limit:'xxx万',
+                prePayment:'先xxx万',
+                serviceCharge:'',
+                type:1,
+                result:0
+            },
+            rules:{},
+            showpay1:false,
+            showpay2:false,
         };
     },
     components: {
@@ -232,7 +403,19 @@ export default {
         //     });
         // }
     },
-
+    mounted(){
+        console.log(this.loginUserInfo);
+        if(this.loginUserInfo=='platform_cust_ser'){
+            this.showpay1=true;
+        }else{
+            this.showpay1 = false;
+        }
+        if(this.loginUserInfo=='receivables'){
+            this.showpay2 = true;
+        }else{
+            this.showpay2 = false
+        }
+    },
     methods: {
         /**
          * @description: 初始数据加载：全部执行单 前置收款待审核 待放款机构审核 服务收款待审核 已完成 已关闭
@@ -393,7 +576,28 @@ export default {
             this.$router.push({
                 path: `/ServiceDetails/${financingCode}`
             });
-        }
+        },
+        InstitutionalReview(){
+            this.InstitutionalReview_show = true;
+        },
+        LendingInstitutions(){
+            this.LendingInstitutions_show = true;
+        },
+        collection(){
+            this.collection_show = true;
+        },
+        InstitutionalReview_cancel(){},
+        InstitutionalReview_save(){
+            console.log(this.InstitutionalReview_form)
+        },
+        LendingInstitutions_cancel(){},
+        LendingInstitutions_save(){
+            console.log(this.InstitutionalReview_form)
+        },
+        collection_cancel(){},
+        collection_save(){
+            console.log(this.InstitutionalReview_form)
+        },
     },
     
 
@@ -439,4 +643,22 @@ export default {
           line-height 32px
   #CopyRight
     copyRight()
+</style>
+<style>
+.j_dailog .el-dialog{
+    width:600px
+}
+.j_dailog .el-dialog__title{
+    font-size: 16px;
+    font-family: MicrosoftYaHei, 微软雅黑;
+    font-weight: 400;
+    font-style: normal;
+}
+.j_dailog .el-dialog__header{
+    border-bottom: rgb(228,228,228);
+    background: rgb(242,242,242);
+}
+.j_dailog .el-form{
+    padding-left:30px;
+}
 </style>

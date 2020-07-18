@@ -16,7 +16,7 @@
       </div>
       <div class="details-most">
         <div class="most-div pd20">
-          <h5><i class="el-icon-collection-tag" type="primary"></i>基本信息</h5>
+          <h5 class="h5s"><i class="el-icon-collection-tag" type="primary"></i>基本信息</h5>
           <el-table
             ref="userTable"
             :data="baseData"
@@ -466,6 +466,7 @@ export default {
         }
     },
   mounted(){
+    console.log(this.mixin);
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -647,11 +648,13 @@ export default {
       .most-div
         h5
           margin-bottom 20px
-          font-weight 700
+          
           font-style normal
           font-family '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑'
           font-size 14px
           letter-spacing normal
+        h5.h5s
+          font-weight 700
         .table-bottom
           border 1px solid #EBEEF5
           text-align right 

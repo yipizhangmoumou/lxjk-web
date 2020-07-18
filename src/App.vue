@@ -6,7 +6,7 @@
 
 <style lang="stylus">
 #app
-  font-family Avenir, Helvetica, Arial, sans-serif
+  font-family 'MicrosoftYaHei', '微软雅黑'
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   color #2c3e50

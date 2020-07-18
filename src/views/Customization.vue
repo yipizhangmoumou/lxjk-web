@@ -12,7 +12,7 @@
     </div>
     <div class="table-info">
       <div class="table-title">
-        <div>
+        <div class="divColor">
           <span>服务编号：201808196398345</span>
           <span>融资顾问：丁昱</span>
           <span>开始服务时间：2020.07.10 12:22:22</span>
@@ -25,7 +25,7 @@
         <div class="title">
           <div>
             <i class="el-icon-s-flag"></i>
-            <span>基本信息</span>
+            <span class="spans">基本信息</span>
           </div>
         </div>
         <div class="table">
@@ -58,18 +58,18 @@
         <div class="table">
           <el-table :data="childPlanList" border style="width: 100%" align-center>
             <el-table-column prop="date" align="center" label="序号"></el-table-column>
-            <el-table-column prop="name" align="center" label="产品名称"></el-table-column>
-            <el-table-column prop="address" align="center" label="产品类型"></el-table-column>
-            <el-table-column prop="address" align="center" label="放款机构"></el-table-column>
-            <el-table-column prop="address" align="center" label="期数"></el-table-column>
-            <el-table-column prop="address" align="center" label="贷款利息"></el-table-column>
-            <el-table-column prop="address" align="center" label="还款方式"></el-table-column>
-            <el-table-column prop="address" align="center" label="担保方式"></el-table-column>
-            <el-table-column prop="address" align="center" label="前置付款项"></el-table-column>
-            <el-table-column prop="address" align="center" label="服务费"></el-table-column>
-            <el-table-column prop="address" align="center" label="申请额度"></el-table-column>
+            <el-table-column prop="productName" align="center" label="产品名称"></el-table-column>
+            <el-table-column prop="productTypeName" align="center" label="产品类型"></el-table-column>
+            <el-table-column prop="orgName" align="center" label="放款机构"></el-table-column>
+            <el-table-column prop="loanCycle" align="center" label="期数"></el-table-column>
+            <el-table-column prop="interestRate" align="center" label="贷款利息"></el-table-column>
+            <el-table-column prop="repaymentStr" align="center" label="还款方式"></el-table-column>
+            <el-table-column prop="applicationMethodStr" align="center" label="担保方式"></el-table-column>
+            <el-table-column prop="qzChargeItemStatus" align="center" label="前置付款项"></el-table-column>
+            <el-table-column prop="servChargeItem" align="center" label="服务费"></el-table-column>
+            <el-table-column prop="finalAmount" align="center" label="申请额度"></el-table-column>
           </el-table>
-          <div class="total">申请额度合计：<span style="color:red"> ¥200.00万</span></div>
+          <div class="total">申请额度合计：<span style="color:red"> ￥{{numAll}}.00万</span></div>
         </div>
 
 
@@ -673,6 +673,7 @@ export default {
         financingPlan:{},
         baseData:[],//基本信息
         childPlanList:[],//产品信息
+        thatAllplace:'',
         areaTree:[],
         props: {
           children: 'children',
@@ -737,6 +738,7 @@ export default {
       industryTextinfo:'',
       areaTextinfoBank:'',
       areaTextbank:[],
+      numAll:0,
       rules:{
             [`enterpriseInfo.name`]:[{ required: true, message: '请输入企业全称', trigger: 'blur' }],
             [`enterpriseInfo.enterpriseNature`]: [
@@ -840,8 +842,14 @@ export default {
           // ---
           // 企业code要组合 provinceCode cityCode
 
-          this.childPlanList = datas.childPlanList;//定制的产品
-
+          this.childPlanList = datas.childPlanList||[];//定制的产品
+          
+          if(this.childPlanList.length>0){
+            this.childPlanList.map(item=>{
+              this.numAll +=item.finalAmount;
+            })
+          }
+          console.log(this.numAll);
           this.companyInfo.enterpriseInfo = datas.enterpriseInfo||{};//企业信息
           this.companyInfo.financialInformation = datas.financialInformation||{};//财务账户
           this.companyInfo.legalRepresentative = datas.legalRepresentative||{};//法人信息
@@ -1139,6 +1147,10 @@ export default {
         margin-right 30px
         color #999
         font-size 14px
+      .divColor span
+        font-weight: 400;
+        font-style: normal;
+        color: #666666;  
     .table-body
       background-color #fff
       color #333
@@ -1163,9 +1175,13 @@ export default {
             padding-right 20px
             box-sizing border-box
       span
-        color #333
-        font-size 16px
+        font-family 'MicrosoftYaHei', '微软雅黑'
+        color #666666
+        font-size 14px
         margin-left 6px
+      span.spans
+        font-weight: 700
+        font-family '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
   >>> #CopyRight
     copyRight()
 .red
@@ -1216,4 +1232,16 @@ export default {
   left 10px !important
 .ml_0
   margin-left 0px !important
+.el-table /deep/ .el-table__header th
+  font-weight: 400
+  font-style: normal
+  font-size: 14px
+  color: #666666
+  text-align: center
+.el-table /deep/ .el-table__body  td
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    text-align: center;
+    line-height: 28px;
 </style>
