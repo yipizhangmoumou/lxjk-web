@@ -91,6 +91,7 @@
                         :current-page="tablePagination.curr"
                         :page-sizes="tablePagination.pageSizes"
                         :page-size="tablePagination.pageSize"
+                        @current-change="changeCurrent"
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="tablePagination.total"
                     ></el-pagination>
@@ -740,6 +741,15 @@ export default {
         collection_cancel(){},
         collection_save(){
             console.log(this.InstitutionalReview_form)
+        },
+        changeCurrent(val){
+            // console.log( val ); 
+
+            // 赋值当前页
+            this.tablePagination.curr = val;
+
+            // 更新表格数据
+            this.getTableData();
         },
     },
     

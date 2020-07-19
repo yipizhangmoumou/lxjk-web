@@ -1180,8 +1180,11 @@ export default {
             });
         },
         reviewBtn(){
-          let arrInfo =this.childPlanList;
-          this.$axios.post('/mgm/financingPlan/updateChildPlanProductStatus',arrInfo).then(res => {
+          let code ={
+            financingCode:this.$route.params.financingCode
+          }
+          
+          this.$axios.post('/api/mgm/financingPlan/updateChildPlanProductStatus',code).then(res => {
               if(res.code == 0){
                 this.$message({
                     type:'success',

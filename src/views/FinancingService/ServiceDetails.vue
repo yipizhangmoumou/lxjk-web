@@ -57,29 +57,34 @@
       label="序号"
       width="50">
     </el-table-column>
-            <el-table-column prop="actionnum" label="执行单号" ></el-table-column>
-            <el-table-column prop="user" label="产品名称"></el-table-column>
-            <el-table-column prop="mobile" label="产品类型"></el-table-column>
-            <el-table-column prop="company" label="放款机构"></el-table-column>
-            <el-table-column prop="linkman" label="期数"></el-table-column>
-            <el-table-column prop="mobile1" label="贷款利息"></el-table-column>
-            <el-table-column prop="mobile" label="还款方式"></el-table-column>
-            <el-table-column prop="danbao" label="担保方式">
+            <el-table-column prop="childPlanCode" label="执行单号" width="170"></el-table-column>
+            <el-table-column prop="productName" label="产品名称"></el-table-column>
+            <el-table-column prop="productTypeName" label="产品类型"></el-table-column>
+            <el-table-column prop="orgName" label="放款机构"></el-table-column>
+            <el-table-column prop="loanCycle" label="期数"></el-table-column>
+            <el-table-column prop="interestRate" label="贷款利息"></el-table-column>
+            <el-table-column prop="repaymentStr" label="还款方式"></el-table-column>
+            <el-table-column prop="guaranteeMethodStr" label="担保方式">
               <template slot-scope="scope">
-                <span>{{scope.row.danbao=='1'?'免担保':'有担保'}}</span>
+                <span>{{scope.row.guaranteeMethodStr=='2'?'免担保':'有担保'}}</span>
                 <br>
-                <span class="cz" @click="seeAssurance" v-if="scope.row.danbao==2">
+                <span class="cz" @click="seeAssurance" v-if="scope.row.guaranteeMethodStr==1">
                   查看详情
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="linkman" label="前置付款项"></el-table-column>
-            <el-table-column prop="mobile1" label="服务费"></el-table-column>
-            <el-table-column prop="linkman" label="申请额度"></el-table-column>
-            <el-table-column prop="mobile1" label="进度"></el-table-column>
+            <el-table-column prop="qzChargeItem" label="前置付款项"></el-table-column>
+            <el-table-column prop="servChargeItem" label="服务费"></el-table-column>
+            <el-table-column prop="finalAmount" label="申请额度"></el-table-column>
+            <el-table-column prop="actionStatus" label="进度">
+              <!-- 1待风控审核 2待付款前置收费项 3 待放款机构审核 4待银行/机构签约放款 5 待付款服务费 6 服务完成 7服务取消 -->
+              <template slot-scope="scope">
+                <span>{{actionStatus[scope.row.actionStatus]}}</span>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="table-bottom">
-            <div>申请额度合计: <span class="red">￥200.00万</span></div>
+            <div>申请额度合计: <span class="red"> ￥{{numAll}}万元</span></div>
           </div>
         </div>
         <div class="most-div pd20">
@@ -310,7 +315,16 @@ export default {
 
       status:'',//服务状态进度
 
-
+      actionStatus:{
+        // 1待风控审核 2待付款前置收费项 3 待放款机构审核 4待银行/机构签约放款 5 待付款服务费 6 服务完成 7服务取消
+        1:'待风控审核',
+        2:'待付款前置收费项',
+        3:'待放款机构审核',
+        4:'待银行/机构签约放款',
+        5:'待付款服务费',
+        6:'服务完成',
+        7:'服务取消'
+      },
       stepArr:[
         {name:'融资顾问服务',time:''},
         {name:'服务定制',time:''},
@@ -456,6 +470,7 @@ export default {
       frontIdCardBase64:'',
       reverseIdCardBase64:'',
       applyId:'',
+      numAll:0,
     }
   },
     created:async function(){
@@ -492,6 +507,7 @@ export default {
        this.$axios.post(url).then(res=>{
         console.log(res);
         if(res.code == 0){
+          this.numAll = 0;
           let datas =res.data;
           this.applyId = datas.applyId;
           this.baseData = [datas.financingPlan];//基本信息
@@ -512,6 +528,11 @@ export default {
                   this.enterpriseInfo.enterpriseNature = item.value
               }
           })
+          if(this.actionData.length>0){
+            this.actionData.map(item=>{
+              this.numAll +=parseInt(item.finalAmount.slice(0,-3));
+            })
+          }          
           this.thattreeFn(this.enterpriseInfo.provinceCode,this.areaTree,1)
           this.thattreeFn(this.financialInformation.provinceCode,this.areaTree,2)
           this.thatindustryFn(this.enterpriseInfo.industryCode)
