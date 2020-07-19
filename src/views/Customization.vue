@@ -14,7 +14,7 @@
           <!-- <span>开始服务时间：{{createTime}}</span> -->
         </div>
         <div class="title-btn">
-          <el-button type="primary" icon="el-icon-s-check">定制完成，提交审核</el-button>
+          <el-button type="primary" @click="reviewBtn" icon="el-icon-s-check">定制完成，提交审核</el-button>
         </div>
       </div>
       <div class="table-body">
@@ -850,7 +850,7 @@ export default {
           }
           console.log(datas);
           this.applyId = datas.applyId;
-          this.stepActive = parseInt(datas.status.slice(-1));
+          this.stepActive = datas.status!=null?parseInt(datas.status.slice(-1)):datas.status;
           this.planCode = datas.planCode||'';
           this.custServName = datas.custServName||'';
           this.createTime = datas.createTime||null;
@@ -1179,6 +1179,22 @@ export default {
                 path: `/evaluationDetails/${id}`
             });
         },
+        reviewBtn(){
+          let arrInfo =this.childPlanList;
+          this.$axios.post('/mgm/financingPlan/updateChildPlanProductStatus',arrInfo).then(res => {
+              if(res.code == 0){
+                this.$message({
+                    type:'success',
+                    message:'审核成功'
+                })
+              }else{
+                  console.log(res);
+              }
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+        }
     }
 };
 </script>
