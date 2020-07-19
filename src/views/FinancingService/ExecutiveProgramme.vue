@@ -264,11 +264,14 @@ import StatusList from "components/StatusList";
 
 // 机构审核结果确认弹出窗组件
 import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
+
 // 放款机构放款结果确认弹出窗组件
 import LoanConfirmationModel from './executiveManagement/LoanConfirmationModel';
+
 // 付款项收款审核
 import ReceiptConfirmationModel from './executiveManagement/ReceiptConfirmationModel';
 
+// 处理数据格式函数封装
 import dateFormat from './../../unit/dataForamt'
 export default {
     name: "ExecutiveProgramme",
@@ -728,25 +731,41 @@ export default {
 
                 let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue !==0){
+                if(actionStatusValue == 4){  
+                    
+
+                    this.loanConfirmationData.data = {
+                        childPlanCode,
+                        productName,
+                        orgName,
+                    }
+
+                    this.loanConfirmationData.visible = true;
+                    
+                }else if(actionStatusValue >= 4 ){  // 机构放款结果已审批
+                    
                     this.$message({
                         showClose: true,
                         message: '当前单号已审批，请勿重复审批！',
                         type: 'warning'
                     });
-                }else{
-                    this.loanConfirmationData.data = {
-                        childPlanCode,
-                        productName,
-                        orgName,
-                        actionStatusValue
-                    }
-
                     
+                }else if( actionStatusValue == 2 ){
+                    this.$message({
+                        showClose: true,
+                        message: '请进行【付款项收款审核】操作！',
+                        type: 'warning'
+                    });    
+                }else if(actionStatusValue == 0){
+                    this.$message({
+                        showClose: true,
+                        message: '请进行【服务定制结果审核】操作！',
+                        type: 'warning'
+                    });
                 }
 
 
-                this.loanConfirmationData.visible = true;
+                
 
                 
 
@@ -782,7 +801,7 @@ export default {
 
                 let {childPlanCode, productName, finalAmount, qzChargeItem, servChargeItem, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue == 2){
+                if(actionStatusValue == 2){  // 前置付款项审核
 
                     this.receiptConfirmationata.data = {
                         childPlanCode,
@@ -796,22 +815,64 @@ export default {
 
                     this.receiptConfirmationata.visible = true;
                     
-                }else if( actionStatusValue < 2 ){
+                }else if(actionStatusValue == 5){  // 服务费付款项审核
 
+                    this.receiptConfirmationata.data = {
+                            childPlanCode,
+                            actionStatusValue,
+                            productName, // 产品名称
+                            finalAmount,           // 申请额度
+                            qzChargeItem,            // 前置付款项
+                            servChargeItem            // 服务费
+                            
+                        }
+
+                    this.receiptConfirmationata.visible = true;
+
+                } else if(actionStatusValue == 0){
                     this.$message({
                         showClose: true,
-                        message: '请进行放款机构审核结果确认操作！',
+                        message: '请进行【机构审核结果确认】操作！',
                         type: 'warning'
-                    });
-
+                    });   
+                } else if(actionStatusValue == 4){
+                    this.$message({
+                        showClose: true,
+                        message: '请进行【放款机构审核结果确认】操作！',
+                        type: 'warning'
+                    }); 
                 }else{
-
                     this.$message({
                         showClose: true,
                         message: '当前单号已审批，请勿重复审批！',
                         type: 'warning'
                     });
                 }
+                
+                // else if(actionStatusValue == 4){
+
+                //     this.$message({
+                //         showClose: true,
+                //         message: '请进行放款机构审核结果确认操作！',
+                //         type: 'warning'
+                //     });
+
+                // }else if( actionStatusValue < 2 ){
+
+                //     this.$message({
+                //         showClose: true,
+                //         message: '请进行放款机构审核结果确认操作！',
+                //         type: 'warning'
+                //     });
+
+                // }else{
+
+                //     this.$message({
+                //         showClose: true,
+                //         message: '当前单号已审批，请勿重复审批！',
+                //         type: 'warning'
+                //     });
+                // }
 
 
                 

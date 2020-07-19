@@ -39,7 +39,7 @@
                 <el-radio v-model="receiptConfirmationFromData.reviewCollection" label="2" v-if="data.actionStatusValue == '5'">服务费</el-radio>
             </el-form-item>
 
-            <el-form-item label="审核收款项：" prop="收款结果审核">
+            <el-form-item label="审核收款项：" prop="result">
                 <el-radio v-model="receiptConfirmationFromData.result" label="1">已放款</el-radio>
             </el-form-item>
 
@@ -127,6 +127,9 @@ export default {
          */
         receiptConfirmationOpenEvent(){
             console.log("付款项收款审核弹出窗被打开了~~~");
+            console.log( this.data.actionStatusValue == 2 );
+            this.receiptConfirmationFromData.reviewCollection = this.data.actionStatusValue == 2 ? "1" : "2";
+
         },
 
         /**
@@ -160,15 +163,37 @@ export default {
 
                     let requiredParams = {
                         actionCode: this.data.childPlanCode,  
-                        result: this.confirmationFromData.result,
-                        status: this.data.actionStatusValue
+                        result: 0,  // 0通过-1不通过 1取消
+                        status: this.data.actionStatusValue ==  2 ? 2 : 5     // 2付款前置收费项收款审核  5 付款服务费收款审核
                     }
                     console.log("提交参数：", requiredParams);
 
-                    // this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
-                    //     .then(res=>{
-                    //         console.log("放款机构审核结果确认", res);
-                    //     })
+                    this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
+                        .then(res=>{
+                            console.log("付款项收款审核", res);
+
+                            if(res.code == 0){
+                                this.$notify({
+                                    title: '成功',
+                                    message: '确认结果提交成功！',
+                                    type: 'success'
+                                });
+                            }else{
+                                this.$notify.error({
+                                    title: '失败',
+                                    message: '确认结果提交失败！'
+                                });
+                            }
+
+                            // 清除填写数据
+                            this.handleClear('receiptConfirmationFromData');
+
+                            // 关闭弹窗
+                            this.handleClose();
+
+                            // 刷新父组件表格数据
+                            this.$emit('getInitData');
+                        })
 
                 } else {
                     return false;
