@@ -28,6 +28,10 @@
                 <el-input v-model="data.orgName" disabled></el-input>
             </el-form-item>
 
+            <el-form-item label="放款结果：" prop="result">
+                <el-radio v-model="loanConfirmationFromData.result" label="1">已放款</el-radio>
+            </el-form-item>
+
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button 
@@ -76,8 +80,7 @@ export default {
 
             // 表单数据
             loanConfirmationFromData: {
-                result: 0,
-                remake: ""
+                result: "1",
 
             },
 
@@ -142,14 +145,34 @@ export default {
 
                     let requiredParams = {
                         actionCode: this.data.childPlanCode,
-                        auditDesc: this.confirmationFromData.remake,     
-                        result: this.confirmationFromData.result,
-                        status: this.data.actionStatusValue
+                        result: 0, //0通过-1不通过 1取消,
+                        status: 4 //  1风控审核 2付款前置收费项收款审核 4 待放款机构审核 5 付款服务费收款审核
                     }
 
                     this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
                         .then(res=>{
                             console.log("放款机构审核结果确认", res);
+                            if(res.code == 0){
+                                this.$notify({
+                                    title: '成功',
+                                    message: '确认结果提交成功！',
+                                    type: 'success'
+                                });
+                            }else{
+                                this.$notify.error({
+                                    title: '失败',
+                                    message: '确认结果提交失败！'
+                                });
+                            }
+
+                            // 清除填写数据
+                            this.handleClear('loanConfirmationFromData');
+
+                            // 关闭弹窗
+                            this.handleClose();
+
+                            // 刷新父组件表格数据
+                            this.$emit('getInitData');
                         })
 
                 } else {
