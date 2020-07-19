@@ -18,7 +18,15 @@
             :model="loanConfirmationFromData" 
             :rules="loanConfirmationFromDataRules">
 
+            <el-form-item label="产品名称：" prop="name">
+                <!-- <el-link v-model="confirmationFromData.name">{{confirmationFromData.name}}</el-link> -->
+                <el-input v-model="data.productName" disabled></el-input>
+            </el-form-item>
 
+            <el-form-item label="放款机构：" prop="org">
+                <!-- <el-link v-model="confirmationFromData.org">{{confirmationFromData.org}}</el-link> -->
+                <el-input v-model="data.orgName" disabled></el-input>
+            </el-form-item>
 
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -58,8 +66,7 @@ export default {
                 return {
                     childPlanCode: "",
                     productName: "",
-                    orgName: "",
-                    actionStatusValue: 0
+                    orgName: ""
                 }
             }
         }

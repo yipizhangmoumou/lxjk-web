@@ -16,8 +16,9 @@
                         icon="el-icon-s-check"
                         type="primary"
                         @click="auditConfirmationEvent">
-                        机构审核结果确认
+                        服务定制结果审核 
                     </el-button>
+                    <!-- loanConfirmationEvent -->
                     <el-button
                         v-if="isAdminRole"
                         size="small"
@@ -30,7 +31,7 @@
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
-                        @click="collection"
+                        @click="receiptConfirmationEvent"
                     >收款审核</el-button>
                 </div>
             </div>
@@ -110,6 +111,12 @@
                 在列表数据处于【已申请】状态 才可以审核
          -->
         <LoanConfirmationModel  v-model="loanConfirmationData.visible" :data="loanConfirmationData.data" @getInitData="getTableData"/>
+
+        <!-- 
+            * desc:  机构放款结果确认 
+                在列表数据处于【已申请】状态 才可以审核
+         -->
+        <ReceiptConfirmationModel  v-model="receiptConfirmationata.visible" :data="receiptConfirmationata.data" @getInitData="getTableData"/>
 
         <!-- <el-dialog class="j_dailog" title="放款机构审核结果确认" :visible.sync="InstitutionalReview_show">
             <el-form :model="InstitutionalReview_form" ref="InstitutionalReview_form" :rules="rules" label-position="right" label-width="110px">
@@ -257,7 +264,10 @@ import StatusList from "components/StatusList";
 
 // 机构审核结果确认弹出窗组件
 import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
+// 放款机构放款结果确认弹出窗组件
 import LoanConfirmationModel from './executiveManagement/LoanConfirmationModel';
+// 付款项收款审核
+import ReceiptConfirmationModel from './executiveManagement/ReceiptConfirmationModel';
 
 import dateFormat from './../../unit/dataForamt'
 export default {
@@ -356,6 +366,12 @@ export default {
                 data: {}
             },
 
+            // 付款项收款审核弹窗数据
+            receiptConfirmationata: {
+                visible: false,
+                data: {}
+            },
+
 
 
 
@@ -412,7 +428,8 @@ export default {
         CopyRight,
         StatusList,
         AuditConfirmationModel,
-        LoanConfirmationModel
+        LoanConfirmationModel,
+        ReceiptConfirmationModel
     },
 
     created() {
@@ -642,7 +659,7 @@ export default {
             if( selectedData.length < 1 ){
                 this.$message({
                     showClose: true,
-                    message: '请选定需要放款审核结果确认的数据项！',
+                    message: '请选定需要机构审核结果确认的数据项！',
                     type: 'warning'
                 });
             } else if( selectedData.length > 1 ){
@@ -655,13 +672,7 @@ export default {
 
                 let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue !==0){
-                    this.$message({
-                        showClose: true,
-                        message: '当前单号已审批，请勿重复审批！',
-                        type: 'warning'
-                    });
-                }else{
+                if(actionStatusValue == 0){
                     this.auditConfirmationData.data = {
                         childPlanCode,
                         productName,
@@ -669,6 +680,13 @@ export default {
                     }
 
                     this.auditConfirmationData.visible = true;
+                    
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号已审批，请勿重复审批！',
+                        type: 'warning'
+                    });    
                 }
 
 
@@ -684,7 +702,7 @@ export default {
         },
 
         /**
-         * @description: 
+         * @description: 【机构放款结果确认】按钮事件
          * @param {type} 
          * @return: 
          * @Date Changed: 
@@ -717,7 +735,7 @@ export default {
                         type: 'warning'
                     });
                 }else{
-                    this.auditConfirmationData.data = {
+                    this.loanConfirmationData.data = {
                         childPlanCode,
                         productName,
                         orgName,
@@ -734,6 +752,75 @@ export default {
 
             }            
         },
+
+        /**
+         * @description: 【付款项收款审核】按钮事件
+         * @param {type} 
+         * @return: 
+         * @Date Changed: 
+         */ 
+        receiptConfirmationEvent(){
+
+
+            console.log( "选定的数据：", this.$refs.tableData.selection );
+
+            let selectedData = this.$refs.tableData.selection;
+
+            if( selectedData.length < 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '请选定需要付款项收款审核的数据项！',
+                    type: 'warning'
+                });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量审核！',
+                    type: 'warning'
+                });
+            } else{
+
+                let {childPlanCode, productName, finalAmount, qzChargeItem, servChargeItem, actionStatusValue } = selectedData[0];
+
+                if(actionStatusValue == 2){
+
+                    this.receiptConfirmationata.data = {
+                        childPlanCode,
+                        actionStatusValue,
+                        productName, // 产品名称
+                        finalAmount,           // 申请额度
+                        qzChargeItem,            // 前置付款项
+                        servChargeItem            // 服务费
+                        
+                    }
+
+                    this.receiptConfirmationata.visible = true;
+                    
+                }else if( actionStatusValue < 2 ){
+
+                    this.$message({
+                        showClose: true,
+                        message: '请进行放款机构审核结果确认操作！',
+                        type: 'warning'
+                    });
+
+                }else{
+
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号已审批，请勿重复审批！',
+                        type: 'warning'
+                    });
+                }
+
+
+                
+
+                
+
+            } 
+
+        },       
 
 
         InstitutionalReview(){
