@@ -34,8 +34,8 @@
             <el-table-column prop="meetProductNum" align="center" label="评估适用产品"></el-table-column>
             <el-table-column prop="selectProductNum" align="center" label="客户选定产品"></el-table-column>
             <el-table-column align="center" label="融资服务申请">
-              <template slot-scope="scope">
-                  <div style="color:#027DB4" @click="goEvaluationDetails(scope.row.financingPlanId)">查看申请详情</div>
+              <template >
+                  <div style="color:#027DB4" @click="goEvaluationDetails()">查看申请详情</div>
               </template>
             </el-table-column>
           </el-table>
@@ -833,6 +833,7 @@ export default {
     },
     methods: {
       async changeData(datas){
+        this.numAll=0;
         this.industryTypeArr = await this.getIndustryTree();
         this.areaTree = await this.getAreaTree();
         this.baseData = [datas.financingPlan];//基本信息
@@ -848,6 +849,7 @@ export default {
             })
           }
           console.log(datas);
+          this.applyId = datas.applyId;
           this.stepActive = parseInt(datas.status.slice(-1));
           this.planCode = datas.planCode||'';
           this.custServName = datas.custServName||'';
@@ -873,6 +875,9 @@ export default {
           this.frontIdCardBase64= datas.enterpriseInfo.frontIdCardBase64||null
           this.reverseIdCardBase64= datas.enterpriseInfo.reverseIdCardBase64||null
           this.businessLicenseBase64= datas.enterpriseInfo.businessLicenseBase64||null
+          this.fileList = [];
+          this.fileListB = [];
+          this.fileListC = [];
           this.frontIdCardBase64!=null?this.fileList.push({url:'data:image/png;base64,'+this.frontIdCardBase64}):this.fileList=[];
           this.reverseIdCardBase64!=null?this.fileListB.push({url:'data:image/png;base64,'+this.reverseIdCardBase64}):this.fileListB=[];
           this.businessLicenseBase64!=null?this.fileListC.push({url:'data:image/png;base64,'+this.businessLicenseBase64}):this.fileListC=[];
@@ -1056,12 +1061,18 @@ export default {
                       type:'success',
                       message:'保存成功'
                   })
+                  this.initData();
+                  this.showwrite = false;
               }else{
                   console.log(res);
               }
           })
           } else {
             console.log('error submit!!');
+                  this.$message({
+                      type:'warning',
+                      message:'请完整必填项'
+                  })
             return false;
           }
         });
@@ -1160,7 +1171,9 @@ export default {
          * @param {string} id 评估id
          * @Date Changed: 2020-07-13
          */
-        goEvaluationDetails(id){
+        goEvaluationDetails(){
+            let id = this.applyId;
+            console.log(id);
             console.log( "===>", id );
             this.$router.push({
                 path: `/evaluationDetails/${id}`

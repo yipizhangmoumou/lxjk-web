@@ -35,7 +35,7 @@
                       <el-table-column label="操作" width="150">
             <template>
               <div class="cz">
-                <div @click="goEvaluationDetails">点击查看</div>
+                <div @click="goEvaluationDetails()">点击查看</div>
               </div>
             </template>
           </el-table-column>
@@ -454,6 +454,7 @@ export default {
       businessLicenseBase64:'',
       frontIdCardBase64:'',
       reverseIdCardBase64:'',
+      applyId:'',
     }
   },
     created:async function(){
@@ -491,11 +492,13 @@ export default {
         console.log(res);
         if(res.code == 0){
           let datas =res.data;
+          this.applyId = datas.applyId;
           this.baseData = [datas.financingPlan];//基本信息
           this.planCode = datas.planCode;
           this.custServName = datas.custServName;
           this.actionData = datas.childPlanList;
           this.createTime = datas.createTime;
+          this.stepActive = datas.status;
             this.enterpriseInfo = datas.enterpriseInfo||{};
             this.enterpriseAssetInfo= datas.enterpriseAssetInfo||{};
             this.financialInformation = datas.financialInformation||{};
@@ -609,7 +612,10 @@ export default {
       this.showAssurance = true;
     },
     goEvaluationDetails(){
-        this.$router.push("/evaluationDetails")
+      let id = this.applyId;
+        this.$router.push({
+          path: `/evaluationDetails/${id}`
+        })
     }
   },
 
