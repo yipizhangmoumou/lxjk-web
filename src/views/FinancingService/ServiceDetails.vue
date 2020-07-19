@@ -17,13 +17,12 @@
       <div class="details-most">
         <div class="most-div pd20">
           <h5 class="h5s"><i class="el-icon-collection-tag" type="primary"></i>基本信息</h5>
-          <el-table
+          <div class="table">
+                      <el-table
             ref="userTable"
             :data="baseData"
-            tooltip-effect="dark"
             style="width: 100%"
-            :stripe="true"
-            :border="true"
+            border
           >
             <el-table-column label="用户ID" prop="userPkId"></el-table-column>
             <el-table-column prop="contactPerson" label="联系人"></el-table-column>
@@ -40,8 +39,10 @@
             </template>
           </el-table-column>
           </el-table>
+          </div>
+
         </div>
-        <div class="most-div pd20">
+        <div class="most-div pd20 table">
           <h5><i class="el-icon-collection-tag" type="primary"></i>融资执行方案</h5>
           <el-table
             ref="userTable"
@@ -311,9 +312,9 @@ export default {
 
 
       stepArr:[
-        {name:'融资顾问服务',time:'2020.07.10 15:43:23'},
-        {name:'服务定制',time:'2020.07.10 15:43:23'},
-        {name:'服务执行',time:'执行中'},
+        {name:'融资顾问服务',time:''},
+        {name:'服务定制',time:''},
+        {name:'服务执行',time:''},
         {name:'完成',time:''},
       ],
       stepActive: 1,
@@ -692,7 +693,10 @@ export default {
     height 100%    
 .form-margin
   padding 0 20px
-
+.table
+  >>> thead
+      th
+          background-color #f0f2f5 !important
 </style>
 <style lang="stylus">
 .j_dialog .el-dialog__header

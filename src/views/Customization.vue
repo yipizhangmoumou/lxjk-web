@@ -53,7 +53,7 @@
         </div>
         <div class="table">
           <el-table :data="childPlanList" border style="width: 100%" align-center>
-            <el-table-column type="index" align="center" label="序号"></el-table-column>
+            <el-table-column type="index" align="center" label="序号" width="100"></el-table-column>
             <el-table-column prop="productName" align="center" label="产品名称"></el-table-column>
             <el-table-column prop="productTypeName" align="center" label="产品类型"></el-table-column>
             <el-table-column prop="orgName" align="center" label="放款机构"></el-table-column>

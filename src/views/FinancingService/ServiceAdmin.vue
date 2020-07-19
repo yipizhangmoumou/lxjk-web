@@ -35,16 +35,16 @@
                 :stripe="true"
                 :border="true">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column label="服务单号" prop="financingCode"></el-table-column>
+                <el-table-column label="服务单号" prop="financingCode" min-width="150"></el-table-column>
                 <!-- <el-table-column label="申请时间" prop="name"></el-table-column> -->
-                <el-table-column label="用户账号" prop="userAccount"></el-table-column>
+                <el-table-column label="用户账号" prop="userAccount" width="150"></el-table-column>
                 <el-table-column label="联系人" prop="contactPerson"></el-table-column>
                 <el-table-column label="电话" prop="contact"></el-table-column>
-                <el-table-column label="企业名称" prop="enterpriseName"></el-table-column>
+                <el-table-column label="企业名称" prop="enterpriseName" min-width="150"></el-table-column>
                 <el-table-column label="申请额度" prop="financingAmount"></el-table-column>
                 <el-table-column label="适用产品" prop="meetProductNum"></el-table-column>
                 <el-table-column label="选择产品" prop="selectProductNum"></el-table-column>
-                <el-table-column label="申请时间" prop="createTime"></el-table-column>
+                <el-table-column label="申请时间" prop="createTime" width="150"></el-table-column>
                 <el-table-column label="融资顾问" prop="custServName"></el-table-column>
                 <el-table-column label="状态" prop="actionStatus"></el-table-column>
 
