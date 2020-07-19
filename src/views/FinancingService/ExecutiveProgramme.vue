@@ -10,14 +10,17 @@
                 <h5>数据列表</h5>
                 <div class="table-btn">
                     <el-button size="small" icon="el-icon-upload2">导出</el-button>
-                    <el-button
+
+                    <!-- <el-button
                         v-if="isAdminRole"
                         size="small"
                         icon="el-icon-s-check"
                         type="primary"
                         @click="auditConfirmationEvent">
                         服务定制结果审核 
-                    </el-button>
+                    </el-button> -->
+
+
                     <!-- loanConfirmationEvent -->
                     <el-button
                         v-if="isAdminRole"
@@ -105,7 +108,7 @@
             * desc:  机构审核结果确认 
                 在列表数据处于【已申请】状态 才可以审核
          -->
-        <AuditConfirmationModel  v-model="auditConfirmationData.visible" :data="auditConfirmationData.data" @getInitData="getTableData"/>
+        <!-- <AuditConfirmationModel  v-model="auditConfirmationData.visible" :data="auditConfirmationData.data" @getInitData="getTableData"/> -->
 
         <!-- 
             * desc:  机构放款结果确认 
@@ -127,8 +130,8 @@ import CopyRight from "components/CopyRight";
 import SearchSix from "components/Search/SearchSix";
 import StatusList from "components/StatusList";
 
-// 机构审核结果确认弹出窗组件
-import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
+// // 机构审核结果确认弹出窗组件
+// import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
 
 // 放款机构放款结果确认弹出窗组件
 import LoanConfirmationModel from './executiveManagement/LoanConfirmationModel';
@@ -222,11 +225,11 @@ export default {
                 "7": "服务取消"
             },
 
-            // 机构审核结果弹窗数据
-            auditConfirmationData: {
-                visible: false,
-                data: {}
-            },
+            // // 机构审核结果弹窗数据
+            // auditConfirmationData: {
+            //     visible: false,
+            //     data: {}
+            // },
 
             // 机构放款结果弹窗数据
             loanConfirmationData: {
@@ -295,7 +298,7 @@ export default {
         SearchSix,
         CopyRight,
         StatusList,
-        AuditConfirmationModel,
+        // AuditConfirmationModel,
         LoanConfirmationModel,
         ReceiptConfirmationModel
     },
@@ -519,55 +522,55 @@ export default {
          * @description: 【机构审核结果确认】按钮事件
          * @Date Changed: 2020-07-19
          */
-        auditConfirmationEvent(){
-            console.log( "选定的数据：", this.$refs.tableData.selection );
+        // auditConfirmationEvent(){
+        //     console.log( "选定的数据：", this.$refs.tableData.selection );
 
-            let selectedData = this.$refs.tableData.selection;
+        //     let selectedData = this.$refs.tableData.selection;
 
-            if( selectedData.length < 1 ){
-                this.$message({
-                    showClose: true,
-                    message: '请选定需要机构审核结果确认的数据项！',
-                    type: 'warning'
-                });
-            } else if( selectedData.length > 1 ){
-                this.$message({
-                    showClose: true,
-                    message: '目前不支持批量审核！',
-                    type: 'warning'
-                });
-            } else{
+        //     if( selectedData.length < 1 ){
+        //         this.$message({
+        //             showClose: true,
+        //             message: '请选定需要机构审核结果确认的数据项！',
+        //             type: 'warning'
+        //         });
+        //     } else if( selectedData.length > 1 ){
+        //         this.$message({
+        //             showClose: true,
+        //             message: '目前不支持批量审核！',
+        //             type: 'warning'
+        //         });
+        //     } else{
 
-                let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
+        //         let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue == 0){
-                    this.auditConfirmationData.data = {
-                        childPlanCode,
-                        productName,
-                        orgName,
-                    }
+        //         if(actionStatusValue == 0){
+        //             this.auditConfirmationData.data = {
+        //                 childPlanCode,
+        //                 productName,
+        //                 orgName,
+        //             }
 
-                    this.auditConfirmationData.visible = true;
+        //             this.auditConfirmationData.visible = true;
                     
-                }else{
-                    this.$message({
-                        showClose: true,
-                        message: '当前单号已审批，请勿重复审批！',
-                        type: 'warning'
-                    });    
-                }
+        //         }else{
+        //             this.$message({
+        //                 showClose: true,
+        //                 message: '当前单号已审批，请勿重复审批！',
+        //                 type: 'warning'
+        //             });    
+        //         }
 
 
                 
 
                 
 
-            }
+        //     }
 
 
 
             
-        },
+        // },
 
         /**
          * @description: 【机构放款结果确认】按钮事件
@@ -583,7 +586,7 @@ export default {
             if( selectedData.length < 1 ){
                 this.$message({
                     showClose: true,
-                    message: '请选定需要放款审核结果确认的数据项！',
+                    message: '请选定需要【放款审核结果确认】操作的数据项！',
                     type: 'warning'
                 });
             } else if( selectedData.length > 1 ){
@@ -596,7 +599,7 @@ export default {
 
                 let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue == 4){  
+                if(actionStatusValue == 3){  
                     
 
                     this.loanConfirmationData.data = {
@@ -607,7 +610,7 @@ export default {
 
                     this.loanConfirmationData.visible = true;
                     
-                }else if(actionStatusValue >= 4 ){  // 机构放款结果已审批
+                }else if(actionStatusValue >= 3 ){  // 【机构放款结果确认】已审批
                     
                     this.$message({
                         showClose: true,
@@ -615,16 +618,16 @@ export default {
                         type: 'warning'
                     });
                     
-                }else if( actionStatusValue == 2 ){
+                }else if( actionStatusValue == 2 ){  // 【付款项收款审核】
                     this.$message({
                         showClose: true,
-                        message: '请进行【付款项收款审核】操作！',
+                        message: '请等待【付款项收款审核】操作！',
                         type: 'warning'
                     });    
-                }else if(actionStatusValue == 0){
+                }else if(actionStatusValue == 1){   // 【风控审核】
                     this.$message({
                         showClose: true,
-                        message: '请进行【服务定制结果审核】操作！',
+                        message: '请等待【风控审核】操作！',
                         type: 'warning'
                     });
                 }
@@ -694,16 +697,16 @@ export default {
 
                     this.receiptConfirmationata.visible = true;
 
-                } else if(actionStatusValue == 0){
+                } else if(actionStatusValue == 1){
                     this.$message({
                         showClose: true,
-                        message: '请进行【机构审核结果确认】操作！',
+                        message: '请等待【风险审核】操作！',
                         type: 'warning'
                     });   
                 } else if(actionStatusValue == 4){
                     this.$message({
                         showClose: true,
-                        message: '请进行【放款机构审核结果确认】操作！',
+                        message: '请等待【放款机构审核结果确认】操作！',
                         type: 'warning'
                     }); 
                 }else{
@@ -798,7 +801,7 @@ export default {
     copyRight()
 </style>
 <style scoped>
-.j_dailog .el-dialog{
+/* .j_dailog .el-dialog{
     width:600px
 }
 .j_dailog .el-dialog__title{
@@ -817,5 +820,5 @@ export default {
 .el-dialog__footer{
     padding: 16px;
     border-top: 1px solid #e5e5e5;
-}
+} */
 </style>

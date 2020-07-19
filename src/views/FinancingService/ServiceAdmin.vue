@@ -9,14 +9,18 @@
             <h5>数据列表</h5>
             <div class="table-btn">
                 <el-button size="small" icon="el-icon-upload2">导出</el-button>
-                <!-- <el-button
+                <!-- 一、风控审核 -->
+                <el-button
+                    v-if="isAdminRole"
                     size="small"
                     icon="el-icon-s-check"
                     type="primary"
-                >
-                    融资服务审核
-                </el-button> -->
-                <!--  -->
+                    @click="auditConfirmationEvent">
+                    风控审核 
+                </el-button>
+
+
+                <!-- 二 、分配融资顾问 -->
                 <el-button
                     size="small"
                     icon="el-icon-s-custom"
@@ -46,6 +50,7 @@
                 <el-table-column label="选择产品" prop="selectProductNum"></el-table-column>
                 <el-table-column label="申请时间" prop="createTime" width="150"></el-table-column>
                 <el-table-column label="融资顾问" prop="custServName"></el-table-column>
+                <el-table-column label="风控审核状态" prop="flow"></el-table-column>
                 <el-table-column label="状态" prop="actionStatus"></el-table-column>
 
                 <el-table-column prop="address" label="操作" width="150">
@@ -110,6 +115,11 @@
             </div>
         </el-dialog>
 
+        <!-- 
+            * desc:  风控审核弹出窗
+         -->
+        <AuditConfirmationModel  v-model="auditConfirmationData.visible" :data="auditConfirmationData.data" @getInitData="getTableData"/>
+
         </div>
         <CopyRight />
     </div>
@@ -120,12 +130,19 @@ import CopyRight from "components/CopyRight";
 import SearchFive from "components/Search/SearchFive";
 import StatusList from "components/StatusList";
 
+// 风控审核弹出窗组件
+import AuditConfirmationModel from './executiveManagement/AuditConfirmationModel';
+
 import dateFormat from './../../unit/dataForamt'
 
 export default {
     name: "ServiceAdmin",
     data() {
         return {
+            // 用户权限
+            isAdminRole: false,
+            isReceivables: false,
+
             // 融资服务管理数据统计
             serviceCount: [
                 {
@@ -172,6 +189,12 @@ export default {
                 "4": "服务完成"
             },
 
+            // 机构审核结果弹窗数据
+            auditConfirmationData: {
+                visible: false,
+                data: {}
+            },
+
 
             isShowAdvisor: false,   // 分配融资顾问弹窗
             // 融资顾问列表
@@ -205,10 +228,17 @@ export default {
     components: {
         SearchFive,
         CopyRight,
-        StatusList
+        StatusList,
+        AuditConfirmationModel
     },
 
     created() {
+        /**
+         * @description: 判断用户当前权限
+         * @param {string} loginUserInfo 用户信息
+         * @Date Changed: 2020-07-18
+         */
+        this.getUseRole(this.loginUserInfo);
 
 
         // 数据加载-待融资顾问服务数量，待服务定制数量，待服务执行数量，已完成数量
@@ -219,6 +249,26 @@ export default {
     },
 
     methods: {
+        /**
+         * @description: 根据用户信息【userInfo】中得role属性判断当前用户权限
+         * @param {type} userInfo 用户信息
+         * @Date Changed: 2020-07-19
+         */
+        getUseRole(loginUserInfo){
+            let {role} = loginUserInfo;
+            switch(role){
+                case 'platform_cust_ser':  // admin  放款机构审核确认  放款机构审核确认
+                    this.isAdminRole = true;
+                    break;
+                case 'receivables': // 付款财务审核确认
+                    this.isReceivables = true;
+                    break;
+                default:
+                    this.isAdminRole = false;
+                    this.isReceivables = false;
+            }
+        },
+
         /**
          * @description: 初始数据加载：待融资顾问服务数量，待服务定制数量，待服务执行数量，已完成数量
          * @Date Changed: 2020-07-12
@@ -296,7 +346,9 @@ export default {
                             createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),// 申请时间
                             custServName: !item.custServName ? "-" :  item.custServName,// 融资顾问
                             isCustomize: !item.custServName ? false :  true,// 定制服务按钮显示/隐藏
-                            actionStatus: item.actionStatus == null ? "-" : this.statusObj[item.actionStatus] // 状态
+                            actionStatus: item.actionStatus == null ? "-" : this.statusObj[item.actionStatus], // 状态
+                            flow: item.flow === null ? "-" : item.flow === 0 ? "-" : item.flow === 1 ? "待风控审核" : "风控审核完成", // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
+                            flowValue: item.flow, // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
                         }
                     }) : [];
 
@@ -411,6 +463,51 @@ export default {
             // 更新表格数据
             this.getTableData();
         },
+
+        /**
+         * @description: 【风控审核】按钮事件
+         * @Date Changed: 2020-07-19
+         */
+        auditConfirmationEvent(){
+            // console.log( "风控审核选定的数据：", this.$refs.multipleTable.selection );
+
+            let selectedData = this.$refs.multipleTable.selection;
+
+            if( selectedData.length < 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '请选定需要【风控审核】的数据项！',
+                    type: 'warning'
+                });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量审核！',
+                    type: 'warning'
+                });
+            } else{
+
+                let {financingCode, enterpriseName, flowValue } = selectedData[0];
+
+                if(flowValue === 1){
+                    this.auditConfirmationData.data = {
+                        financingCode,
+                        enterpriseName
+                    }
+
+                    this.auditConfirmationData.visible = true;
+                    
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号状态不可进行【风控审核】操作！',
+                        type: 'warning'
+                    });    
+                }
+            }
+            
+        },
+
 
         /**
          * @description: 初始数据加载：获取融资顾问列表

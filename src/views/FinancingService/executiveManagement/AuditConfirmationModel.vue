@@ -6,7 +6,7 @@
     <!---->
     <el-dialog
         id="auditConfirmationModel"
-        title="服务定制结果审核"
+        title="风控审核"
         :visible.sync="visible"
         width="600px"
         @open="auditConfirmationOpenEvent"
@@ -18,20 +18,24 @@
             :model="confirmationFromData" 
             :rules="auditConfirmationFromDataRules">
 
-            <el-form-item label="产品名称：" prop="name">
-                <!-- <el-link v-model="confirmationFromData.name">{{confirmationFromData.name}}</el-link> -->
+            <el-form-item label="公司名称：" prop="enterpriseName">
+                <el-input v-model="data.enterpriseName" disabled></el-input>
+            </el-form-item>
+
+            <!-- <el-form-item label="产品名称：" prop="name">
                 <el-input v-model="data.productName" disabled></el-input>
             </el-form-item>
 
             <el-form-item label="放款机构：" prop="org">
-                <!-- <el-link v-model="confirmationFromData.org">{{confirmationFromData.org}}</el-link> -->
                 <el-input v-model="data.orgName" disabled></el-input>
-            </el-form-item>
+            </el-form-item> -->
 
              <el-form-item label="审核结果：" prop="result">
                 <el-radio-group v-model="confirmationFromData.result">
                     <el-radio :label="0">通过</el-radio>
-                    <el-radio :label="1">未通过</el-radio>
+                    <el-radio :label="1">未通过,重新定制</el-radio>
+                    <el-radio :label="2">未通过,服务取消</el-radio>
+
                 </el-radio-group>
             </el-form-item>
 
@@ -81,9 +85,8 @@ export default {
             type: Object,
             default () {
                 return {
-                    childPlanCode: "",
-                    productName: "",
-                    orgName: ""
+                    financingCode: "",
+                    enterpriseName: ""
                 }
             }
         }
@@ -102,18 +105,6 @@ export default {
             auditConfirmationFromDataRules: {
                 
             },
-
-            // 状态反向
-            actionStatusSetObj: {
-                "申请中": 0,
-                "待风控审核": 1,
-                "待付款前置收费项": 2,
-                "待放款机构审核": 3,
-                "机构签约放款": 4,
-                "待付款服务费": 5,
-                "服务完成": 6,
-                "服务取消": 7
-            },
      
         }
     },
@@ -125,7 +116,7 @@ export default {
          * @Date Changed: 
          */
         auditConfirmationOpenEvent(){
-            console.log("机构审核结果确认弹出窗被打开了~~~");
+            console.log("风控审核弹出窗被打开了~~~");
         },
 
         /**
@@ -154,19 +145,18 @@ export default {
         handleSave (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log("ajax数据：",this.data);
-                    console.log("表单数据：",this.confirmationFromData);
 
                     let requiredParams = {
-                        actionCode: this.data.childPlanCode,
+                        financingCode: this.data.financingCode,
                         auditDesc: this.confirmationFromData.remake,     
-                        result: this.confirmationFromData.result,
-                        status: 1           // 1风控审核
+                        result: this.confirmationFromData.result
                     }
 
-                    this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
+                    console.log( "提交的数据：", requiredParams );
+
+                    this.$axios.post("/api/mgm/financingPlan/riskAudit",requiredParams)
                         .then(res=>{
-                            console.log("放款机构审核结果确认", res);
+                            console.log("风控审核结果确认", res);
                             if(res.code == 0){
                                 this.$notify({
                                     title: '成功',

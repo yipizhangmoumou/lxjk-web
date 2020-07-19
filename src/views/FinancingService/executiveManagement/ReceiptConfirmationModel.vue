@@ -13,8 +13,8 @@
         :before-close="handleClose">
         <el-form 
             ref="receiptConfirmationFromData" 
-            label-position="left"
-            label-width="100px"
+            label-position="right"
+            label-width="120px"
             :model="receiptConfirmationFromData" 
             :rules="receiptConfirmationFromDataRules">
 
@@ -35,12 +35,26 @@
             </el-form-item>
 
             <el-form-item label="审核收款项：" prop="reviewCollection" >
-                <el-radio v-model="receiptConfirmationFromData.reviewCollection" label="1" v-if="data.actionStatusValue == '2'">前置付款项</el-radio>
-                <el-radio v-model="receiptConfirmationFromData.reviewCollection" label="2" v-if="data.actionStatusValue == '5'">服务费</el-radio>
+                <el-radio 
+                    v-model="receiptConfirmationFromData.reviewCollection" 
+                    label="1" 
+                    v-if="data.actionStatusValue == '2'">
+                    前置付款项
+                    </el-radio>
+                <el-radio 
+                    v-model="receiptConfirmationFromData.reviewCollection" 
+                    label="2" 
+                    v-if="data.actionStatusValue == '5'">
+                    服务费
+                </el-radio>
             </el-form-item>
 
-            <el-form-item label="审核收款项：" prop="result">
-                <el-radio v-model="receiptConfirmationFromData.result" label="1">已放款</el-radio>
+            <el-form-item label="收款结果审核：" prop="result">
+                <el-radio 
+                    v-model="receiptConfirmationFromData.result" 
+                    label="1">
+                    已放款
+                </el-radio>
             </el-form-item>
 
         </el-form>
@@ -103,18 +117,6 @@ export default {
             receiptConfirmationFromDataRules: {
                 
             },
-
-            // 状态反向
-            actionStatusSetObj: {
-                "申请中": 0,
-                "待风控审核": 1,
-                "待付款前置收费项": 2,
-                "待放款机构审核": 3,
-                "机构签约放款": 4,
-                "待付款服务费": 5,
-                "服务完成": 6,
-                "服务取消": 7
-            },
      
         }
     },
@@ -126,8 +128,11 @@ export default {
          * @Date Changed: 
          */
         receiptConfirmationOpenEvent(){
-            console.log("付款项收款审核弹出窗被打开了~~~");
-            console.log( this.data.actionStatusValue == 2 );
+            // console.log("付款项收款审核弹出窗被打开了~~~");
+            
+            /**
+             * 根据当前审批节点状态进行【审核收款项】的值选定
+            */
             this.receiptConfirmationFromData.reviewCollection = this.data.actionStatusValue == 2 ? "1" : "2";
 
         },
@@ -216,6 +221,12 @@ export default {
                 padding 20px 40px
                 max-height 300px
                 overflow-y: auto
+
+                .el-form-item
+                    .el-radio__label
+                        padding-left 0px
+                        color #666
+
 
             .el-dialog__footer
                 border-top 1px solid #e5e5e5
