@@ -9,21 +9,6 @@
         :before-close="handleClose">
         <el-form ref="proCustData" :model="proCustData" label-position="" :rules="proCustDataRules">
             <div class="form-line">
-                <!-- <el-form-item label="产品名称：" prop="name">
-                    <el-input 
-                        disabled
-                        v-model="proCustData.name" 
-                        placeholder="请输产品名称">
-                    </el-input>
-                </el-form-item>
-
-                <el-form-item label="放款机构：" prop="lender">
-                    <el-input 
-                        disabled
-                        v-model="proCustData.lender" 
-                        placeholder="请输放款机构">
-                    </el-input>
-                </el-form-item> -->
                 <el-form-item label="产品名称：">
                     <el-input 
                         disabled
@@ -51,7 +36,7 @@
                 </el-form-item>
         
                 <el-form-item label="贷款利息：" prop="interestRate">
-                    <samp style="font-size: 8px">{{ data.loanInterest }}</samp>
+                    <samp class="laebl-info">{{ data.loanInterest }}</samp>
                     <el-input 
                         v-model.number="proCustData.interestRate" 
                         placeholder="请输入贷款利息数字">
@@ -73,7 +58,7 @@
                 </el-form-item>
 
                 <el-form-item label="申请额度：" prop="finalAmount">
-                    <samp style="font-size: 8px">{{ data.amountRegin }}</samp>
+                    <samp class="laebl-info">{{ data.amountRegin }}</samp>
                     <el-input 
                         v-model.number="proCustData.finalAmount" 
                         placeholder="请输入申请额度数字">
@@ -82,7 +67,7 @@
                 </el-form-item>
 
                 <el-form-item label="前置收费：" prop="qzCharge">
-                    <samp style="font-size: 8px">(0即是无收费项)</samp>
+                    <samp class="laebl-info">(0即是无收费项)</samp>
                     <el-input 
                         class="input-with-select"
                         v-model.number="proCustData.qzCharge" 
@@ -98,7 +83,7 @@
                 </el-form-item>
 
                 <el-form-item label="服务收费项：" prop="servCharge">
-                    <samp style="font-size: 8px">(元或%，百分比为申请额度%)</samp>
+                    <samp class="laebl-info">(元或%，百分比为申请额度%)</samp>
                     <el-input 
                         class="input-with-select"
                         v-model.number="proCustData.servCharge" 
@@ -445,11 +430,17 @@ export default {
                         width: 100%;
                         margin: 0 auto;
                         .el-form-item
-                            width 240px
+                            width 260px
                             /deep/ .el-form-item__label 
                                         padding 0
                             /deep/ .el-form-item__content
                                         margin 0 !important
+                                        > .laebl-info
+                                            font-size 8px
+                                            display block
+                                            white-space: nowrap
+                                            overflow hidden
+                                            text-overflow: ellipsis;
                                         > .el-select
                                             width 100%
                                         .input-with-select
@@ -462,7 +453,7 @@ export default {
                         width: 100%
                         .el-form-item
                             box-sizing border-box
-                            padding 0 20px
+                            padding 0 10px
                             width: 100%
                             .el-textarea__inner
                                 min-height 100px !important

@@ -35,7 +35,7 @@
                 </el-form-item>
         
                 <el-form-item label="贷款利息：" prop="interestRate">
-                    <samp style="font-size: 10px">{{ data.interestRateRegion }}</samp>
+                    <samp class="laebl-info">{{ data.interestRateRegion }}</samp>
                     <el-input 
                         v-model.number="proEditData.interestRate" 
                         placeholder="请输入贷款利息数字">
@@ -56,14 +56,14 @@
                 <el-form-item 
                     label="申请额度："
                     prop="applySalary">
-                    <samp style="font-size: 10px">{{ data.finalAmountRegion }}</samp>
+                    <samp  class="laebl-info">{{ data.finalAmountRegion }}</samp>
                     <el-input v-model.number="proEditData.finalAmount" placeholder="请输入申请额度数字">
                         <i slot="suffix" class="unit"  style="font-size: 18px">万</i>
                     </el-input>
                 </el-form-item>
 
                 <el-form-item label="前置收费：" prop="beforeToll">
-                    <samp style="font-size: 10px">{{ data.qzChargeItemRate }}</samp>
+                    <samp  class="laebl-info">{{ data.qzChargeItemRate }}</samp>
                     <el-input placeholder="请输入数字" v-model.number="proEditData.qzCharge" class="input-with-select">
                         <el-select v-model="beforeTollUnit" slot="append" placeholder="请选择">
                             <el-option label="元" value="元"></el-option>
@@ -73,7 +73,7 @@
                 </el-form-item>
 
                 <el-form-item label="服务收费项：" prop="serverToll">
-                    <samp style="font-size: 10px">{{ data.servChargeItemRate }}</samp>
+                    <samp  class="laebl-info">{{ data.servChargeItemRate }}</samp>
                     <el-input placeholder="请输入数字" v-model.number="proEditData.servCharge" class="input-with-select">
                         <el-select v-model="serverTollUnit" slot="append" placeholder="请选择">
                             <el-option label="元" value="元"></el-option>
@@ -440,11 +440,17 @@ export default {
                         flex-wrap: wrap
                         justify-content space-around
                         .el-form-item
-                            width 240px
+                            width 260px
                             /deep/ .el-form-item__label 
                                         padding 0
                             /deep/ .el-form-item__content
                                         margin 0 !important
+                                        > .laebl-info
+                                            font-size 8px
+                                            display block
+                                            white-space: nowrap
+                                            overflow hidden
+                                            text-overflow: ellipsis;
                                         > .el-select
                                             width: 100%
                                         .input-with-select
@@ -456,12 +462,12 @@ export default {
                         &:after
                             display block
                             content: ""
-                            width 240px
+                            width 260px
                     .textare                
                         width: 100%
                         .el-form-item
                             box-sizing border-box
-                            padding 0 20px
+                            padding 0 10px
                             width: 100%
                             .el-textarea__inner
                                 min-height 100px !important
