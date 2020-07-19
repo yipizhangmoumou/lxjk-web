@@ -163,19 +163,17 @@ export default {
         handleSave (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log("ajax数据：",this.data);
-                    console.log("表单数据：",this.receiptConfirmationFromData);
 
                     let requiredParams = {
                         actionCode: this.data.childPlanCode,  
                         result: 0,  // 0通过-1不通过 1取消
                         status: this.data.actionStatusValue ==  2 ? 2 : 5     // 2付款前置收费项收款审核  5 付款服务费收款审核
                     }
-                    console.log("提交参数：", requiredParams);
+                    // console.log("提交参数：", requiredParams);
 
                     this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
                         .then(res=>{
-                            console.log("付款项收款审核", res);
+                            // console.log("付款项收款审核", res);
 
                             if(res.code == 0){
                                 this.$notify({

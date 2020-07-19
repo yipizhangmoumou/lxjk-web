@@ -109,7 +109,7 @@ export default {
          * @Date Changed: 
          */
         loanConfirmationOpenEvent(){
-            console.log("机构放款结果确认弹出窗被打开了~~~");
+            // console.log("机构放款结果确认弹出窗被打开了~~~");
         },
 
         /**
@@ -138,8 +138,6 @@ export default {
         handleSave (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log("ajax数据：",this.data);
-                    console.log("表单数据：",this.confirmationFromData);
 
                     let requiredParams = {
                         actionCode: this.data.childPlanCode,
@@ -149,7 +147,7 @@ export default {
 
                     this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
                         .then(res=>{
-                            console.log("放款机构审核结果确认", res);
+                            // console.log("放款机构审核结果确认", res);
                             if(res.code == 0){
                                 this.$notify({
                                     title: '成功',

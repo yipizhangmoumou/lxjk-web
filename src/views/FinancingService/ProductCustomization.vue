@@ -265,7 +265,7 @@ export default {
             this.initData.activeIdx = key;
             switch(key){
                 case "short":
-                    console.log(  this.initData.selectedProducts.actionPlanProductListShort );
+                    // console.log(  this.initData.selectedProducts.actionPlanProductListShort );
                     // 评估适用产品 短期
                     this.initData.currentAppProList = this.initData.applicableProducts.pageMgmAssessmentApplyListShort;
 
@@ -503,7 +503,7 @@ export default {
          * @Date Changed: 2020-07-12
          */
         productCustomize(row){
-            console.log( "当前数据", row );
+            // console.log( "当前数据", row );
             let { productId, productName, orgName, loanInterest, amountRegin  } = row;
 
 
@@ -524,7 +524,7 @@ export default {
          * @Date Changed: 2020-07-12
          */  
         aleryProEdit(row){
-            console.log( row );
+            // console.log( row );
             let { childActionCode, productName, orgName, interestRateRegion, finalAmountRegion, qzChargeItemRate, servChargeItemRate} = row;
 
 

@@ -329,7 +329,7 @@ export default {
             this.$axios.post("/api/mgm/financingPlan/listData",{
                 ...data
             }).then(res=>{
-                console.log( "获取数据列表", res );
+                // console.log( "获取数据列表", res );
                 if( res.code == 0 ){
                     let data = res.data;
                     this.tableData = data != null ? data.mgmFinancingPlanList.map(item=>{
@@ -516,7 +516,7 @@ export default {
         getAssginAdvistorData(){
             this.$axios.post("/api/mgm/financingPlan/listFinancingAdviser")
                 .then(res=>{
-                    console.log( "获取融资顾问数据：", res ); 
+                    // console.log( "获取融资顾问数据：", res ); 
                     if(res.code == 0){
                         let data = res.data;
                         this.custServList = data.map(item=>{
@@ -542,7 +542,7 @@ export default {
          * @Date Changed: 
          */
         assginAdvistor(){
-            console.log( "选定的数据：", this.$refs.multipleTable.selection );
+            // console.log( "选定的数据：", this.$refs.multipleTable.selection );
             let selectedData = this.$refs.multipleTable.selection;
             
             if( selectedData.length < 1 ){
@@ -620,7 +620,7 @@ export default {
 
                     this.$axios.post("/api/mgm/financingPlan/updataFinancingAdviser",requiredParams)
                         .then(res=>{
-                            console.log( "分配融资顾问响应：", res );
+                            // console.log( "分配融资顾问响应：", res );
                             if( res.code == 0 ){
                                 this.$message({
                                     showClose: true,

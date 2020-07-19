@@ -22,14 +22,6 @@
                 <el-input v-model="data.enterpriseName" disabled></el-input>
             </el-form-item>
 
-            <!-- <el-form-item label="产品名称：" prop="name">
-                <el-input v-model="data.productName" disabled></el-input>
-            </el-form-item>
-
-            <el-form-item label="放款机构：" prop="org">
-                <el-input v-model="data.orgName" disabled></el-input>
-            </el-form-item> -->
-
              <el-form-item label="审核结果：" prop="result">
                 <el-radio-group v-model="confirmationFromData.result">
                     <el-radio :label="0">通过</el-radio>
@@ -116,7 +108,7 @@ export default {
          * @Date Changed: 
          */
         auditConfirmationOpenEvent(){
-            console.log("风控审核弹出窗被打开了~~~");
+            // console.log("风控审核弹出窗被打开了~~~");
         },
 
         /**
@@ -152,11 +144,11 @@ export default {
                         result: this.confirmationFromData.result
                     }
 
-                    console.log( "提交的数据：", requiredParams );
+                    // console.log( "提交的数据：", requiredParams );
 
                     this.$axios.post("/api/mgm/financingPlan/riskAudit",requiredParams)
                         .then(res=>{
-                            console.log("风控审核结果确认", res);
+                            // console.log("风控审核结果确认", res);
                             if(res.code == 0){
                                 this.$notify({
                                     title: '成功',
