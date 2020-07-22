@@ -62,7 +62,7 @@
               { required: true, message: '请输入用户姓名', trigger: 'blur' }
             ]"
           >
-            <el-input placeholder="请输入手机号" v-model="form.userName"></el-input>
+            <el-input placeholder="请输入用户姓名" v-model="form.userName"></el-input>
           </el-form-item>
           <el-form-item
                   v-if="!form.pkId"
@@ -72,7 +72,7 @@
               { required: true, message: '请输入用户密码', trigger: 'blur' }
             ]"
           >
-            <el-input placeholder="请输入手机号" v-model="form.password"></el-input>
+            <el-input placeholder="请输入用户密码" v-model="form.password" show-password></el-input>
           </el-form-item>
         <div class="submit-btn">
           <el-button type="primary" @click="addForm">提交</el-button>

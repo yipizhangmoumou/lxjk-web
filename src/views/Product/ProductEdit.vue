@@ -116,21 +116,31 @@
           </el-form-item>
         </div>
         <div class="form-line">
-        <el-form-item label="最小年化利率(%)" prop="loanInterestMin">
-            <el-input-number v-model="form.product.loanInterestMin" :min="0"
-                             :controls="false"></el-input-number>
-        </el-form-item>
-        <el-form-item label="最大年化利率(%)" prop="loanInterestMax">
-        <el-input-number v-model="form.product.loanInterestMax" :min="0" :max="100"
-                             :controls="false"></el-input-number>
-        </el-form-item>
+          <el-form-item label="最小年化利率(%)" prop="loanInterestMin">
+              <el-input-number v-model="form.product.loanInterestMin" :min="0"
+                               :controls="false"></el-input-number>
+          </el-form-item>
+          <el-form-item label="最大年化利率(%)" prop="loanInterestMax">
+          <el-input-number v-model="form.product.loanInterestMax" :min="0" :max="100"
+                               :controls="false"></el-input-number>
+          </el-form-item>
           <el-form-item label="前置费用" prop="chargeItems">
             <el-checkbox-group v-model="form.product.chargeItems">
               <el-checkbox v-for="(v,i) in charge_items" :label="v.key.toString()" :key="i">{{v.value}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-<!--          <div></div>-->
         </div>
+<!--        <div class="form-line">-->
+<!--          <el-form-item label="可申请总额度（万元）" prop="loanInterestMin">-->
+<!--            <el-input-number v-model="form.product.loanInterestMin" :min="0"-->
+<!--                             :controls="false"></el-input-number>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="可申请产品数" prop="loanInterestMax">-->
+<!--            <el-input-number v-model="form.product.loanInterestMax" :min="0" :max="100"-->
+<!--                             :controls="false"></el-input-number>-->
+<!--          </el-form-item>-->
+<!--          <div></div>-->
+<!--        </div>-->
       </el-form>
       <el-form ref="form1" :model="form.productApplyCondition" :rules="rules1" label-position="top">
         <h4>准入条件--企业信息</h4>
