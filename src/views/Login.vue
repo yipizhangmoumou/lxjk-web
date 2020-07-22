@@ -7,12 +7,12 @@
             <div class="login-item">
                 <h1 class="title">链信金科</h1>
                 <el-form :model="user" ref="user" class="form-item">
-                    <el-form-item prop="userAccount"
+                    <el-form-item prop="phone"
                         :rules="[
-                            { required: true, message: '请输入用户名', trigger: 'blur' }
+                            { required: true, message: '请输入手机号码', trigger: 'blur' }
                         ]"
                     >
-                        <el-input v-model="user.userAccount" placeholder="请输入用户名"></el-input>
+                        <el-input v-model="user.phone" placeholder="请输入手机号码"></el-input>
                     </el-form-item>
                     <el-form-item prop="password"
                         :rules="[
@@ -38,7 +38,7 @@
         data() {
             return {
                 user: {
-                    userAccount: '',
+                    phone: '',
                     password: ''
                 },
               loading: false
