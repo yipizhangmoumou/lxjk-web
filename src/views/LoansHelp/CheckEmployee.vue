@@ -154,8 +154,9 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
-    changStatus (id, operatorType) {
-      this.$axios.post('/api/mgm/loanAgencyUser/verify', {id,operatorType}).then(() =>{
+    changStatus (id, operatorType, deptId) {
+      console.log(id, operatorType)
+      this.$axios.post('/api/mgm/loanAgencyUser/verify', {id,operatorType, deptId}).then(() =>{
         this.$msgSuccess()
         this.getTableData()
       }).catch(err=>{
@@ -179,20 +180,22 @@ export default {
             },
             erFn() {
               console.log("失败以后做的");
-            }
+            },
+            operatorType: type
           });
           break;
         case '1':
           this.layer({
             row,
             content: "是否确定通过该员工申请，且设为管理员",
-            message: "禁用成功",
+            message: "开通管理员成功",
             suFn() {
               this.changStatus(row.pkId, type)
             },
             erFn() {
               console.log("失败以后做的");
-            }
+            },
+            operatorType: type
           });
           break;
         case '2':
@@ -205,7 +208,8 @@ export default {
             },
             erFn() {
               console.log("失败以后做的");
-            }
+            },
+            operatorType: type
           });
           break;
       }
@@ -216,25 +220,23 @@ export default {
      * @param null
      * @return null
      */
-    layer({ row, content, type, message, suFn, erFn }) {
+    layer({ row, content, type, message, suFn, erFn, operatorType }) {
       console.log(row, "一些数据");
       this.$confirm(content, "确认提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: type || "warning"
       })
-              .then(() => {
-                console.log(message)
-                // this.$message({
-                //   type: "success",
-                //   message: message
-                // });
-                suFn();
-              })
-              .catch(() => {
-                // 取消操作
-                erFn();
-              });
+      .then(() => {
+        console.log(message)
+        console.log(suFn)
+        this.changStatus(row.pkId, operatorType, row.deptId)
+      })
+      .catch((err) => {
+        console.log(err)
+        // 取消操作
+        erFn()
+      });
     }
   },
   components: {
