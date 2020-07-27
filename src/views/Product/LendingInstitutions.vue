@@ -36,10 +36,10 @@
                         <i class="el-icon-remove"></i>
                         {{row.status === 0 ? '停用' : '启用'}}
                     </div>
-                    <div @click="handleDelete(row)">
-                        <i class="el-icon-delete-solid"></i>
-                        删除
-                    </div>
+<!--                    <div @click="handleDelete(row)">-->
+<!--                        <i class="el-icon-delete-solid"></i>-->
+<!--                        删除-->
+<!--                    </div>-->
                 </div>
             </template>
           </el-table-column>
