@@ -1,49 +1,63 @@
-/**
- * @description: 机构放款结果确认弹窗
- * @Date Changed: 2020-07-18
- */
 <template>
-    <!---->
+    <!--
+        /**
+        * @description: 放款机构审核结果确认弹出窗
+        * @Date Changed: 2020-07-18
+        */
+    -->
     <el-dialog
-        id="loanConfirmationModel"
-        title="机构放款结果确认"
+        id="payResultModel"
+        title="放款机构审核结果确认"
         :visible.sync="visible"
         width="600px"
-        @open="loanConfirmationOpenEvent"
+        @open="auditConfirmationOpenEvent"
         :before-close="handleClose">
         <el-form 
-            ref="loanConfirmationFromData" 
+            ref="payResultFromData" 
             label-position="left"
             label-width="100px"
-            :model="loanConfirmationFromData" 
-            :rules="loanConfirmationFromDataRules">
+            :model="payResultFromData" 
+            :rules="payResultFromDataRules">
 
-            <el-form-item label="产品名称：" prop="name">
+            <el-form-item label="产品名称：" prop="enterpriseName">
                 <el-input v-model="data.productName" disabled></el-input>
             </el-form-item>
 
-            <el-form-item label="放款机构：" prop="org">
+            <el-form-item label="放款机构：" prop="enterpriseName">
                 <el-input v-model="data.orgName" disabled></el-input>
             </el-form-item>
 
-            <el-form-item label="放款结果：" prop="result">
-                <el-radio v-model="loanConfirmationFromData.result" label="1">已放款</el-radio>
+             <el-form-item label="审核结果：" prop="result">
+                <el-radio-group v-model="payResultFromData.result">
+                    <el-radio :label="0">通过</el-radio>
+                    <el-radio :label="1">未通过</el-radio>
+                </el-radio-group>
+            </el-form-item>
+
+            <el-form-item label="备注：" prop="remake">
+                <el-input 
+                    type="textarea" 
+                    maxlength="30" 
+                    :rows="3" 
+                    v-model="payResultFromData.remake" 
+                    placeholder="请输入内容">
+                </el-input>
             </el-form-item>
 
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button 
                 type="text" 
-                @click="handleClear('loanConfirmationFromData')">
+                @click="handleClear('payResultFromData')">
                 清除条件
             </el-button>
             <el-button 
                 type="primary" 
-                @click="handleSave('loanConfirmationFromData')">
+                @click="handleSave('payResultFromData')">
                 确 定
             </el-button>
             <el-button 
-                @click="()=>{this.handleClear('loanConfirmationFromData');this.handleClose()}">
+                @click="()=>{this.handleClear('payResultFromData');this.handleClose()}">
                 取 消
             </el-button>
         </span>
@@ -52,7 +66,7 @@
 
 <script>
 export default {
-    name: 'loanConfirmationModel',
+    name: 'auditConfirmationModel',
     model: {
         prop: 'visible',
         event: 'changeVisible'
@@ -68,7 +82,7 @@ export default {
                 return {
                     childPlanCode: "",
                     productName: "",
-                    orgName: ""
+                    orgName: "",
                 }
             }
         }
@@ -77,27 +91,13 @@ export default {
         return {
 
             // 表单数据
-            loanConfirmationFromData: {
-                result: "1",
+            payResultFromData: {
+                result: 0,
+                remake: ""
 
             },
 
-            // 表单校验
-            loanConfirmationFromDataRules: {
-                
-            },
-
-            // 状态反向
-            actionStatusSetObj: {
-                "申请中": 0,
-                "待风控审核": 1,
-                "待付款前置收费项": 2,
-                "待放款机构审核": 3,
-                "机构签约放款": 4,
-                "待付款服务费": 5,
-                "服务完成": 6,
-                "服务取消": 7
-            },
+            payResultFromDataRules: {}
      
         }
     },
@@ -108,8 +108,8 @@ export default {
          * @description: 弹出窗被打开后的回调
          * @Date Changed: 
          */
-        loanConfirmationOpenEvent(){
-            // console.log("机构放款结果确认弹出窗被打开了~~~");
+        auditConfirmationOpenEvent(){
+            // console.log("放款机构审核结果确认弹出窗被打开了~~~");
         },
 
         /**
@@ -141,13 +141,16 @@ export default {
 
                     let requiredParams = {
                         actionCode: this.data.childPlanCode,
-                        result: 0, //0通过-1不通过 1取消,
-                        status: 4 //  1风控审核 2付款前置收费项收款审核 4 待放款机构审核 5 付款服务费收款审核
+                        status: 3,
+                        auditDesc: this.payResultFromData.remake,     
+                        result: this.payResultFromData.result
                     }
+
+                    console.log( "提交的数据：", requiredParams );
 
                     this.$axios.post("/api/mgm/actionChildPlan/audit",requiredParams)
                         .then(res=>{
-                            // console.log("放款机构审核结果确认", res);
+                            // console.log("放款机构审核结果确认提交响应", res);
                             if(res.code == 0){
                                 this.$notify({
                                     title: '成功',
@@ -162,7 +165,7 @@ export default {
                             }
 
                             // 清除填写数据
-                            this.handleClear('loanConfirmationFromData');
+                            this.handleClear('payResultFromData');
 
                             // 关闭弹窗
                             this.handleClose();
@@ -183,7 +186,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-    #loanConfirmationModel
+    #payResultModel
         /deep/ .el-dialog
             /deep/ .el-dialog__header
                 background #f2f2f2

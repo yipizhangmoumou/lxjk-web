@@ -50,7 +50,7 @@
                 <el-table-column label="选择产品" prop="selectProductNum"></el-table-column>
                 <el-table-column label="申请时间" prop="createTime" width="150"></el-table-column>
                 <el-table-column label="融资顾问" prop="custServName"></el-table-column>
-                <el-table-column label="风控审核状态" prop="flow"></el-table-column>
+                <!-- <el-table-column label="风控审核状态" prop="flow"></el-table-column> -->
                 <el-table-column label="状态" prop="actionStatus"></el-table-column>
 
                 <el-table-column prop="address" label="操作" width="150">
@@ -184,9 +184,12 @@ export default {
             // 状态枚举
             statusObj: {
                 "1": "待融资顾问服务",
-                "2": "待服务定制",
-                "3": "待服务执行",
-                "4": "服务完成"
+                "2": "待服务定制", 
+                "3": "待风控审核",
+                "4": "服务中", 
+                "5": "已完成", 
+                "6": "已取消", 
+                "7": "风控审核不通过"
             },
 
             // 机构审核结果弹窗数据
@@ -256,8 +259,9 @@ export default {
          */
         getUseRole(loginUserInfo){
             let {role} = loginUserInfo;
+            console.log( "role:",role  );
             switch(role){
-                case 'platform_cust_ser':  // admin  放款机构审核确认  放款机构审核确认
+                case 'admin':  // admin  放款机构审核确认  放款机构审核确认
                     this.isAdminRole = true;
                     break;
                 case 'receivables': // 付款财务审核确认
@@ -345,10 +349,11 @@ export default {
                             selectProductNum: item.selectProductNum == null ? "-" : `${item.selectProductNum}项`,// 选择产品
                             createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),// 申请时间
                             custServName: !item.custServName ? "-" :  item.custServName,// 融资顾问
-                            isCustomize: !item.custServName ? false :  true,// 定制服务按钮显示/隐藏
+                            isCustomize: item.actionStatus == 2 || item.actionStatus == 7 ? true :  false,// 定制服务按钮显示/隐藏
                             actionStatus: item.actionStatus == null ? "-" : this.statusObj[item.actionStatus], // 状态
-                            flow: item.flow === null ? "-" : item.flow === 0 ? "-" : item.flow === 1 ? "待风控审核" : "风控审核完成", // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
-                            flowValue: item.flow, // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
+                            actionStatusVal: item.actionStatus == null ? "-" : item.actionStatus, // 状态
+                            // flow: item.flow === null ? "-" : item.flow === 0 ? "-" : item.flow === 1 ? "待风控审核" : "风控审核完成", // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
+                            // flowValue: item.flow, // 审核状态(风控是否可点：0不可点，1可点  2 风控审核完成)
                         }
                     }) : [];
 
@@ -487,9 +492,9 @@ export default {
                 });
             } else{
 
-                let {financingCode, enterpriseName, flowValue } = selectedData[0];
+                let {financingCode, enterpriseName, actionStatusVal } = selectedData[0];
 
-                if(flowValue === 1){
+                if(actionStatusVal === 3){
                     this.auditConfirmationData.data = {
                         financingCode,
                         enterpriseName

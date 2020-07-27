@@ -11,31 +11,33 @@
                 <div class="table-btn">
                     <el-button size="small" icon="el-icon-upload2">导出</el-button>
 
-                    <!-- <el-button
+                    <!-- 放款机构审核结果确认：待处理 -->
+                    <el-button
                         v-if="isAdminRole"
                         size="small"
                         icon="el-icon-s-check"
                         type="primary"
-                        @click="auditConfirmationEvent">
-                        服务定制结果审核 
-                    </el-button> -->
-
-
-                    <!-- loanConfirmationEvent -->
+                        @click="payResultModel">
+                        放款机构审核结果确认 
+                    </el-button>
+                    
                     <el-button
                         v-if="isAdminRole"
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
-                        @click="loanConfirmationEvent"
-                    >机构放款结果确认</el-button>
+                        @click="loanConfirmationEvent">
+                        机构放款结果确认
+                    </el-button>
+
                     <el-button
                         v-if="isReceivables"
                         size="small"
                         icon="el-icon-s-custom"
                         type="primary"
-                        @click="receiptConfirmationEvent"
-                    >收款审核</el-button>
+                        @click="receiptConfirmationEvent">
+                        收款审核
+                    </el-button>
                 </div>
             </div>
             <div class="table">
@@ -63,7 +65,7 @@
                     <el-table-column label="前置付款状态" prop="qzChargeItemStatus"></el-table-column>
                     <el-table-column label="服务费" prop="servChargeItem"></el-table-column>
                     <el-table-column label="服务费支付状态" prop="servChargeItemStatus"></el-table-column>
-                    <el-table-column label="方案执行时间" prop="createTime"></el-table-column>
+                    <el-table-column label="方案执行时间" prop="actionTime"></el-table-column>
                     <el-table-column label="融资顾问" prop="custSerName"></el-table-column>
                     <el-table-column label="来源" prop="promoterName"></el-table-column>
                     <el-table-column label="状态" prop="actionStatus"></el-table-column>
@@ -105,6 +107,12 @@
         <CopyRight />
 
         <!-- 
+            * desc: 放款机构审核结果确认
+                在列表数据处于【3】状态  才可以审核
+         -->
+        <PayResultModel v-model="payResulData.visible" :data="payResulData.data" @getInitData="getTableData"/>
+
+        <!-- 
             * desc:  机构放款结果确认 
                 在列表数据处于【已申请】状态 才可以审核
          -->
@@ -124,6 +132,8 @@ import CopyRight from "components/CopyRight";
 import SearchSix from "components/Search/SearchSix";
 import StatusList from "components/StatusList";
 
+// 放款机构审核结果确认弹出窗
+import PayResultModel from './executiveManagement/PayResultModel'
 
 // 放款机构放款结果确认弹出窗组件
 import LoanConfirmationModel from './executiveManagement/LoanConfirmationModel';
@@ -207,16 +217,23 @@ export default {
             },
             // 状态
             actionStatusObj: {
-                "0": "申请中",
-                "1": "待风控审核",
-                "2": "待付款前置收费项",
-                "3": "待放款机构审核",
-                "4": "待银行/机构签约放款",
-                "5": "待付款服务费",
-                "6": "服务完成",
-                "7": "服务取消"
+                "0": "申请中",  
+                "1": "待风控审核",   
+                "2": "待付款前置收费项",  
+                "3": "待放款机构审核",  
+                "4": "待银行/机构签约放款",   
+                "5": "待付款服务费",  
+                "6": "服务完成",  
+                "7": "服务取消",
+                "8": "风控审核不通过",  
+                "9": "机构审核不通过"
             },
 
+            // 机构放款结果确认弹窗数据
+            payResulData: {
+                visible: false,
+                data: {}
+            },
 
             // 机构放款结果弹窗数据
             loanConfirmationData: {
@@ -242,7 +259,7 @@ export default {
         SearchSix,
         CopyRight,
         StatusList,
-        // AuditConfirmationModel,
+        PayResultModel,
         LoanConfirmationModel,
         ReceiptConfirmationModel
     },
@@ -275,7 +292,7 @@ export default {
         getUseRole(loginUserInfo){
             let {role} = loginUserInfo;
             switch(role){
-                case 'platform_cust_ser':  // admin  放款机构审核确认  放款机构审核确认
+                case 'admin':  // admin  放款机构审核确认  放款机构审核确认
                     this.isAdminRole = true;
                     break;
                 case 'receivables': // 付款财务审核确认
@@ -333,7 +350,7 @@ export default {
                 size: this.tablePagination.pageSize,
             }
             if( !!filterObj && filterObj.type == "simple" ){
-                data.childPlanCode = !filterObj.childPlanCode ? null : filterObj.childPlanCode;
+                data.financingPlanCode = !filterObj.financingPlanCode ? null : filterObj.financingPlanCode;
                 data.actionStatus  = filterObj.actionStatus === "" ? null : filterObj.actionStatus;
                 data.actionTime = !filterObj.actionTime ? null : filterObj.actionTime;
             }
@@ -373,7 +390,7 @@ export default {
                             qzChargeItemStatus: item.qzChargeItemStatus === null ? "-" : this.qzChargeItemStatusObj[item.qzChargeItemStatus],//前置付款状态 
                             servChargeItem: !item.servChargeItem ? "-" : item.servChargeItem,//服务费
                             servChargeItemStatus: item.servChargeItemStatus === null ? "-" : this.servChargeItemStatusObj[item.servChargeItemStatus],//服务费支付状态 
-                            createTime: !item.createTime ? "-" : dateFormat.dateFmt(item.createTime),//方案执行时间 
+                            actionTime: !item.actionTime ? "-" : dateFormat.dateFmt(item.actionTime),//方案执行时间 
                             custSerName: !item.custSerName ? "-" : item.custSerName,//融资顾问 
                             promoterName: !item.promoterName ? "-" : item.promoterName,//来源 
                             actionStatus: item.actionStatus === null ? "" : this.actionStatusObj[item.actionStatus],//状态 
@@ -449,6 +466,73 @@ export default {
         },
 
         /**
+         * @description: 【放款机构审核结果确认】按钮事件
+         * @Date Changed: 2020-07-23
+         */
+        payResultModel(){
+
+            console.log( "[放款机构审核结果确认]选定的数据：", this.$refs.tableData.selection );
+
+            let selectedData = this.$refs.tableData.selection;
+
+            if( selectedData.length < 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '请选定需要【放款审核结果确认】操作的数据项！',
+                    type: 'warning'
+                });
+            } else if( selectedData.length > 1 ){
+                this.$message({
+                    showClose: true,
+                    message: '目前不支持批量审核！',
+                    type: 'warning'
+                });
+            } else{
+
+                let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
+
+                if(actionStatusValue == 3){  
+                    
+
+                    this.payResulData.data = {
+                        childPlanCode,
+                        productName,
+                        orgName,
+                    }
+
+                    this.payResulData.visible = true;
+                    
+                }else if(actionStatusValue >= 3 ){  // 【放款机构审核结果确认】已审批
+                    
+                    this.$message({
+                        showClose: true,
+                        message: '当前单号已审批，请勿重复审批！',
+                        type: 'warning'
+                    });
+                    
+                }else if( actionStatusValue == 2 ){  // 【付款项收款审核】
+                    this.$message({
+                        showClose: true,
+                        message: '请等待【付款项收款审核】操作！',
+                        type: 'warning'
+                    });    
+                }else if(actionStatusValue == 1){   // 【付款项收款审核】
+                    this.$message({
+                        showClose: true,
+                        message: '请等待风控审核】操作！',
+                        type: 'warning'
+                    });
+                }else if(actionStatusValue == 0){   // 【风控审核】
+                    this.$message({
+                        showClose: true,
+                        message: '请等待【风控审核】操作！',
+                        type: 'warning'
+                    });
+                }
+            } 
+        },
+
+        /**
          * @description: 【机构放款结果确认】按钮事件
          * @param {type} 
          * @return: 
@@ -475,7 +559,7 @@ export default {
 
                 let {childPlanCode, productName, orgName, actionStatusValue } = selectedData[0];
 
-                if(actionStatusValue == 3){  
+                if(actionStatusValue == 4){  
                     
 
                     this.loanConfirmationData.data = {
@@ -486,7 +570,7 @@ export default {
 
                     this.loanConfirmationData.visible = true;
                     
-                }else if(actionStatusValue >= 3 ){  // 【机构放款结果确认】已审批
+                }else if(actionStatusValue > 4 ){  // 【机构放款结果确认】已审批
                     
                     this.$message({
                         showClose: true,
@@ -494,16 +578,22 @@ export default {
                         type: 'warning'
                     });
                     
+                }else if( actionStatusValue == 3 ){  // 【放款机构审核结果确认】
+                    this.$message({
+                        showClose: true,
+                        message: '请等待【放款机构审核结果确认】操作！',
+                        type: 'warning'
+                    });    
                 }else if( actionStatusValue == 2 ){  // 【付款项收款审核】
                     this.$message({
                         showClose: true,
                         message: '请等待【付款项收款审核】操作！',
                         type: 'warning'
                     });    
-                }else if(actionStatusValue == 1){   // 【付款项收款审核】
+                }else if(actionStatusValue == 1){   // 【风控审核】
                     this.$message({
                         showClose: true,
-                        message: '请等待【付款项收款审核】操作！',
+                        message: '请等待【风控审核】操作！',
                         type: 'warning'
                     });
                 }else if(actionStatusValue == 0){   // 【风控审核】

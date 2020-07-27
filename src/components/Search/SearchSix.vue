@@ -14,7 +14,7 @@
             <el-form ref="search" :model="search" label-width="80px">
                 <!-- <slot name="baseSearch"></slot> -->
                 <el-form-item label="输入查询：">
-                    <el-input placeholder="执行单号" v-model="search.childPlanCode"></el-input>
+                    <el-input placeholder="服务单号" v-model="search.financingPlanCode"></el-input>
                 </el-form-item>
                 <el-form-item label="执行状态：">
                     <el-select placeholder="全部" v-model="search.actionStatus">
@@ -189,7 +189,7 @@ export default {
 
             // 简略筛选
             search: {
-                childPlanCode: "", // 执行单号
+                financingPlanCode: "", // 融资服务单号
                 actionStatus: "",   // 执行单状态
                 actionTime: ""  // 执行时间
             },
@@ -198,7 +198,7 @@ export default {
             isShowAdvancedFilter: false, // 高级筛选弹窗是否显示
             // 高级筛选
             advancedFilter: {
-                childPlanCode: "", // 执行单号
+                financingPlanCode: "", // 执行单号
                 actionStatus: "",// 执行单状态
                 // 产品类型 
                 // 产品类型

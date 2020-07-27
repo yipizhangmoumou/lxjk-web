@@ -1,9 +1,10 @@
-/**
- * @description: 服务定制结果审核 
- * @Date Changed: 2020-07-18
- */
 <template>
-    <!---->
+    <!--
+        /**
+        * @description: 风控审核弹出窗
+        * @Date Changed: 2020-07-18
+        */
+    -->
     <el-dialog
         id="auditConfirmationModel"
         title="风控审核"
