@@ -435,6 +435,7 @@
   :on-preview="handlePictureCardPreview"
   :on-remove="handleRemove"
   :on-exceed="handleExceed"
+  :before-upload="beforeAvatarUpload"
   :http-request="upload"
   :file-list="fileList"
   >
@@ -452,6 +453,7 @@
   :on-remove="handleRemoveB"
   :on-exceed="handleExceedB"
   :http-request="uploadB"
+  :before-upload="beforeAvatarUploadB"
   :file-list="fileListB"
   >
   <span>背面</span>
@@ -489,6 +491,7 @@
   :limit="1"
   :on-remove="handleRemoveC"
   :on-exceed="handleExceedC"
+  :before-upload="beforeAvatarUploadC"
   :http-request="uploadC"
   :file-list="fileListC"
   >
@@ -1088,6 +1091,15 @@ export default {
                 message:'最多可上传一张图片。'
             })
         },
+        beforeAvatarUpload(file){
+          let types = ['image/jpeg', 'image/jpg', 'image/png'];
+          const isImage = types.includes(file.type);
+          if (!isImage) {
+            this.$message.error('上传图片只能是 JPG、JPEG、PNG 格式!');
+
+          }
+          return isImage;
+        },
         upload(file){
             console.log(file);
             let fd = new FormData();
@@ -1117,6 +1129,14 @@ export default {
                 message:'最多可上传一张图片。'
             })
         },
+        beforeAvatarUploadB(file){
+          let types = ['image/jpeg', 'image/jpg', 'image/png'];
+          const isImage = types.includes(file.type);
+          if (!isImage) {
+            this.$message.error('上传图片只能是 JPG、JPEG、PNG 格式!');
+          }
+          return isImage;
+        },
         uploadB(file){
             console.log(file);
             let fd = new FormData();
@@ -1143,6 +1163,14 @@ export default {
                 message:'最多可上传一张图片。'
             })
         },
+        beforeAvatarUploadC(file){
+          let types = ['image/jpeg', 'image/jpg', 'image/png'];
+          const isImage = types.includes(file.type);
+          if (!isImage) {
+            this.$message.error('上传图片只能是 JPG、JPEG、PNG 格式!');
+          }
+          return isImage;
+        },        
         uploadC(file){
             console.log(file);
             let fd = new FormData();
@@ -1189,6 +1217,9 @@ export default {
                 this.$message({
                     type:'success',
                     message:'审核成功'
+                })
+                this.$router.push({
+                  path: '/serviceAdmin'
                 })
               }else{
                   console.log(res);
