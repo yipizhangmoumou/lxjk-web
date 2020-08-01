@@ -20,10 +20,10 @@
                             <span>{{item.name}}</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item 
-                                :route="{path: child.path}" 
-                                :index="`${index}-${key}`" 
-                                v-for="(child, key) in item.childrenList" 
+                            <el-menu-item
+                                :route="{path: child.path}"
+                                :index="`${index}-${key}`"
+                                v-for="(child, key) in item.childrenList"
                                 :key="key">
                                 {{child.name}}
                             </el-menu-item>
@@ -51,10 +51,10 @@ export default {
                             name:'助贷机构管理',
                             child:[]
                         },
-                        // {
-                        //     path: '/postAdmin',
-                        //     name:'机构岗位管理'
-                        // },
+                        {
+                            path: '/postAdmin',
+                            name:'机构岗位管理'
+                        },
                         {
                             path: '/employeeAdmin',
                             name:'助贷机构员工管理',
@@ -132,8 +132,8 @@ export default {
         this.menuList.forEach((el, index) => {
             el.childrenList.forEach((item, i) => {
 
-                if ( item.path == this.$route.path || item.child.includes(this.$route.name) ) {
-                    
+                if ( item.path == this.$route.path || (item.child && item.child.includes(this.$route.name)) ) {
+
                     this.currPath = `${index}-${i}`;
                     return;
                 }

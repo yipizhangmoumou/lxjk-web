@@ -7,58 +7,55 @@
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
           <el-button size="small" icon="el-icon-download">导入</el-button>
-          <el-button size="small" icon="el-icon-plus" type="primary">为机构新增员工</el-button>
-          <el-button size="small" icon="el-icon-plus" type="primary" @click="$router.push('/addOrganization')">添加机构</el-button>
+<!--          <el-button size="small" icon="el-icon-plus" type="primary">为机构新增员工</el-button>-->
+          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加岗位</el-button>
         </div>
       </div>
       <div class="table">
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="listData"
           tooltip-effect="dark"
           style="width: 100%"
           :stripe="true"
           :border="true"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="机构编号" width="120">
-            <template slot-scope="scope">{{ scope.row.number }}</template>
+          <el-table-column type="selection" width="55"/>
+          <el-table-column label="所属机构" prop="fkCompanyId">
+            <template slot-scope="scope">
+              {{getFKName(scope.row.fkCompanyId)}}
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="机构名称" width="120"></el-table-column>
-          <el-table-column prop="address" label="所在地区"></el-table-column>
-          <el-table-column prop="employee" label="员工人数" width="120"></el-table-column>
-          <el-table-column prop="linkman" label="联系人" width="120"></el-table-column>
-          <el-table-column prop="mobile" label="联系方式" width="120"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-          <el-table-column prop="status" label="状态" width="80"></el-table-column>
+          <el-table-column label="岗位名称" prop="deptName"/>
+          <el-table-column label="更新时间" prop="updateTime">
+            <template slot-scope="scope">
+              {{scope.row.updateTime ? scope.row.updateTime.replace('T', ' ') : ''}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="description" label="岗位描述"/>
+          <el-table-column label="状态" prop="status" width="80">
+            <template slot-scope="scope">
+              {{scope.row.status === 0 ? '启用' : '停用'}}
+            </template>
+          </el-table-column>
           <el-table-column prop="address" label="操作" width="240">
             <template slot-scope="scope">
               <div class="cz">
-                <div>
+                <div @click="handleEdit(scope.row)">
                   <i class="el-icon-edit"></i>
                   编辑
                 </div>
-                <div @click="operation(1, scope.row)">
+                <div @click="handleStatus(scope.row)" v-if="scope.row.status !== 0">
                   <i class="el-icon-success"></i>
-                  开通
+                  启用
                 </div>
-                <div @click="operation(2, scope.row)">
+                <div @click="handleStatus(scope.row)" v-else>
                   <i class="el-icon-remove"></i>
-                  禁用
+                  停用
                 </div>
-                <div @click="operation(3, scope.row)">
+                <div @click="handleDelete(scope.row)">
                   <i class="el-icon-delete-solid"></i>
                   删除
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="codeUrl" label="结构员工推广码" width="120">
-            <template>
-              <div class="code">
-                <div>
-                  <i class="el-icon-picture"></i>
-                  推广码
                 </div>
               </div>
             </template>
@@ -79,28 +76,38 @@
           </div>
           <!-- 分页 -->
           <el-pagination
-            :current-page="curr"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+                  :current-page="listPage.page"
+                  :page-size="listPage.size"
+                  :total="listPage.total"
+                  :page-sizes="[10, 20, 30, 50]"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  @current-change="onPageIndexChange"
+                  @size-change="onPageSizeChange"
           ></el-pagination>
         </div>
       </div>
     </div>
     <CopyRight />
+    <EditPost
+      v-model="editObj.visible"
+      :data="editObj.data"
+      :lAlist="lAlist"
+      @query="getTableData"
+    />
   </div>
 </template>
 
 <script>
 import CopyRight from "components/CopyRight"
 import SearchOne from "components/Search/SearchOne";
+import EditPost from "./component/EditPost"
+import tableMixin from '../../assets/js/tableMixin'
 export default {
   name: "PostAdmin",
   data() {
     return {
-      curr: 1,
-      tableData: [],
+      listApiUrl: '/api/mgm/loanAgencyDept/list',
+      dataKey: 'data',
       multipleSelection: [],
       options: [
         {
@@ -108,10 +115,68 @@ export default {
           label: "黄金糕"
         }
       ],
-      value: ""
+      value: "",
+      editObj: {
+        visible: false,
+        data: {}
+      },
+      lAlist: [],
     };
   },
+  mixins: [tableMixin],
   methods: {
+    handleEdit (row) {
+      console.log(row)
+      this.editObj.data = JSON.parse(JSON.stringify(row))
+      this.editObj.visible = true
+    },
+    handleStatus (row) {
+      let obj = JSON.parse(JSON.stringify(row))
+      obj.status = row.status === 0 ? 1 : 0
+      this.$axios.post('/api/mgm/loanAgencyDept/update', obj)
+      .then(() =>{
+        this.$msgSuccess()
+        this.getTableData()
+      })
+      .catch(err => {
+        this.$msgError(err.message)
+      })
+    },
+    handleDelete (row) {
+      this.$confirm('确认删除这条数据吗', '确认').then(() => {
+        this.$axios.post(`/api/mgm/loanAgencyDept/delete/${row.pkId}`)
+        .then(() => {
+          this.$msgSuccess()
+          this.getTableData()
+        })
+        .catch(err => {
+          this.$msgError(err.message)
+        })
+        }).catch((err) => {
+        console.log(err)
+      })
+    },
+    getLAList () {
+      this.$axios.post('/api/mgm/loanAgency/queryList', {
+        "page": 1,
+        "size": 500,
+        "status": 0
+      })
+      .then(res => {
+        res.data.mgmLoanAgencyList && (this.lAlist = res.data.mgmLoanAgencyList)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    getFKName (id) {
+      let obj = this.lAlist.find(v => v.pkId === id)
+      return obj ? obj.name : ''
+    },
+    handleAddNew () {
+      this.editObj.visible = true
+      this.editObj.data = {}
+    },
     /**
      * @dir 全选
      * @param null
@@ -224,22 +289,12 @@ export default {
   },
   components: {
     SearchOne,
-    CopyRight
+    CopyRight,
+    EditPost
   },
   created() {
-    for (let index = 0; index < 11; index++) {
-      this.tableData.push({
-        number: parseInt(Math.random() * 1000000),
-        name: "机构名称" + index,
-        address: "地区" + index,
-        employee: "员工人数" + index,
-        linkman: "联系人" + index,
-        mobile: "联系方式" + index,
-        createTime: "2020-03-09 12:34:23",
-        status: index % 2 == 0 ? "已开通" : "未开通",
-        codeUrl: "http://www.baidu.com"
-      });
-    }
+    this.getLAList()
+    this.getTableData()
   }
 };
 </script>
