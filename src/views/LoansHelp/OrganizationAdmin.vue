@@ -103,8 +103,30 @@ export default {
   methods: {
     getAreaName(code) {
       if(!code) return '-'
-      let info = this.recursion(this.areaTree, code)
-      return (info && info.name) || '-'
+      let list = code.split(',')
+      // if (list.length === 1) {
+      //   let obj = this.areaTree.find(v => v.code === list[0])
+      //   return obj ? obj.name : '-'
+      // }
+      let returnList = []
+      let childrenList = []
+      list.forEach((v, i) => {
+        if (!i) {
+          let obj = this.areaTree.find(y => y.code === v)
+          if (obj) {
+            childrenList = obj.children
+            returnList.push(obj.name)
+          }
+        } else {
+          let obj = childrenList.find(y => y.code === v)
+          if (obj) {
+            childrenList = obj.children
+            returnList.push(obj.name)
+          }
+        }
+      })
+      if (!returnList.length) return '-'
+      return returnList.join(' / ')
     },
     deleteEmpty (arr) {
       return arr.map(v => {

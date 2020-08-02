@@ -52,11 +52,9 @@
                         :props="{
                                       expandTrigger: 'hover',
                                       value: 'code',
-                                      label: 'name',
-                                      emitPath: false
+                                      label: 'name'
                                     }"
                         collapse-tags
-                        :show-all-levels="false"
                 ></el-cascader>
               </el-form-item>
             </div>
@@ -298,7 +296,7 @@ export default {
       form: {
         "name": "",
         "address": "",
-        "area": "",
+        "area": [],
         "createUser": "",
         "description": "",
         "leader": "",// 联系人
@@ -324,7 +322,9 @@ export default {
         this.loading = true
         this.$axios.post(`/api/mgm/loanAgency/queryById/${this.$route.query.id}`)
                 .then(res => {
-                  this.form = Object.assign(this.form, res.data)
+                  let data = JSON.parse(JSON.stringify(res.data))
+                  data.area = data.area ? data.area.split(',') : []
+                  this.form = Object.assign(this.form, data)
                   this.loading = false
                 })
         .catch(err => {
@@ -369,7 +369,9 @@ export default {
         .then(() =>{
           this.loading = true
           let url = this.$route.query.id ? '/api/mgm/loanAgency/update' : '/api/mgm/loanAgency/add'
-          this.$axios.post(url, {loanAgency: this.form})
+          let data = JSON.parse(JSON.stringify(this.form))
+          data.area = data.area.toString()
+          this.$axios.post(url, {loanAgency: data})
             .then(() => {
               this.loading = false
               this.$msgSuccess()

@@ -78,7 +78,7 @@ const routes = [
                 name: '评估详情'
             },
             component: () => import("views/FinancingService/EvaluationDetails")
-        }, 
+        },
         {
             path: '/productCustomization/:planCode',
             name: 'productCustomization',
@@ -110,6 +110,12 @@ const routes = [
           name: 'LendingInstitutions',
           meta: { name: '产品贷款机构管理' },
           component: () => import("views/Product/LendingInstitutions")
+        },
+        {
+          path: '/ProductType',
+          name: 'ProductType',
+          meta: { name: '产品类型管理' },
+          component: () => import("views/Product/ProductType")
         },
         {
           path: '/DataDictionary',

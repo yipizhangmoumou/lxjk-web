@@ -43,7 +43,6 @@
                                       emitPath: false
                                     }"
                     collapse-tags
-                    :show-all-levels="false"
             ></el-cascader>
           </el-form-item>
           <el-form-item

@@ -99,6 +99,11 @@ export default {
                             path: '/LendingInstitutions',
                             name:'产品贷款机构管理',
                             child: []
+                        },
+                        {
+                            path: '/ProductType',
+                            name:'产品类型管理',
+                            child: []
                         }
                     ]
                 },
