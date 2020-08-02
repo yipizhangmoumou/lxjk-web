@@ -37,10 +37,10 @@
                                     <i class="el-icon-success"></i>
                                     编辑
                                 </div>
-                                <div @click="handleDelete(row)">
-                                    <i class="el-icon-delete-solid"></i>
-                                    删除
-                                </div>
+<!--                                <div @click="handleDelete(row)">-->
+<!--                                    <i class="el-icon-delete-solid"></i>-->
+<!--                                    删除-->
+<!--                                </div>-->
                             </div>
                         </template>
                     </el-table-column>

@@ -7,7 +7,7 @@
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
             <el-form-item label="所属融资分类">
-                <el-select v-model="parentObj" placeholder="" class="full-width" disabled>
+                <el-select v-model="parentObj" placeholder="" value-key="code" class="full-width" disabled>
                     <el-option
                             v-for="(item, index) in dataCodeList"
                             :key="index"
