@@ -30,12 +30,25 @@
                 >
                     <el-table-column prop="code" label="产品类型编码"></el-table-column>
                     <el-table-column prop="name" label="产品类型名称"></el-table-column>
+                    <el-table-column prop="status" label="状态">
+                        <template slot-scope="{row}">
+                            {{row.status === 0 ? '启用' : '停用'}}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="240" fixed="right">
                         <template slot-scope="{row}">
                             <div class="cz">
                                 <div @click="handleEdit(row)">
                                     <i class="el-icon-success"></i>
                                     编辑
+                                </div>
+                                <div @click="handleStatus(row)" v-if="row.status !== 0">
+                                    <i class="el-icon-success"></i>
+                                    启用
+                                </div>
+                                <div @click="handleStatus(row)" v-else>
+                                    <i class="el-icon-remove"></i>
+                                    停用
                                 </div>
 <!--                                <div @click="handleDelete(row)">-->
 <!--                                    <i class="el-icon-delete-solid"></i>-->
@@ -109,6 +122,20 @@ export default {
   },
   mixins: [tableMixin],
   methods: {
+    handleStatus (row) {
+      let data = {
+        pkId: row.id,
+        status: row.status === 0 ? -1 : 0
+      }
+      this.$axios.post('/api/mgm/financingType/update', { financingType: data })
+      .then(() => {
+        this.$msgSuccess()
+        this.getTableData()
+      })
+      .catch(err => {
+        this.$msgError(err.message)
+      })
+    },
     getCodeTypeList () {
       this.$axios.post('/api/mgm/financingType/getParentType').then(res => {
         this.dataCodeList = res.data
