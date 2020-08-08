@@ -58,7 +58,9 @@
                         :page-sizes="tablePagination.pageSizes"
                         :page-size="tablePagination.pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="tablePagination.total">
+                        :total="tablePagination.total"
+                        @size-change="changePageSize"
+                        @current-change="changeCurrent">
                     </el-pagination>
                 </div>
             </div>
@@ -252,7 +254,7 @@ export default {
             // 筛选参数中加入筛选类型
             filterObj.type = "simple";
 
-            console.log("父组件接收；", filterObj)
+            console.log("父组件接收；", filterObj);
 
             this.getTableData(filterObj); 
         },
@@ -295,6 +297,37 @@ export default {
         //     this.$refs.multipleTable.clearSelection();
         //   }
         // }
+
+        /**
+         * @description: 数据列表-【当前页显示数据数量】更换
+         * @param {Number} val 当前页显示数量
+         * @Date Changed: 2020-07-13
+         */  
+        changePageSize(val){
+            // console.log(  "变更分页当前页显示数据数量：", this.tablePagination , val );
+            
+            // 赋值当前页显示数据数量
+            this.tablePagination.pageSize = val;
+
+            // 更新表格数据
+            this.getTableData();
+
+        },
+
+        /**
+         * @description: 数据列表-当前页变更
+         * @param {Number} val 当前页码
+         * @Date Changed: 2020-07-13
+         */     
+        changeCurrent(val){
+            // console.log( val ); 
+
+            // 赋值当前页
+            this.tablePagination.curr = val;
+
+            // 更新表格数据
+            this.getTableData();
+        },
 
         /**
          * @description: 路由跳转-评估详情

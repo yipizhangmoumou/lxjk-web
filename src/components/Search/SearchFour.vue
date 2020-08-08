@@ -38,6 +38,7 @@
                 </el-form-item>
             </el-form>
         </div>
+        
         <!-- 高级搜索 -->
         <el-dialog title="高级搜索" class="dialog-from" :visible.sync="dialogVisible" width="600px">
             <el-form ref="form" :model="form" label-width="80px">
