@@ -259,7 +259,7 @@ export default {
          */
         getUseRole(loginUserInfo){
             let {role} = loginUserInfo;
-            console.log( "role:",role  );
+            // console.log( "role:",role  );
             switch(role){
                 case 'admin':  // admin  放款机构审核确认  放款机构审核确认
                     this.isAdminRole = true;

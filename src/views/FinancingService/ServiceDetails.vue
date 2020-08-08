@@ -483,11 +483,11 @@ export default {
             await this.getIndustryTree();
             await this.initData();
         } catch(e){
-            console.log(e);
+            console.warn(e);
         }
     },
   mounted(){
-    console.log(this.mixin);
+    // console.log(this.mixin);
       this.getDic('year_revenue', 'thatYearsArr')
       this.getDic('last_year_revenue', 'lastYearsArr')
       this.getDic('last_year_invoiced','lastcallArr')
@@ -499,17 +499,17 @@ export default {
 
       this.getDic('enterprise_nature','companyTypeArr')
       this.getDic('financing_type','industryTypeArr')
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
   },
   methods:{
       initData(){
     // 获取详情
     let financingCode = this.$route.params.financingCode
-    console.log(financingCode);
+    // console.log(financingCode);
     let url =`/api/mgm/financingPlan/detail/${financingCode}`
       
        this.$axios.post(url).then(res=>{
-        console.log(res);
+        // console.log(res);
         if(res.code == 0){
           this.numAll = 0;
           let datas =res.data;
@@ -525,7 +525,7 @@ export default {
             this.financialInformation = datas.financialInformation||{};
             this.legalRepresentative = datas.legalRepresentative||{};
           this.businessInfo = datas.businessInfo||{};
-          console.log(this.enterpriseInfo.name);
+        //   console.log(this.enterpriseInfo.name);
           // 公司性质
           this.companyTypeArr.map(item=>{
               if(item.key == this.enterpriseInfo.enterpriseNature){
@@ -545,10 +545,10 @@ export default {
         //   this.reverseIdCardBase64 = this.enterpriseInfo.reverseIdCardBase64;
 
         }else{
-          console.log(111);
+        //   console.log(111);
         }
       }).catch(err=>{
-        console.log(err);
+        console.warn(err);
       })   
       },
     thattreeFn(showData,listData,type){
@@ -557,7 +557,7 @@ export default {
         if(showData == item.code){
             if(type==1){
                 this.areaText.push(item.name)
-                console.log(this.areaText)
+                // console.log(this.areaText)
                 if(this.areaText.length==1){
                     
                 this.thattreeFn(this.enterpriseInfo.cityCode,item.children,1)
@@ -588,7 +588,7 @@ export default {
       if(type==1){
         this.areaTextinfo = this.areaText.join('/');
       }else{
-          console.log(this.areaTextbank);
+        //   console.log(this.areaTextbank);
           
         this.areaTextinfoBank = this.areaTextbank.join('/');
       }        
@@ -603,7 +603,7 @@ export default {
                     }
                 })
             })
-            console.log(this.industryText);
+            // console.log(this.industryText);
             
             this.industryTextinfo = this.industryText[0]
         },
