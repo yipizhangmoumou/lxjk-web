@@ -8,7 +8,7 @@
     <div id="SearchFive">
         <div class="search-header">
             <div class="title head-item">数据筛选</div>
-            <div class="btn head-item" @click="showAdvancedFilterModel">高级搜索</div>
+            <!-- <div class="btn head-item" @click="showAdvancedFilterModel">高级搜索</div> -->
         </div>
         <div class="search-form">
             <el-form ref="search" :model="search" label-width="80px">
@@ -202,6 +202,7 @@ export default {
             // console.log("高级筛选",this.advancedFilter);
             this.$emit("advancedQuery", this.advancedFilter);
             
+            this.cleanIf();
             this.isShowAdvancedFilter = false;
         },
 

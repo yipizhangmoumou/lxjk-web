@@ -8,7 +8,7 @@
     <div id="SearchSix">
         <div class="search-header">
             <div class="title head-item">数据筛选</div>
-            <div class="btn head-item" @click="isShowAdvancedFilter = true">高级搜索</div>
+            <!-- <div class="btn head-item" @click="isShowAdvancedFilter = true">高级搜索</div> -->
         </div>
         <div class="search-form">
             <el-form ref="search" :model="search" label-width="80px">

@@ -292,6 +292,10 @@
 
 <script>
 import ElSteps from "components/ElSteps";
+
+// 处理数据格式函数封装
+import dateFormat from './../../unit/dataForamt';
+
 export default {
   name:'ServiceDetails',
   components:{
@@ -514,7 +518,7 @@ export default {
           this.planCode = datas.planCode;
           this.custServName = datas.custServName;
           this.actionData = datas.childPlanList;
-          this.createTime = datas.createTime;
+          this.createTime = !datas.createTime ? "" : dateFormat.dateFmt(datas.createTime);
           this.stepActive = datas.status;
             this.enterpriseInfo = datas.enterpriseInfo||{};
             this.enterpriseAssetInfo= datas.enterpriseAssetInfo||{};
@@ -682,7 +686,7 @@ export default {
           font-size 14px
           letter-spacing normal
         h5.h5s
-          font-weight 700
+          font-weight 500
         .table-bottom
           border 1px solid #EBEEF5
           text-align right 

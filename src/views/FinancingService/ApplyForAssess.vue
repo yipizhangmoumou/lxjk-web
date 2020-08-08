@@ -2,7 +2,7 @@
     <div id="ApplyForAssess">
         <StatusList :ArrayList="assessCount" />
 
-        <SearchFour @simpleQuery="getBySimpleQuery"/>
+        <SearchFour @simpleQuery="getBySimpleQuery" @advancedQuery="getByAdvancedQuery"/>
         
         <div class="table-container">
             <div class="table-header">
@@ -73,6 +73,10 @@
 import CopyRight from "components/CopyRight"
 import SearchFour from "components/Search/SearchFour";
 import StatusList from "components/StatusList";
+
+// 处理数据格式函数封装
+import dateFormat from './../../unit/dataForamt';
+
 export default {
     name: "ApplyForAssess",
     data() {
@@ -129,17 +133,17 @@ export default {
 
 
 
-            // curr: 1,
-            // pageSize:10,
+            // // curr: 1,
+            // // pageSize:10,
             
-            multipleSelection: [],
-            options: [
-                {
-                    value: "选项1",
-                    label: "黄金糕"
-                }
-            ],
-            value: "",
+            // multipleSelection: [],
+            // options: [
+            //     {
+            //         value: "选项1",
+            //         label: "黄金糕"
+            //     }
+            // ],
+            // value: "",
 
             
         };
@@ -208,12 +212,12 @@ export default {
             }
 
             if( !!filterObj && filterObj.type == "advanced" ){
-                data.planCode = !filterObj.planCode ? null: filterObj.planCode;         // 服务单号
-                data.contact = !filterObj.contact ? null : filterObj.contact;          // 电话
+                data.code = !filterObj.code ? null: filterObj.code;                                  // 评估单号
+                data.userAccount = !filterObj.userAccount ? null : filterObj.userAccount;            // 用户账号
                 data.enterpriseName = !filterObj.enterpriseName ? null : filterObj.enterpriseName;   // 企业名称
-                data.actionStatus = !filterObj.actionStatus ? null : filterObj.actionStatus;     // 服务状态
-                data.startTime = !filterObj.createTime ? null : filterObj.createTime;       // 服务申请时间
-                data.custServId = !filterObj.custServId ? null : filterObj.custServId;       // 融资顾问  
+                data.status = filterObj.status == "" ? null : filterObj.status;                           // 评估结果
+                data.financingApply = filterObj.financingApply == "" ? null : filterObj.financingApply;   // 融资申请
+                data.startTime = !filterObj.startTime ? null : filterObj.startTime;                  // 申请时间  
             }
 
 
@@ -234,7 +238,7 @@ export default {
                             applyResult: item.applyResult == null ? "-" : this.applyResultObj[item.applyResult],// 评估结果
                             meetProductNum: item.meetProductNum == null ? "-" : `${item.meetProductNum}项`, // 适用产品
                             financingPlanStatus: item.financingPlanStatus == null ? "-" : this.financingPlanStatusObj[item.financingPlanStatus],// 融资申请
-                            createTime: item.createTime// 申请时间
+                            createTime: dateFormat.dateFmt(item.createTime)// 申请时间
                         }
                     }) : [];
 
@@ -254,9 +258,24 @@ export default {
             // 筛选参数中加入筛选类型
             filterObj.type = "simple";
 
-            console.log("父组件接收；", filterObj);
+            // console.log("父组件接收；", filterObj);
 
             this.getTableData(filterObj); 
+        },
+
+        /**
+         * @description: 数据筛选加载：高级筛选
+         * @param {json} filterObj
+         * @Date Changed: 2020-07-13
+         */
+        getByAdvancedQuery(filterObj){
+            console.log( "父组件中接收到的高级过滤的数据",filterObj  );
+
+            // 筛选参数中加入筛选类型
+            filterObj.type = "advanced";
+            
+            this.getTableData(filterObj); 
+
         },
 
 
@@ -340,21 +359,6 @@ export default {
             });
         },
     },
-
-    // mounted() {
-    //     const param={
-        
-    //     page:1,
-    //     size:10
-    //     }
-    //     this.$axios.post('/api/mgm/assessmentApply/listData',param)
-    //         .then((res) => {
-    //             if(res.code===0){
-    //                 this.tableData=res.data.mgmAssessmentApplyList;
-    //             }
-                
-    //         })
-    // },
 
 };
 </script>
