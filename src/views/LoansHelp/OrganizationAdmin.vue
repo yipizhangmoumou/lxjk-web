@@ -1,6 +1,6 @@
 <template>
   <div id="OrganizationAdmin">
-    <SearchOne />
+    <SearchOne @search="onSearch"/>
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
@@ -96,11 +96,16 @@ export default {
         }
       ],
       value: "",
-      areaTree: []
+      areaTree: [],
+      queryObj: {}
     };
   },
   mixins: [tableMixin],
   methods: {
+    onSearch (val) {
+      this.queryObj = val;
+      this.getTableData();
+    },
     getAreaName(code) {
       if(!code) return '-'
       let list = code.split(',')

@@ -8,31 +8,25 @@
   <div id="SearchOne">
     <div class="search-header">
       <div class="title head-item">数据筛选</div>
-      <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>
+<!--      <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>-->
     </div>
     <div class="search-form">
       <el-form ref="search" :model="search" label-width="80px">
         <!-- <slot name="baseSearch"></slot> -->
-        <el-form-item label="输入查询">
-          <el-input placeholder="机构编号/名称/联系人" v-model="search.name"></el-input>
+        <el-form-item label="机构名称">
+          <el-input placeholder="机构名称" v-model="search.name"></el-input>
         </el-form-item>
-        <el-form-item label="所在地区">
-          <el-select placeholder="全部" v-model="search.region">
-            <el-option label="全部" value></el-option>
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+        <el-form-item label="机构代码">
+          <el-input placeholder="机构代码" v-model="search.orgCode"></el-input>
         </el-form-item>
-        <el-form-item label="级别">
-          <el-select placeholder="全部" v-model="search.jb">
-            <el-option label="全部" value></el-option>
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+        <el-form-item label="状态">
+          <el-select placeholder="全部" v-model="search.status">
+            <el-option v-for="(v, i) in statusList" :key="i" :label="v.label" :value="v.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="btn-box">
           <el-button size="small" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="el-icon-back">重置</el-button>
+          <el-button size="small" icon="el-icon-back" @click="handleC">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -99,10 +93,31 @@ export default {
   name: "SearchOne",
   data() {
     return {
+      statusList: [
+        {
+          label: '停用',
+          value: -1
+        }, {
+          label: '启用',
+          value: 0
+        }, {
+          label: '黑名单',
+          value: 1
+        }, {
+          label: '注销',
+          value: 2
+        }, {
+          label: '欠费',
+          value: 3
+        }, {
+          label: '运行中',
+          value: 4
+        }
+      ],
       search: {
         name: "",
-        region: "",
-        jb: ""
+        orgCode: "",
+        status: null
       },
       dialogVisible: false,
       form: {
@@ -135,7 +150,15 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
+      this.$emit('search', this.search);
+    },
+    handleC () {
+      this.search = {
+        name: "",
+        orgCode: "",
+        status: null
+      };
+      this.$emit('search', {});
     },
     submitSearch() {
       console.log(this.form)
