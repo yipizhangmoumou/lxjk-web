@@ -259,7 +259,7 @@ export default {
          */
         getUseRole(loginUserInfo){
             let {role} = loginUserInfo;
-            console.log( "role:",role  );
+            // console.log( "role:",role  );
             switch(role){
                 case 'admin':  // admin  放款机构审核确认  放款机构审核确认
                     this.isAdminRole = true;
@@ -333,7 +333,7 @@ export default {
             this.$axios.post("/api/mgm/financingPlan/listData",{
                 ...data
             }).then(res=>{
-                // console.log( "获取数据列表", res );
+                console.log( "获取数据列表", res );
                 if( res.code == 0 ){
                     let data = res.data;
                     this.tableData = data != null ? data.mgmFinancingPlanList.map(item=>{

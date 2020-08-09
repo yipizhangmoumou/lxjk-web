@@ -404,7 +404,7 @@ export default {
         getInitData(id){
             this.$axios.post(`/api/mgm/assessmentApply/detail/${id}`)
                 .then(res=>{
-                    console.log( "评估详情数据响应：", res );
+                    // console.log( "评估详情数据响应：", res );
                     if(res.code == 0){
                         let data = res.data;
 
