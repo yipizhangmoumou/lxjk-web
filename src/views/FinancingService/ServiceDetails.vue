@@ -596,16 +596,26 @@ export default {
         thatindustryFn(data){
             this.industryTypeArr.map(item=>{
                 item.children.map(item1=>{
+                  if(isNaN(data)){
+                    if(data== item.code){
+                        this.industryText.push(item.name)
+                        this.industryType = [item.code,item1.code]
+                        return 
+                    }
+                  }else{
                     if(data== item1.code){
                         this.industryText.push(item.name)
                         this.industryType = [item.code,item1.code]
                         return 
                     }
+                  }
+                    
                 })
             })
             // console.log(this.industryText);
             
             this.industryTextinfo = this.industryText[0]
+            console.log(data,this.industryText);
         },
     getIndustryTree() {
       this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
