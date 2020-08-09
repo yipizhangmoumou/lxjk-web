@@ -96,6 +96,7 @@
                         :current-page="tablePagination.curr"
                         :page-sizes="tablePagination.pageSizes"
                         :page-size="tablePagination.pageSize"
+                        @size-change="changePageSize"
                         @current-change="changeCurrent"
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="tablePagination.total"
@@ -712,24 +713,46 @@ export default {
         },
 
 
-        LendingInstitutions(){
-            this.LendingInstitutions_show = true;
+        // LendingInstitutions(){
+        //     this.LendingInstitutions_show = true;
+        // },
+        // collection(){
+        //     this.collection_show = true;
+        // },
+        // InstitutionalReview_cancel(){},
+        // InstitutionalReview_save(){
+        //     console.log(this.InstitutionalReview_form)
+        // },
+        // LendingInstitutions_cancel(){},
+        // LendingInstitutions_save(){
+        //     console.log(this.InstitutionalReview_form)
+        // },
+        // collection_cancel(){},
+        // collection_save(){
+        //     console.log(this.InstitutionalReview_form)
+        // },
+
+        /**
+         * @description: 数据列表-【当前页显示数据数量】更换
+         * @param {Number} val 当前页显示数量
+         * @Date Changed: 2020-07-13
+         */  
+        changePageSize(val){
+            // console.log(  "变更分页当前页显示数据数量：", this.tablePagination , val );
+            
+            // 赋值当前页显示数据数量
+            this.tablePagination.pageSize = val;
+
+            // 更新表格数据
+            this.getTableData();
+
         },
-        collection(){
-            this.collection_show = true;
-        },
-        InstitutionalReview_cancel(){},
-        InstitutionalReview_save(){
-            console.log(this.InstitutionalReview_form)
-        },
-        LendingInstitutions_cancel(){},
-        LendingInstitutions_save(){
-            console.log(this.InstitutionalReview_form)
-        },
-        collection_cancel(){},
-        collection_save(){
-            console.log(this.InstitutionalReview_form)
-        },
+
+        /**
+         * @description: 页码切换
+         * @param {type} 
+         * @Date Changed: 2020-08-10
+         */
         changeCurrent(val){
             // console.log( val ); 
 
