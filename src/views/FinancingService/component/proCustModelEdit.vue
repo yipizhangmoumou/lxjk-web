@@ -18,7 +18,7 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="放款机构：" props="fkLoanAgencyId">
+                <el-form-item label="放款机构：" prop="fkLoanAgencyId">
                     <el-select 
                         v-model="proEditData.fkLoanAgencyId" 
                         placeholder="请选择放款机构">
