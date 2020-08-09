@@ -121,7 +121,17 @@ export default {
                             child: []
                         }
                     ]
-                }
+                },
+                // {
+                //     name: '风险管理',
+                //     childrenList: [
+                //         {
+                //             path: '/CreditReport',
+                //             name:'MSP征信报告3.0(API版)',
+                //             child: []
+                //         }
+                //     ]
+                // }
             ]
         }
     },

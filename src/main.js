@@ -10,6 +10,10 @@ import "assets/styl/common.styl"
 import 'element-ui/lib/theme-chalk/index.css';
 
 import axiosInit from './assets/js/axiosInit.js'
+
+import VueJsonp from 'vue-jsonp'
+Vue.use(VueJsonp)
+
 Vue.axios = Vue.prototype.$axios = axiosInit
 Vue.msgSuccess = Vue.prototype.$msgSuccess = function (message) {
   Vue.prototype.$message({

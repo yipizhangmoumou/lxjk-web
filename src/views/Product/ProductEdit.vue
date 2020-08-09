@@ -215,31 +215,30 @@
             <div></div>
           </div>
         <h4>准入条件--企业经营</h4>
-          <div class="form-line">
-            <el-form-item label="本年度销售收入" prop="currentYearRevenue">
-              <el-select v-model="form.productApplyCondition.currentYearRevenue" placeholder="">
-                <el-option
-                        v-for="item in year_revenue"
-                        :key="item.key"
-                        :label="item.value"
-                        :value="item.key">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="上年度销售收入" prop="lastYearRevenue">
-              <el-select v-model="form.productApplyCondition.lastYearRevenue" placeholder="">
-                <el-option
-                        v-for="item in last_year_revenue"
-                        :key="item.key"
-                        :label="item.value"
-                        :value="item.key">
-                </el-option>
-              </el-select>
-            </el-form-item>
+        <div class="form-line">
+          <el-form-item label="上年度销售收入最小值" prop="lastYearRevenueMin">
+            <el-input-number v-model="form.productApplyCondition.lastYearRevenueMin" :min="0"
+                             :controls="false" placeholder=""/>
+          </el-form-item>
+          <el-form-item label="上年度销售收入最大值" prop="lastYearRevenueMax">
+            <el-input-number v-model="form.productApplyCondition.lastYearRevenueMax" :min="0"
+                             :controls="false" placeholder=""/>
+          </el-form-item>
             <el-form-item label="上年度开票收入" prop="yearInvoiced">
               <el-input-number v-model="form.productApplyCondition.yearInvoiced" :min="0"
-                               :controls="false" placeholder=""></el-input-number>
+                               :controls="false" placeholder=""/>
             </el-form-item>
+        </div>
+        <div class="form-line">
+          <el-form-item label="本年度销售收入最小值" prop="currentYearRevenueMin">
+            <el-input-number v-model="form.productApplyCondition.currentYearRevenueMin" :min="0"
+                             :controls="false" placeholder=""/>
+          </el-form-item>
+          <el-form-item label="本年度销售收入最大值" prop="currentYearRevenueMax">
+            <el-input-number v-model="form.productApplyCondition.currentYearRevenueMax" :min="0"
+                             :controls="false" placeholder=""/>
+          </el-form-item>
+          <div/>
         </div>
       </el-form>
       <div class="submit-btn">
@@ -340,7 +339,11 @@ export default {
           "vatMoney": 0,//增值税实际纳税
           "whetherPledgeAmount": 0,//质押应收款
           "yearInvoiced": undefined,//本年度开票收入
-          "applicantAge": undefined //法人年龄
+          "applicantAge": undefined, //法人年龄
+          "currentYearRevenueMin": undefined, //本年度营销收入最小值
+          "currentYearRevenueMax": undefined, //本年度营销收入最大值
+          "lastYearRevenueMin": undefined, //去年度营销收入最大值
+          "lastYearRevenueMax": undefined, //去年度营销收入最大值
         }
       },
       rules: {
@@ -368,6 +371,10 @@ export default {
         lastYearRevenue: [{required: true, message: ' '}],
         yearInvoiced: [{required: true, validator: validateNum}],
         applicantAge: [{required: true, message: ' '}],
+        currentYearRevenueMin: [{required: true, message: ' '}],
+        currentYearRevenueMax: [{required: true, message: ' '}],
+        lastYearRevenueMin: [{required: true, message: ' '}],
+        lastYearRevenueMax: [{required: true, message: ' '}],
         excludeIndustry: [{required: true, message: ' '}]
       },
       // 还款方式
@@ -515,8 +522,8 @@ export default {
     this.getDic('application_method', 'application_method')
     this.getDic('enterprise_nature', 'enterprise_nature')
     this.getDic('corporate_age', 'corporate_age')
-    this.getDic('year_revenue', 'year_revenue')
-    this.getDic('last_year_revenue', 'last_year_revenue')
+    // this.getDic('year_revenue', 'year_revenue')
+    // this.getDic('last_year_revenue', 'last_year_revenue')
     this.getDic('fee', 'charge_items')
     this.getFinancingTypeTree()
     this.getAreaTree()

@@ -128,6 +128,12 @@ const routes = [
           name: 'User',
           meta: { name: '用户管理' },
           component: () => import("views/Setting/User")
+        },
+        {
+          path: '/CreditReport',
+          name: 'CreditReport',
+          meta: { name: 'MSP征信报告3.0(API版)' },
+          component: () => import("views/RiskManagement/CreditReport")
         }
       ]
     },
