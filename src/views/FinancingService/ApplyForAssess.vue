@@ -207,8 +207,8 @@ export default {
 
             if( !!filterObj && filterObj.type == "simple" ){
                 data.code = !filterObj.code ? null : filterObj.code;
-                data.applyResult  = filterObj.applyResult === ""  ? null : filterObj.applyResult;
-                data.startTime = !filterObj.startTime ? null : filterObj.startTime;
+                data.status  = filterObj.applyResult === ""  ? null : filterObj.applyResult;
+                data.createTime = !filterObj.startTime ? null : filterObj.startTime;
             }
 
             if( !!filterObj && filterObj.type == "advanced" ){

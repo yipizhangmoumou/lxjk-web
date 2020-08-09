@@ -333,7 +333,7 @@ export default {
             this.$axios.post("/api/mgm/financingPlan/listData",{
                 ...data
             }).then(res=>{
-                // console.log( "获取数据列表", res );
+                console.log( "获取数据列表", res );
                 if( res.code == 0 ){
                     let data = res.data;
                     this.tableData = data != null ? data.mgmFinancingPlanList.map(item=>{
