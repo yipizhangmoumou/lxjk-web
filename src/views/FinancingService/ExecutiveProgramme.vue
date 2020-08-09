@@ -73,7 +73,7 @@
                     <el-table-column prop="address" label="操作" width="150">
                         <template slot-scope="scope">
                             <div class="cz">
-                                <div @click="goServiceDetails(scope.row.childPlanCode)">融资服务详情</div>
+                                <div @click="goServiceDetails(scope.row.financingPlanCode)">融资服务详情</div>
                             </div>
                         </template>
                     </el-table-column>
@@ -395,7 +395,8 @@ export default {
                             promoterName: !item.promoterName ? "-" : item.promoterName,//来源 
                             actionStatus: item.actionStatus === null ? "" : this.actionStatusObj[item.actionStatus],//状态 
                             actionStatusValue: item.actionStatus,//状态 原始值
-                            finishTime: !item.finishTime ? "-" : dateFormat.dateFmt(item.finishTime)//完成时间 
+                            finishTime: !item.finishTime ? "-" : dateFormat.dateFmt(item.finishTime),//完成时间 
+                            financingPlanCode :!item.financingPlanCode? '':item.financingPlanCode
                         }
                     }) : [];
 
@@ -456,12 +457,12 @@ export default {
 
         /**
          * @description: 路由跳转-融资服务详情
-         * @param {string} financingCode 服务id
+         * @param {string} financingPlanCode 服务id
          * @Date Changed: 2020-07-13 
          */
-        goServiceDetails(financingCode){
+        goServiceDetails(financingPlanCode){
             this.$router.push({
-                path: `/ServiceDetails/${financingCode}`
+                path: `/ServiceDetails/${financingPlanCode}`
             });
         },
 
