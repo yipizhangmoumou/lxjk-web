@@ -13,10 +13,10 @@
         <div class="search-form">
             <el-form ref="search" :model="search" label-width="80px">
                 <!-- <slot name="baseSearch"></slot> -->
-                <el-form-item label="输入查询：">
+                <el-form-item label="输入查询：" props="financingPlanCode">
                     <el-input placeholder="服务单号" v-model="search.financingPlanCode"></el-input>
                 </el-form-item>
-                <el-form-item label="执行状态：">
+                <el-form-item label="执行状态：" props="actionStatus">
                     <el-select placeholder="全部" v-model="search.actionStatus">
                         <el-option label="全部" value></el-option>
                         <!-- <el-option label="区域一" value="shanghai"></el-option> -->
@@ -28,13 +28,13 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="执行时间：">
+                <el-form-item label="执行时间：" props="actionTime">
                     <el-date-picker v-model="search.actionTime" type="date" placeholder="选择执行时间-区间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item class="btn-box">
                     <el-button size="small" type="primary" icon="el-icon-search" @click="abbreviatedQuery">查询</el-button>
-                    <el-button size="small" icon="el-icon-back">重置</el-button>
+                    <el-button size="small" icon="el-icon-back" @click="resetAbbreviatedQuery('search')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -235,6 +235,17 @@ export default {
         abbreviatedQuery() {
             console.log( "abbreviatedQuery===> ", this.search );
             this.$emit("simpleQuery", this.search)
+        },
+
+        /**
+         * @description: 缩略重置按钮
+         * @param {string} formName 表单名 
+         * @Date Changed: 2020-07-13
+         */ 
+        resetAbbreviatedQuery(formName){
+            this.$refs[formName].resetFields();
+
+            this.$emit("simpleQuery", this.search);
         },
 
         submitSearch() {
