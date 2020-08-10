@@ -115,15 +115,15 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{currentYearRevenue[companyInfo.businessInfo.currentYearRevenue]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.businessInfo.currentYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{lastYearRevenue[companyInfo.businessInfo.lastYearRevenue]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.businessInfo.lastYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{lastYearInvoiceAmount[companyInfo.businessInfo.lastYearInvoiceAmount]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{companyInfo.businessInfo.lastYearInvoiceAmount}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
@@ -851,7 +851,7 @@ export default {
               this.numAll +=parseInt(item.finalAmount.slice(0,-3));
             })
           }
-          console.log(datas);
+          console.log(datas.businessInfo);
           this.applyId = datas.applyId;
           this.stepActive = datas.status!=null?parseInt(datas.status.slice(-1)):datas.status;
           this.planCode = datas.planCode||'';
@@ -863,12 +863,15 @@ export default {
           this.companyInfo.enterpriseAssetInfo = datas.enterpriseAssetInfo||{};
           this.companyInfo.businessInfo = datas.businessInfo||{};
           this.status = datas.status;
+          this.companyInfo.businessInfo.currentYearRevenue = datas.businessInfo.currentYearRevenue;
+          this.companyInfo.businessInfo.lastYearRevenue = datas.businessInfo.lastYearRevenue;
+          this.companyInfo.businessInfo.lastYearInvoiceAmount = datas.businessInfo.lastYearInvoiceAmount;
           this.companyInfo.enterpriseInfo.enterpriseNature = datas.enterpriseInfo.enterpriseNature;
           this.companyInfo.enterpriseInfo.regAddress = datas.enterpriseInfo.regAddress;
           this.companyInfo.enterpriseInfo.enterpriseNature = datas.enterpriseInfo.enterpriseNature;
-          this.companyInfo.area_code = [this.companyInfo.enterpriseInfo.provinceCode,this.companyInfo.enterpriseInfo.cityCode,this.companyInfo.enterpriseInfo.areaCode]
+          this.companyInfo.area_code = [datas.enterpriseInfo.provinceCode,datas.enterpriseInfo.cityCode,datas.enterpriseInfo.areaCode]
           this.companyInfo.comfinan_areaCode = [this.companyInfo.financialInformation.provinceCode,this.companyInfo.financialInformation.cityCode,this.companyInfo.financialInformation.regionCode]
-          console.log(this.companyInfo.area_code,this.companyInfo.comfinan_areaCode);
+          console.log(this.companyInfo.enterpriseInfo.provinceCode);
           this.companyInfo.enterpriseAssetInfo.realEstateVal = this.companyInfo.enterpriseAssetInfo.realEstateVal !=null?parseInt(this.companyInfo.enterpriseAssetInfo.realEstateVal):''
           this.companyInfo.enterpriseAssetInfo.equipmentVal = this.companyInfo.enterpriseAssetInfo.equipmentVal!=null?parseInt(this.companyInfo.enterpriseAssetInfo.equipmentVal) :'';
           this.companyInfo.enterpriseAssetInfo.patentVal = this.companyInfo.enterpriseAssetInfo.patentVal!=null?parseInt(this.companyInfo.enterpriseAssetInfo.patentVal):'';
@@ -962,13 +965,22 @@ export default {
       
     },  
         thatindustryFn(data){
+
             this.industryTypeArr.map(item=>{
                 item.children.map(item1=>{
+                  if(isNaN(data)){
+                    if(data== item.code){
+                        this.industryText.push(item.name)
+                        this.companyInfo.industryType = [item.code,item1.code]
+                        return 
+                    }
+                  }else{
                     if(data== item1.code){
                         this.industryText.push(item.name)
                         this.companyInfo.industryType = [item.code,item1.code]
                         return 
                     }
+                  }
                 })
             })
             this.industryTextinfo = this.industryText[0]

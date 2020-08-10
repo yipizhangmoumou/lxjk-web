@@ -553,7 +553,6 @@ export default {
       },
     thattreeFn(showData,listData,type){
       listData.forEach((item)=>{
-        
         if(showData == item.code){
             if(type==1){
                 this.areaText.push(item.name)
@@ -587,8 +586,9 @@ export default {
       })
       if(type==1){
         this.areaTextinfo = this.areaText.join('/');
+        console.log(this.areaText)
       }else{
-        //   console.log(this.areaTextbank);
+          console.log(this.areaTextbank);
           
         this.areaTextinfoBank = this.areaTextbank.join('/');
       }        
