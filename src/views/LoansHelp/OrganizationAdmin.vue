@@ -7,7 +7,7 @@
         <div class="table-btn">
           <el-button size="small" icon="el-icon-upload2">导出</el-button>
           <el-button size="small" icon="el-icon-download">导入</el-button>
-          <el-button size="small" icon="el-icon-plus" type="primary">为机构新增员工</el-button>
+<!--          <el-button size="small" icon="el-icon-plus" type="primary">为机构新增员工</el-button>-->
           <el-button size="small" icon="el-icon-plus" type="primary" @click="$router.push('/addOrganization')">添加机构</el-button>
         </div>
       </div>

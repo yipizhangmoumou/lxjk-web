@@ -17,7 +17,7 @@
                 <h5>数据列表</h5>
                 <div class="table-btn">
                     <!--          <el-button size="small" icon="el-icon-upload2">导出</el-button>-->
-                    <!--          <el-button size="small" icon="el-icon-plus" type="primary" @click="testGet1">测试接口</el-button>-->
+<!--                              <el-button size="small" icon="el-icon-plus" type="primary" @click="testGet">测试接口</el-button>-->
                     <!--          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加产品</el-button>-->
                 </div>
             </div>
@@ -35,14 +35,14 @@
                     <el-table-column prop="customerName" label="名称"></el-table-column>
                     <el-table-column prop="paperNumber" label="身份证"></el-table-column>
                     <el-table-column label="操作" width="240" fixed="right">
-<!--                        <template slot-scope="{row}">-->
-<!--                            <div class="cz">-->
-<!--                                <div @click="handleView(row)">-->
-<!--                                    <i class="el-icon-success"></i>-->
-<!--                                    查看详情-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </template>-->
+                        <template slot-scope="{row}">
+                            <div class="cz">
+                                <div @click="handleView(row)">
+                                    <i class="el-icon-success"></i>
+                                    查看详情
+                                </div>
+                            </div>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="page-container">
@@ -130,8 +130,39 @@ export default {
         console.log(err)
       })
     },
+    testGet () {
+      this.$axios.get('/remote/mspClientQuery.shtml', {
+        params: Object.assign({}, {
+          customerName: '车新',
+          paperNumber: '450109199003274742',
+          phone: '18612340001'
+        }, INFO_DEFINE)
+      })
+        .then(res => {
+          console.log(res)
+          this.testGet1()
+        })
+    },
+    testGet1 () {
+      this.$axios.get('/remote/mspClientSimpleQuery.shtml', {
+        params: Object.assign({}, {
+          customerName: '车新',
+          paperNumber: '450109199003274742',
+          phone: '18612340001'
+        }, INFO_DEFINE)
+      })
+      .then(res => {
+        console.log(res)
+      })
+    },
     handleView (row) {
       console.log(row)
+      this.$axios.get('/remote/mspClientSimpleQuery.shtml', {
+        params: Object.assign({}, row, INFO_DEFINE)
+      })
+        .then(res => {
+          console.log(res)
+        })
     },
     /**
      * @dir 全选
