@@ -27,6 +27,8 @@ axios.interceptors.response.use(
     if (response.config.headers.needReturnAll) return response
     // 如果有数据而且状态码为成功，则返回数据
     if (response.data && response.data.code === SUCCESS_CODE) return response.data
+    // 安融接口返回，与这边服务不一致，做特殊处理
+    if (response.data) return response.data
     // __isFulFilled 字段用来区分是接口返回的错误（true），还是接口根本就没有通（非 true）
     if (process.env.NODE_ENV !== 'production') {
       console.log(`%c【开发日志】%s %s 返回成功，但 data.result !== ${SUCCESS_CODE}， res=%o`, ERROR_STYLE, response.config.method.toUpperCase(), response.config.url, response.data)

@@ -132,7 +132,7 @@ const routes = [
         {
           path: '/CreditReport',
           name: 'CreditReport',
-          meta: { name: 'MSP征信报告3.0(API版)' },
+          meta: { name: 'MSP征信报告' },
           component: () => import("views/RiskManagement/CreditReport")
         }
       ]
