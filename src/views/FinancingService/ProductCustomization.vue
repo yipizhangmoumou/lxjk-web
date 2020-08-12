@@ -319,6 +319,7 @@ export default {
                         this.initData.applicableProducts.pageMgmAssessmentApplyListShort = !data.pageMgmAssessmentApplyListShort ? [] : data.pageMgmAssessmentApplyListShort.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
+                                providers: item.providers,  // 放款机构
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
@@ -339,6 +340,7 @@ export default {
                         this.initData.applicableProducts.pageMgmAssessmentApplyListMiddle = !data.pageMgmAssessmentApplyListMiddle ? [] : data.pageMgmAssessmentApplyListMiddle.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
+                                providers: item.providers,  // 放款机构
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
@@ -358,6 +360,7 @@ export default {
                         this.initData.applicableProducts.pageMgmAssessmentApplyListLong = !data.pageMgmAssessmentApplyListLong ? [] : data.pageMgmAssessmentApplyListLong.map((item,idx)=>{
                             return {
                                 idx: idx,  // 序号
+                                providers: item.providers,  // 放款机构
                                 selectProductStatus: item.selectProductStatus === null ? "-" : this.selectProductStatusObj[item.selectProductStatus], // 客户选取
                                 productId: !item.productId ? "-" : item.productId,// 产品ID
                                 productName: !item.productName ? "-" : item.productName,// 产品名称
@@ -504,11 +507,12 @@ export default {
          */
         productCustomize(row){
             // console.log( "当前数据", row );
-            let { productId, productName, orgName, loanInterest, amountRegin  } = row;
+            let { productId, providers, productName, orgName, loanInterest, amountRegin  } = row;
 
 
             this.proCustData.data = {
                 planCode: this.planCode,
+                providers,  // 放款机构
                 productId,
                 productName,
                 orgName,

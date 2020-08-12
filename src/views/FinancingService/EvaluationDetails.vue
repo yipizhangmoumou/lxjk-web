@@ -353,9 +353,9 @@ export default {
 
             // 产品类型枚举
             productTypeObj: {
-                "1": "长期",
+                "1": "短期",
                 "2": "中期", 
-                "3": "短期"
+                "3": "长期"
             },
 
             // 客户选取状态枚举
@@ -536,9 +536,9 @@ export default {
                             region: `${!data.enterpriseDetail.province ? "-" : data.enterpriseDetail.province} ${!data.enterpriseDetail.city ? "-" : data.enterpriseDetail.city} ${!data.enterpriseDetail.area ? "-" : data.enterpriseDetail.area }`,// 所在区域
                             address: `${data.enterpriseDetail.province}-${data.enterpriseDetail.city}-${data.enterpriseDetail.area}`,// 详细地址
                             establishDate: !data.enterpriseDetail.establishDate ? "-" : data.enterpriseDetail.establishDate ,// 成立时间
-                            currentYearRevenueValue: !data.enterpriseDetail.currentYearRevenueValue ? "-" : data.enterpriseDetail.currentYearRevenueValue,// 本年度销售收入
-                            lastYearRevenueValue: !data.enterpriseDetail.lastYearRevenueValue ? "-" : data.enterpriseDetail.lastYearRevenueValue,// 上年度销售收入
-                            lastYearInvoiceAmountValue: !data.enterpriseDetail.lastYearInvoiceAmountValue ? "-" : data.enterpriseDetail.lastYearInvoiceAmountValue,// 上年度开票收入
+                            currentYearRevenueValue: !data.enterpriseDetail.currentYearRevenue ? "-" : data.enterpriseDetail.currentYearRevenue,// 本年度销售收入
+                            lastYearRevenueValue: !data.enterpriseDetail.lastYearRevenue ? "-" : data.enterpriseDetail.lastYearRevenue,// 上年度销售收入
+                            lastYearInvoiceAmountValue: !data.enterpriseDetail.lastYearInvoiceAmount ? "-" : data.enterpriseDetail.lastYearInvoiceAmount,// 上年度开票收入
                             hasRealEstate: data.enterpriseDetail.hasRealEstate === null ? "-" : data.enterpriseDetail.hasRealEstate ? "是" : "否",// 是否有不动产
                             realEstateValString: !data.enterpriseDetail.realEstateValString ? "-" : data.enterpriseDetail.realEstateValString,// 不动产价值
                             corporateAge: !data.enterpriseDetail.corporateAge ? "-" : data.enterpriseDetail.corporateAge,// 法人年龄

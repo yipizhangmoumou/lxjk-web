@@ -6,7 +6,7 @@
             </div>
             <div class="login-item">
                 <h1 class="title">链信金科</h1>
-                <el-form :model="user" ref="user" class="form-item">
+                <el-form :model="user" ref="user" class="form-item" @submit.native.prevent>
                     <el-form-item prop="phone"
                         :rules="[
                             { required: true, message: '请输入手机号码', trigger: 'blur' }
@@ -23,7 +23,7 @@
                         <el-input type="password" v-model="user.password" placeholder="请输入登录密码"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('user')" :loading="loading">登录</el-button>
+                        <el-button type="primary" native-type="submit" @click="submitForm('user')" :loading="loading">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -45,6 +45,10 @@
             }
         },
         methods: {
+
+
+            
+
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                 if (valid) {

@@ -18,12 +18,18 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="放款机构：">
-                    <el-input 
-                        disabled
-                        v-model="data.orgName" 
-                        placeholder="请输放款机构">
-                    </el-input>
+                <el-form-item label="放款机构：" prop="fkLoanAgencyId">
+                    <el-select 
+                        v-model="proEditData.fkLoanAgencyId" 
+                        placeholder="请选择放款机构">
+                        <!-- <el-option label="6期" value="6"></el-option> -->
+                        <el-option 
+                            v-for="(item,idx) in providers"
+                            :key="idx"
+                            :label="item.name" 
+                            :value="item.fkLoanAgencyId">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
 
                 <el-form-item label="期数：" prop="loanCycle">
@@ -179,7 +185,14 @@ export default {
              */
             EnuData:{},
 
+            /**
+             * @description: 放款机构枚举数据
+             * @Date Changed: 
+             */    
+            providers: [],        
+
             proEditData: {
+                fkLoanAgencyId: "",    // 放款机构
                 loanCycle: "", // 期数                 loanCycle
                 interestRate: "", // 贷款利息       interestRate
                 repayment: "", // 还款方式          repayment
@@ -200,7 +213,7 @@ export default {
 
             proCustEditDataRules: {
                 // name: [{required: true, message: '请输产品名称', trigger: 'blur'}],
-                // lender: [{required: true, message: '请输放款机构', trigger: 'blur'}],
+                fkLoanAgencyId: [{required: true, message: '请选择放款机构', trigger: 'blur'}],
                 loanCycle: [{required: true, message: '请选择期数', trigger: 'blur'}],
                 interestRate: [
                     {required: true, message: '请输入贷款利息数字', trigger: 'blur'},
@@ -270,8 +283,12 @@ export default {
                     if(res.code == 0){
                         let data = res.data;
 
+                        // 放款机构枚举数据
+                        this.providers = data.providers || [];
+
                         // 初始值赋值
                         this.proEditData = {
+                            fkLoanAgencyId: data.fkLoanAgencyId, // 放款机构id
                             loanCycle: data.loanCycle, // 期数                 loanCycle
                             interestRate: data.interestRate, // 贷款利息       interestRate
                             repayment: data.repayment, // 还款方式          repayment
@@ -284,6 +301,8 @@ export default {
                             guarantorPhone: data.guarantorPhone, // 担保人电话       guarantorPhone
                             guarantorOtherInfo: data.guarantorOtherInfo, // 担保人其他信息   
                         }
+
+                        
 
                         // 前置收费单位 服务收费项单位
                         this.beforeTollUnit = !data.qzCharge? "元": data.qzCharge.split(/\d+/g)[1];  // 前置收费单位
@@ -353,6 +372,7 @@ export default {
 
                     let requiredParam = {
                         actionCode: this.data.childActionCode,
+                        fkLoanAgencyId: this.proEditData.fkLoanAgencyId
                     };
 
                     let {loanCycle, interestRate, repayment, finalAmount, qzCharge,servCharge, guaranteeMethod, guarantorName, guarantorIdNum, guarantorPhone, guarantorOtherInfo} = this.proEditData;

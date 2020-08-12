@@ -12,11 +12,11 @@
         </div>
         <div class="search-form">
             <el-form ref="search" :model="search" label-width="80px">
-                <!-- <slot name="baseSearch"></slot> -->
-                <el-form-item label="输入查询：" props="financingPlanCode">
+
+                <el-form-item label="输入查询：" prop="financingPlanCode">
                     <el-input placeholder="服务单号" v-model="search.financingPlanCode"></el-input>
                 </el-form-item>
-                <el-form-item label="执行状态：" props="actionStatus">
+                <el-form-item label="执行状态：" prop="actionStatus">
                     <el-select placeholder="全部" v-model="search.actionStatus">
                         <el-option label="全部" value></el-option>
                         <!-- <el-option label="区域一" value="shanghai"></el-option> -->
@@ -28,8 +28,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="执行时间：" props="actionTime">
-                    <el-date-picker v-model="search.actionTime" type="date" placeholder="选择执行时间-区间" value-format="yyyy-MM-dd">
+                <el-form-item label="执行时间：" prop="actionTime">
+                    <el-date-picker v-model="search.actionTime" type="date" placeholder="选择执行时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item class="btn-box">
@@ -233,7 +233,7 @@ export default {
          * @Date Changed: 2020-07-13
          */
         abbreviatedQuery() {
-            console.log( "abbreviatedQuery===> ", this.search );
+            // console.log( "abbreviatedQuery===> ", this.search );
             this.$emit("simpleQuery", this.search)
         },
 
@@ -244,6 +244,8 @@ export default {
          */ 
         resetAbbreviatedQuery(formName){
             this.$refs[formName].resetFields();
+
+            // console.log( this.search );
 
             this.$emit("simpleQuery", this.search);
         },

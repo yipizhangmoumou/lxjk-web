@@ -12,17 +12,29 @@
                 <el-form-item label="产品名称：">
                     <el-input 
                         disabled
-                        v-model="data.productName" 
+                        v-model="proCustData.productName" 
                         placeholder="请输产品名称">
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="放款机构：">
-                    <el-input 
+                <el-form-item label="放款机构：" prop="fkLoanAgencyId">
+                    <!-- <el-input 
                         disabled
-                        v-model="data.orgName" 
+                        v-model="proCustData.orgName" 
                         placeholder="请输放款机构">
-                    </el-input>
+                    </el-input> 
+                    providers-->
+                    <el-select 
+                        v-model="proCustData.fkLoanAgencyId" 
+                        placeholder="请选择放款机构">
+                        <!-- <el-option label="6期" value="6"></el-option> -->
+                        <el-option 
+                            v-for="(item,idx) in data.providers"
+                            :key="idx"
+                            :label="item.name" 
+                            :value="item.fkLoanAgencyId">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
 
                 <el-form-item label="期数：" prop="loanCycle">
@@ -171,7 +183,7 @@ export default {
                     planCode: "",
                     productId: "", 
                     productName: "",
-                    orgName: "",
+                    providers: [],
                     loanInterest: "",
                     amountRegin: ""
                 }
@@ -195,7 +207,7 @@ export default {
             // 表单数据
             proCustData: {
                 // name: "AAAA",   // 产品名称   
-                // lender: "CCCC", // 放款机构
+                fkLoanAgencyId: "", // 放款机构
                 loanCycle: "", // 期数                 loanCycle
                 interestRate: "", // 贷款利息       interestRate
                 repayment: "", // 还款方式          repayment
@@ -218,7 +230,7 @@ export default {
 
             proCustDataRules: {
                 // name: [{required: true, message: '请输产品名称', trigger: 'blur'}],
-                // lender: [{required: true, message: '请输放款机构', trigger: 'blur'}],
+                fkLoanAgencyId: [{required: true, message: '请输放款机构', trigger: 'blur'}],
                 loanCycle: [{required: true, message: '请选择期数', trigger: 'blur'}],
                 interestRate: [
                     {required: true, message: '请输入贷款利息数字', trigger: 'blur'},
@@ -259,11 +271,6 @@ export default {
                 ]
             }
         }
-    },
-    created(){
-       
-        
-
     },
     methods: {
         // /**
@@ -340,7 +347,8 @@ export default {
                     // let requiredParam = JSON.parse(JSON.stringify(this.proCustData));
                     let requiredParam = {
                         financingPlanCode: this.data.planCode,
-                        productId: this.data.productId
+                        productId: this.data.productId,
+                        fkLoanAgencyId: this.proCustData.fkLoanAgencyId
                     };
 
                     let {loanCycle, interestRate, repayment, finalAmount, qzCharge,servCharge, guaranteeMethod, guarantorName, guarantorIdNum, guarantorPhone, guarantorOtherInfo} = this.proCustData;

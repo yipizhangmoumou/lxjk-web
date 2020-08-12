@@ -124,15 +124,15 @@
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 本年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{currentYearRevenue[businessInfo.currentYearRevenue]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{businessInfo.currentYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度销售收入</div>
-        <el-button class="pdl10" disabled type="text">{{lastYearRevenue[businessInfo.lastYearRevenue]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{businessInfo.lastYearRevenue}}</el-button>
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
-        <el-button class="pdl10" disabled type="text">{{lastYearInvoiceAmount[businessInfo.lastYearInvoiceAmount]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{businessInfo.lastYearInvoiceAmount}}</el-button>
     </el-col>
   </el-row>  
   <el-row>
@@ -142,7 +142,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
-        <el-button class="pdl10" disabled type="text">{{realEstateVal[enterpriseAssetInfo.realEstateVal]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.realEstateVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -154,7 +154,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 设备价值</div>
-        <el-button class="pdl10" disabled type="text">{{equipmentVal[enterpriseAssetInfo.equipmentVal]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.equipmentVal}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -166,7 +166,7 @@
     </el-col>
     <el-col :span="8">
        <div class=""><i class="redrules">*</i> 专利数</div>
-        <el-button class="pdl10" disabled type="text">{{patentVal[enterpriseAssetInfo.patentVal]}}</el-button>
+        <el-button class="pdl10" disabled type="text">{{enterpriseAssetInfo.patentVal}}</el-button>
     </el-col>
   </el-row>    
   <el-row>
@@ -553,7 +553,6 @@ export default {
       },
     thattreeFn(showData,listData,type){
       listData.forEach((item)=>{
-        
         if(showData == item.code){
             if(type==1){
                 this.areaText.push(item.name)
@@ -587,8 +586,9 @@ export default {
       })
       if(type==1){
         this.areaTextinfo = this.areaText.join('/');
+        console.log(this.areaText)
       }else{
-        //   console.log(this.areaTextbank);
+          console.log(this.areaTextbank);
           
         this.areaTextinfoBank = this.areaTextbank.join('/');
       }        
@@ -596,16 +596,26 @@ export default {
         thatindustryFn(data){
             this.industryTypeArr.map(item=>{
                 item.children.map(item1=>{
+                  if(isNaN(data)){
+                    if(data== item.code){
+                        this.industryText.push(item.name)
+                        this.industryType = [item.code,item1.code]
+                        return 
+                    }
+                  }else{
                     if(data== item1.code){
                         this.industryText.push(item.name)
                         this.industryType = [item.code,item1.code]
                         return 
                     }
+                  }
+                    
                 })
             })
             // console.log(this.industryText);
             
             this.industryTextinfo = this.industryText[0]
+            console.log(data,this.industryText);
         },
     getIndustryTree() {
       this.$axios.post('/api/mgm/industry/getIndustryTree').then(res => {
