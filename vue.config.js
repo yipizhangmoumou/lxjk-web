@@ -15,14 +15,14 @@ module.exports = {
                   '^/api': ''
                 }
             },
-            // '/remote': {
-            //     target: 'https://p2ptest.creditdata.cn:10000/p2p/remote',
-            //     secure: false,
-            //     changeOrigin: true,
-            //     pathRewrite: {
-            //         '^/remote': ''
-            //     }
-            // }
+            '/remote': {
+                target: 'https://p2ptest.creditdata.cn:10000/p2p/remote',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/remote': ''
+                }
+            }
         }
     },
     configureWebpack: {

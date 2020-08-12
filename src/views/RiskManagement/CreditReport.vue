@@ -93,7 +93,8 @@ export default {
           label: "黄金糕"
         }
       ],
-      value: ""
+      value: "",
+      dicType: 1
     };
   },
   filters: {
@@ -203,12 +204,12 @@ export default {
         });
     },
     testGet () {
-      this.$jsonp('https://p2ptest.creditdata.cn:10000/p2p/remote/quickRiskRemain.shtml', {
+      this.$axios.get('/remote/toDoQuery.shtml', {
+        params: {
           member: '3041',
           sign: 'JNoCMYv9wc46I',
-            callbackQuery: "cb",
-            callbackName: "jsonpCallback",
-            output:'json'
+          type: this.dicType
+        }
       }).then((res) =>{
         console.log(res)
       }).catch(err =>
@@ -231,11 +232,6 @@ export default {
     this.testGet()
   },
   mounted () {
-    /*window.jsonpCallback = (data) => {
-      console.log(data)
-      console.log('mounted')
-      this.jsonpFunction(data)
-    }*/
   }
 };
 </script>

@@ -12,6 +12,9 @@
             <el-form-item label="用户账户(登陆账号)" prop="userAccount">
                 <el-input v-model="form.userAccount" placeholder=""></el-input>
             </el-form-item>
+            <el-form-item label="用户密码" prop="password" v-if="isNew">
+                <el-input v-model="form.password" placeholder=""></el-input>
+            </el-form-item>
             <el-form-item label="用户名(用户真实姓名)" prop="userName">
                 <el-input v-model="form.userName" placeholder=""></el-input>
             </el-form-item>
@@ -61,13 +64,15 @@ export default {
         pkId: null,
         phone: '',
         userAccount: '',
+        password: '',
         userName: '',
         userType: undefined
       },
       rules: {
         phone: [{required: true, message: ' ', trigger: 'blur'}],
         userAccount: [{required: true, message: ' ', trigger: 'blur'}],
-        userType: [{required: true, message: ' ', trigger: 'blur'}]
+        userType: [{required: true, message: ' ', trigger: 'blur'}],
+        password: [{required: true, message: ' ', trigger: 'blur'}]
       }
     }
   },
@@ -126,6 +131,7 @@ export default {
             pkId: null,
             phone: '',
             userAccount: '',
+            password: '',
             userName: '',
             userType: undefined
           }
