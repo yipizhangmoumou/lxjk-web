@@ -7,7 +7,7 @@
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="left" label-width="80px" :rules="rules">
             <el-form-item label="所属机构" prop="fkCompanyId">
-                <el-select v-model="form.fkCompanyId" placeholder="" class="full-width" @change="handleChangeFK">
+                <el-select v-model="form.fkCompanyId" placeholder="" class="full-width">
                     <el-option
                             v-for="item in lAlist"
                             :key="item.pkId"
@@ -16,16 +16,16 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="上级岗位">
-                <el-select v-model="form.parentId" placeholder="" :disabled="!form.fkCompanyId" class="full-width">
-                    <el-option
-                            v-for="item in adeptList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-form-item>
+<!--            <el-form-item label="上级岗位">-->
+<!--                <el-select v-model="form.parentId" placeholder="" :disabled="!form.fkCompanyId" class="full-width">-->
+<!--                    <el-option-->
+<!--                            v-for="item in adeptList"-->
+<!--                            :key="item.value"-->
+<!--                            :label="item.label"-->
+<!--                            :value="item.value">-->
+<!--                    </el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
             <el-form-item label="岗位名称" prop="deptName">
                 <el-input v-model="form.deptName" placeholder=""></el-input>
             </el-form-item>
