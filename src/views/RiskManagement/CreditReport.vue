@@ -157,12 +157,16 @@ export default {
     },
     handleView (row) {
       console.log(row)
-      this.$axios.get('/remote/mspClientSimpleQuery.shtml', {
-        params: Object.assign({}, row, INFO_DEFINE)
+      this.$router.push({
+        name: 'CreditReferenceDetails',
+        query: row
       })
-        .then(res => {
-          console.log(res)
-        })
+      // this.$axios.get('/remote/mspClientSimpleQuery.shtml', {
+      //   params: Object.assign({}, row, INFO_DEFINE)
+      // })
+      //   .then(res => {
+      //     console.log(res)
+      //   })
     },
     /**
      * @dir 全选
