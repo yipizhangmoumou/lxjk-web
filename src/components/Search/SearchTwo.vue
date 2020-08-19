@@ -8,26 +8,26 @@
   <div id="SearchTwo">
     <div class="search-header">
       <div class="title head-item">数据筛选</div>
-      <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>
+<!--      <div class="btn head-item" @click="dialogVisible = true">高级搜索</div>-->
     </div>
     <div class="search-form">
       <el-form ref="search" :model="search" label-width="80px">
         <el-form-item label="输入查询">
-          <el-input placeholder="用户ID/手机号/姓名" v-model="search.name"></el-input>
+          <el-input placeholder="用户ID/手机号/姓名" v-model="search.userIdOrMobileOrName"></el-input>
         </el-form-item>
         <el-form-item label="机构">
-          <el-input placeholder="机构名称/编号" v-model="search.name"></el-input>
+          <el-input placeholder="机构名称/编号" v-model="search.loanAgencyIdOrName"></el-input>
         </el-form-item>
-        <el-form-item label="岗位">
-          <el-select placeholder="全部" v-model="search.jb">
-            <el-option label="全部" value></el-option>
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="岗位">-->
+<!--          <el-select placeholder="全部" v-model="search.jb">-->
+<!--            <el-option label="全部" value></el-option>-->
+<!--            <el-option label="区域一" value="shanghai"></el-option>-->
+<!--            <el-option label="区域二" value="beijing"></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item class="btn-box">
           <el-button size="small" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="el-icon-back">重置</el-button>
+          <el-button size="small" icon="el-icon-back" @click="handleC">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -83,9 +83,8 @@ export default {
   data() {
     return {
       search: {
-        name: "",
-        region: "",
-        jb: ""
+        loanAgencyIdOrName: "",
+        userIdOrMobileOrName: ""
       },
       dialogVisible: false,
       form: {
@@ -118,7 +117,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
+      this.$emit('search', this.search);
+    },
+    handleC () {
+      this.search = {
+        loanAgencyIdOrName: "",
+        userIdOrMobileOrName: ""
+      };
+      this.$emit('search', {});
     },
     submitSearch() {
       console.log(this.form)
@@ -140,4 +146,8 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../../assets/styl/search.styl";
+  .btn-box{
+    width: 500px;
+    text-align: right;
+  }
 </style>

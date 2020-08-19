@@ -1,6 +1,6 @@
 <template>
   <div id="EmployeeAdmin">
-    <SearchTwo />
+    <SearchTwo @search="onSearch"/>
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
@@ -119,6 +119,10 @@ export default {
   },
   mixins: [tableMixin],
   methods: {
+    onSearch (val) {
+      this.queryObj = Object.assign({}, {status: '3'}, val);
+      this.getTableData();
+    },
     /**
      * @dir 全选
      * @param null

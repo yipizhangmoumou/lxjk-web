@@ -1,6 +1,6 @@
 <template>
   <div id="EmployeeAdmin">
-    <SearchTwo />
+    <SearchTwo @search="onSearch" />
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
@@ -116,6 +116,10 @@ export default {
   },
   mixins: [tableMixin],
   methods: {
+    onSearch (val) {
+      this.queryObj = val;
+      this.getTableData();
+    },
     handleDelete (row) {
       this.$confirm('确认删除这条数据吗', '确认').then(() => {
         this.$axios.post(`/api/mgm/loanAgencyUser/delete/${row.pkId}`)

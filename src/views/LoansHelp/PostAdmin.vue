@@ -1,6 +1,6 @@
 <template>
   <div id="PostAdmin">
-    <SearchOne />
+<!--    <SearchOne />-->
     <div class="table-container">
       <div class="table-header">
         <h5>数据列表</h5>
@@ -99,7 +99,7 @@
 
 <script>
 import CopyRight from "components/CopyRight"
-import SearchOne from "components/Search/SearchOne";
+// import SearchOne from "components/Search/SearchOne";
 import EditPost from "./component/EditPost"
 import tableMixin from '../../assets/js/tableMixin'
 export default {
@@ -288,7 +288,7 @@ export default {
     }
   },
   components: {
-    SearchOne,
+    // SearchOne,
     CopyRight,
     EditPost
   },
@@ -305,7 +305,7 @@ export default {
   position relative
   .table-container
     width 1100px
-    margin 0 auto 200px
+    margin 20px auto 200px
     background-color #fff
     padding 20px
     box-sizing border-box

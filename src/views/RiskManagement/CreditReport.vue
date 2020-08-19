@@ -18,7 +18,7 @@
                 <div class="table-btn">
                     <!--          <el-button size="small" icon="el-icon-upload2">导出</el-button>-->
 <!--                              <el-button size="small" icon="el-icon-plus" type="primary" @click="testGet">测试接口</el-button>-->
-                    <!--          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加产品</el-button>-->
+                    <el-button size="small" icon="el-icon-plus" type="primary" @click="handleQuery">首次查询</el-button>
                 </div>
             </div>
             <div class="table">
@@ -72,11 +72,15 @@
             </div>
         </div>
         <CopyRight/>
+        <FirstQuery
+            v-model="queryVisible"
+        />
     </div>
 </template>
 
 <script>
 import CopyRight from 'components/CopyRight'
+import FirstQuery from './component/FirstQuery'
 import tableMixin from '../../assets/js/tableMixin'
 
 const INFO_DEFINE = {
@@ -104,7 +108,8 @@ export default {
         {value: 3, label: '获取逾期状态待共享列表'},
         {value: 4, label: '获取审批结果待共享列表'},
         {value: 5, label: '获取审批通过无合同待共享列表'}
-      ]
+      ],
+      queryVisible: false
     }
   },
   filters: {
@@ -115,6 +120,9 @@ export default {
   },
   mixins: [tableMixin],
   methods: {
+    handleQuery () {
+      this.queryVisible = true
+    },
     getTableData () {
       this.isLoading = true
       this.$axios.get('/remote/toDoQuery.shtml', {
@@ -179,7 +187,8 @@ export default {
     }
   },
   components: {
-    CopyRight
+    CopyRight,
+    FirstQuery
   },
   created () {
   },

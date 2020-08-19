@@ -569,14 +569,60 @@ export default {
   },
   methods: {
     getDicLabel (listName, value) {
-      console.log(value)
       if (!value) return '-'
       let obj = this[listName].find(v => v.value === value)
       if (!obj) return '-'
       return obj.label
     },
     initData () {
-      if (this.$route.query) {
+      console.log(this.$route.params)
+      console.log(INFO_DEFINE)
+      if (Object.keys(this.$route.params).length !== 0) {
+        let res = this.$route.params;
+        res.detail = []
+        if (res.title) {
+          let title = res.title
+          res.detail.push({
+            key: '笔数',
+            applying: title.applyingCount,
+            applyPassed: title.applyPassedCount,
+            applyReject: title.applyRejectCount,
+            applyCancel: title.applyCancelCount,
+            applyTotal: title.applyTotalCount,
+            wjq: title.wjqCount,
+            jq: title.jqCount,
+            total: title.totalCount,
+            ewjq: title.ewjqCount,
+            ejq: title.ejqCount,
+            etotal: title.etotalCount,
+            black: title.blackCount,
+            queryCount3Month: title.queryCount3Month,
+            queryCount6Month: title.queryCount6Month,
+            queryCount2Year: title.queryCount2Year,
+            queryCount: title.queryCount
+          })
+          res.detail.push({
+            key: '总(合同)金额',
+            applying: title.applyingSumMoney,
+            applyPassed: title.applyPassedSumMoney,
+            applyReject: title.applyRejectSumMoney,
+            applyCancel: title.applyCancelSumMoney,
+            applyTotal: title.applyTotalSumMoney,
+            wjq: title.wjqSumMoney,
+            jq: title.jqSumMoney,
+            total: title.totalSumMoney,
+            ewjq: title.ewjqSumMoney,
+            ejq: title.ejqSumMoney,
+            etotal: title.etotalSumMoney,
+            black: title.blackSumMoney,
+            queryCount3Month: '- -',
+            queryCount6Month: '- -',
+            queryCount2Year: '- -',
+            queryCount: '- -'
+          })
+        }
+        this.form = res
+      } else {
         this.loading = true
         this.$axios.get(`/remote/mspClientSimpleQuery.shtml`, {
           params: Object.assign({}, this.$route.query, INFO_DEFINE)
