@@ -12,7 +12,7 @@
                 <el-form-item label="产品名称：">
                     <el-input 
                         disabled
-                        v-model="proCustData.productName" 
+                        v-model="data.productName" 
                         placeholder="请输产品名称">
                     </el-input>
                 </el-form-item>
@@ -190,7 +190,38 @@ export default {
             }
         }
     },
+
     data () {
+
+        /**
+         * @description: 申请额度大小校验
+         * @Date Changed: 2020-08-20
+         */  
+        let checkFinalAmount = (rule, value, callback) => {
+
+            try{
+                
+                let rangleString = this.data.amountRegin;
+                let minRagle = rangleString.split("-")[0];
+                let maxRagle = rangleString.split("-")[1].split("万元")[0];
+
+                // console.log(  "最小值，最大值",  minRagle  +"  " + maxRagle );
+
+                if( value < minRagle ){
+
+                    callback(new Error(`申请额度最小值为：${minRagle}`));
+
+                }else if( value > maxRagle ){
+                    
+                    callback(new Error(`申请额度最大值为：${maxRagle}`));
+                }
+
+            }catch(err){
+                console.error( "后台数据异常,字段【amountRegin】有误！" );
+            }
+
+        } 
+
         return {
 
             /**
@@ -241,7 +272,7 @@ export default {
                 finalAmount: [
                     {required: true, message: '请输入申请额度数字', trigger: 'blur'},
                     {type: 'number', message: '申请额度必须为数字值', trigger: 'blur'},
-                    // {type: 'number', min: 10, max: 100, message: '申请额度10-100万', trigger: 'blur'},
+                    { validator: checkFinalAmount, trigger: 'blur'},
                 ],
                 qzCharge: [
                     {required: true, message: '请输前置收费', trigger: 'blur'},
@@ -325,14 +356,13 @@ export default {
          */     
         handleClear(formName){
             this.$refs[formName].resetFields();
-        },
+        },   
 
         /**
          * @description: 弹窗【取消】按钮
          * @Date Changed: 2020-07-12
          */
         handleClose () {
-            // this.handleClear("proCustDataRules");
             this.$emit('changeVisible', false);
         },
 

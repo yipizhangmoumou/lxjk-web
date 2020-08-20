@@ -7,8 +7,8 @@
         <div class="table-container">
             <div class="table-header">
                 <h5>数据列表</h5>
-                <div class="table-btn">
-                    <el-button size="small" icon="el-icon-upload2">导出</el-button>
+                <div class="table-btn" >
+                    <el-button v-if="false" size="small" icon="el-icon-upload2">导出</el-button>
                 </div>
             </div>
             <div class="table">
