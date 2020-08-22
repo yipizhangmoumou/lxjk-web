@@ -9,7 +9,6 @@
         :before-close="handleClose">
         <el-form ref="proEditData" :model="proEditData" label-position="" :rules="proCustEditDataRules">
             <div class="form-line">
-                            
                 <el-form-item label="产品名称：">
                     <el-input 
                         disabled
@@ -59,16 +58,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item 
-                    label="申请额度："
-                    prop="applySalary">
+
+                <el-form-item label="申请额度：" prop="finalAmount">
                     <samp  class="laebl-info">{{ data.finalAmountRegion }}</samp>
-                    <el-input v-model.number="proEditData.finalAmount" placeholder="请输入申请额度数字">
+                    <el-input 
+                        v-model.number="proEditData.finalAmount" 
+                        placeholder="请输入申请额度数字">
                         <i slot="suffix" class="unit"  style="font-size: 18px">万</i>
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="前置收费：" prop="beforeToll">
+                <el-form-item label="前置收费：" prop="qzCharge">
                     <samp  class="laebl-info">{{ data.qzChargeItemRate }}</samp>
                     <el-input placeholder="请输入数字" v-model.number="proEditData.qzCharge" class="input-with-select">
                         <el-select v-model="beforeTollUnit" slot="append" placeholder="请选择">
@@ -173,6 +173,40 @@ export default {
         }
     },
     data () {
+
+        /**
+         * @description: 申请额度大小校验
+         * @Date Changed: 2020-08-20
+         */  
+        let checkFinalAmount = (rule, value, callback) => {
+
+            console.log( "触发申请额度校验~~~" );
+
+            console.log( "this.data", this.data );
+
+            try{
+                
+                let rangleString = this.data.finalAmountRegion;
+                let minRagle = rangleString.split("-")[0];
+                let maxRagle = rangleString.split("-")[1].split("万元")[0];
+
+                // console.log(  "最小值，最大值",  minRagle  +"  " + maxRagle );
+
+                if( value < minRagle ){
+
+                    callback(new Error(`申请额度最小值为：${minRagle}`));
+
+                }else if( value > maxRagle ){
+                    
+                    callback(new Error(`申请额度最大值为：${maxRagle}`));
+                }
+
+            }catch(err){
+                console.error( "后台数据异常,字段【amountRegin】有误！" );
+            }
+        }
+
+
         return {
 
 
@@ -218,13 +252,13 @@ export default {
                 interestRate: [
                     {required: true, message: '请输入贷款利息数字', trigger: 'blur'},
                     {type: 'number', message: '贷款利息必须为数字值', trigger: 'blur'},
-                    // {type: 'number', min: 7, max: 9, message: '贷款利息7%~9%', trigger: 'blur' }
+                    {type: 'number', min: 7, max: 9, message: '贷款利息7%~9%', trigger: 'blur' }
                 ],
                 repayment: [{required: true, message: '请选择还款方式', trigger: 'blur'}],
                 finalAmount: [
                     {required: true, message: '请输入申请额度数字', trigger: 'blur'},
                     {type: 'number', message: '申请额度必须为数字值', trigger: 'blur'},
-                    // {type: 'number', min: 10, max: 100, message: '申请额度10-100万', trigger: 'blur'},
+                    {validator: checkFinalAmount, trigger: 'blur'},
                 ],
                 qzCharge: [
                     {required: true, message: '请输前置收费', trigger: 'blur'},
@@ -279,7 +313,7 @@ export default {
         getInitData(childActionCode){
             this.$axios.post(`/api/mgm/actionChildPlan/selectProductCustomizationDialog/${childActionCode}`)
                 .then(res=>{
-                    console.log( "查看产品定制页面弹出框响应：", res );
+                    // console.log( "查看产品定制页面弹出框响应：", res );
                     if(res.code == 0){
                         let data = res.data;
 

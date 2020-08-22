@@ -9,7 +9,7 @@
             <div class="table-header">
                 <h5>数据列表</h5>
                 <div class="table-btn">
-                    <el-button size="small" icon="el-icon-upload2">导出</el-button>
+                    <el-button v-if="false" size="small" icon="el-icon-upload2">导出</el-button>
 
                     <!-- 放款机构审核结果确认：待处理 -->
                     <el-button

@@ -8,7 +8,7 @@
         <div class="table-header">
             <h5>数据列表</h5>
             <div class="table-btn">
-                <el-button size="small" icon="el-icon-upload2">导出</el-button>
+                <el-button v-if="false" size="small" icon="el-icon-upload2">导出</el-button>
                 <!-- 一、风控审核 -->
                 <el-button
                     v-if="isAdminRole"
@@ -66,7 +66,7 @@
             <div class="selectBtn">
                 <el-button size="small" @click="selectAll">全选</el-button>
                 <el-button size="small" @click="invertSelection(tableData)">反选</el-button>
-                <el-select v-model="value" placeholder="批量操作" @change="batchOperating">
+                <el-select v-if="false" v-model="value" placeholder="批量操作" @change="batchOperating">
                     <!-- <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -405,10 +405,11 @@ export default {
          * @return null
          */
         invertSelection(rows) {
+            // console.log( "反选", rows );
             let arr = [];
             this.tableData.forEach((e, index) => {
                 rows.forEach(i => {
-                    if (e.id_ === i.id_) {
+                    if (e.financingPlanId === i.financingPlanId) {
                         arr.push(this.tableData[index]);
                     }
                 });

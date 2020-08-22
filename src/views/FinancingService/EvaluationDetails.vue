@@ -4,7 +4,7 @@
 
         <div class="evaluation-details">
             <div class="details-header">
-                订单编号：{{ id }}
+                评估单号：{{ initData.codeId }}
             </div>
             <div class="evaluation-details-main">
                 <!-- 一、基本信息 -->
@@ -74,7 +74,7 @@
                             <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
                             <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
                             <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
-                            <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
+                            <el-table-column label="可申请额度" prop="financingAmount"></el-table-column>
                         </el-table>
                         <!-- 分页 -->
                         <div class="page-conatiner">
@@ -135,7 +135,7 @@
                             <el-table-column label="贷款利息" prop="loanInterest"></el-table-column>
                             <el-table-column label="还款方式" prop="repaymentStr"></el-table-column>
                             <el-table-column label="担保方式" prop="guaranteeMethodStr"></el-table-column>
-                            <el-table-column label="最高申请额度" prop="financingAmount"></el-table-column>
+                            <el-table-column label="可申请额度" prop="financingAmount"></el-table-column>
                         </el-table>
                         <!-- 分页 -->
                         <div class="page-conatiner">
@@ -291,6 +291,8 @@ export default {
                 // 流程步骤数据
                 stepActive: 2,
 
+                codeId: "",
+
                 stepData: [
                     {
                         name: "评估申请",
@@ -413,6 +415,10 @@ export default {
                         this.initData.stepActive = data.assessmentApply.applyResult ? 3 : !data.assessmentApply.meetProductNum ? 2 : 1;
                         /** ------ 评估进度状态 数据重构：开始------ **/
 
+                        /** ------ 评估单号：开始 ------ **/ 
+                        this.initData.codeId = data.assessmentApply.code;
+                        /** ------ 评估单号：结束 ------ **/ 
+
 
                         /** ------ 基本信息 数据重构：开始------ **/
                         let arr = [];
@@ -442,7 +448,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
                             }
                         });
                         this.initData.applicableProducts.middleTerms = !data.middleTerms ? [] : data.middleTerms.map((item,idx)=>{
@@ -456,7 +462,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
                             }
                         });
                         this.initData.applicableProducts.longTerms = !data.longTerms ? [] : data.longTerms.map((item,idx)=>{
@@ -470,7 +476,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
                             }
                         });
                         /** ------ 评估适用产品 数据重构：结束------ **/
@@ -489,7 +495,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
 
                             }
                         });
@@ -505,7 +511,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
 
                             }
                         });
@@ -521,7 +527,7 @@ export default {
                                 loanInterest: !item.loanInterest ? "-" : item.loanInterest,// 贷款利息
                                 repaymentStr: !item.repaymentStr ? "-" : item.repaymentStr,// 还款方式
                                 guaranteeMethodStr: !item.guaranteeMethodStr ? "-" : item.guaranteeMethodStr,// 担保方式
-                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 最高申请额度
+                                financingAmount: !item.financingAmount ? "-" : item.financingAmount// 可申请额度
 
                             }
                         });
