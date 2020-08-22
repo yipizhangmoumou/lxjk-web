@@ -5,7 +5,7 @@
       <div class="table-header">
         <h5>数据列表</h5>
         <div class="table-btn">
-          <el-button size="small" icon="el-icon-upload2">导出</el-button>
+<!--          <el-button size="small" icon="el-icon-upload2">导出</el-button>-->
           <el-button size="small" icon="el-icon-plus" type="primary" @click="$router.push('/addAndEditEmployee/add')">添加</el-button>
         </div>
       </div>

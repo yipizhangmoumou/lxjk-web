@@ -27,7 +27,7 @@
 <!--                </el-select>-->
 <!--            </el-form-item>-->
             <el-form-item label="岗位名称" prop="deptName">
-                <el-input v-model="form.deptName" placeholder=""></el-input>
+                <el-input v-model="form.deptName" placeholder="" maxlength="48"></el-input>
             </el-form-item>
             <el-form-item label="岗位描述">
                 <el-input v-model="form.description" type="textarea" placeholder=""></el-input>

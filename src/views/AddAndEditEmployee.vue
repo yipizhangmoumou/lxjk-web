@@ -152,7 +152,8 @@ export default {
             .then(() => {
               this.loading = false
               this.$msgSuccess()
-              this.$router.back(-1)
+              // this.$router.back(-1)
+              this.$router.push({path: '/employeeAdmin'})
             })
             .catch(err => {
               this.loading = false

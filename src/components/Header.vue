@@ -1,30 +1,30 @@
 <template>
   <div id="Header">
-    <div class="search item">
-      <input type="text" placeholder="请输入搜索内容" />
-      <i class="el-icon-search"></i>
-    </div>
-    <div class="user-info item">
-      <el-dropdown>
-        <span class="el-dropdown-link">
-          <img src="../assets/images/avatar.png" alt />
-          Admin
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>修改密码</el-dropdown-item>
-          <el-dropdown-item>基本信息</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-    <div class="message item">
-      <el-badge :value="12" class="item">
-        <i class="el-icon-message-solid"></i>
-      </el-badge>
-    </div>
-    <div class="setting item">
-      <i class="el-icon-s-tools"></i>
-    </div>
+<!--    <div class="search item">-->
+<!--      <input type="text" placeholder="请输入搜索内容" />-->
+<!--      <i class="el-icon-search"></i>-->
+<!--    </div>-->
+<!--    <div class="user-info item">-->
+<!--      <el-dropdown>-->
+<!--        <span class="el-dropdown-link">-->
+<!--          <img src="../assets/images/avatar.png" alt />-->
+<!--          Admin-->
+<!--          <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+<!--        </span>-->
+<!--        <el-dropdown-menu slot="dropdown">-->
+<!--          <el-dropdown-item>修改密码</el-dropdown-item>-->
+<!--          <el-dropdown-item>基本信息</el-dropdown-item>-->
+<!--        </el-dropdown-menu>-->
+<!--      </el-dropdown>-->
+<!--    </div>-->
+<!--    <div class="message item">-->
+<!--      <el-badge :value="12" class="item">-->
+<!--        <i class="el-icon-message-solid"></i>-->
+<!--      </el-badge>-->
+<!--    </div>-->
+<!--    <div class="setting item">-->
+<!--      <i class="el-icon-s-tools"></i>-->
+<!--    </div>-->
     <div class="logout item" @click="logOut">
       <i class="el-icon-switch-button"></i>
     </div>

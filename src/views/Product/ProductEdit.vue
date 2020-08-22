@@ -189,11 +189,11 @@
             </el-form-item>
           </div>
           <div class="form-line">
-            <el-form-item label="(不低于)公司注册资本" prop="registeredCapital">
+            <el-form-item label="(不低于)公司注册资本(万元)" prop="registeredCapital">
               <el-input-number v-model="form.productApplyCondition.registeredCapital" :min="0"
                                :controls="false" placeholder=""></el-input-number>
             </el-form-item>
-            <el-form-item label="(不低于)公司注册年限" prop="operateTime">
+            <el-form-item label="(不低于)公司注册年限(年)" prop="operateTime">
               <el-input-number v-model="form.productApplyCondition.operateTime" :min="0"
                                :controls="false" placeholder=""></el-input-number>
             </el-form-item>
@@ -201,7 +201,7 @@
           </div>
         <h4 class="edit-title">准入条件--法人信息</h4>
           <div class="form-line">
-            <el-form-item label="法人年龄" prop="applicantAge">
+            <el-form-item label="法人年龄(岁)" prop="applicantAge">
               <el-select v-model="form.productApplyCondition.applicantAge" placeholder="">
                 <el-option
                         v-for="item in corporate_age"
@@ -216,25 +216,25 @@
           </div>
         <h4>准入条件--企业经营</h4>
         <div class="form-line">
-          <el-form-item label="上年度销售收入最小值" prop="lastYearRevenueMin">
+          <el-form-item label="上年度销售收入最小值(万元)" prop="lastYearRevenueMin">
             <el-input-number v-model="form.productApplyCondition.lastYearRevenueMin" :min="0"
                              :controls="false" placeholder=""/>
           </el-form-item>
-          <el-form-item label="上年度销售收入最大值" prop="lastYearRevenueMax">
+          <el-form-item label="上年度销售收入最大值(万元)" prop="lastYearRevenueMax">
             <el-input-number v-model="form.productApplyCondition.lastYearRevenueMax" :min="0"
                              :controls="false" placeholder=""/>
           </el-form-item>
-            <el-form-item label="上年度开票收入" prop="yearInvoiced">
+            <el-form-item label="上年度开票收入(万元)" prop="yearInvoiced">
               <el-input-number v-model="form.productApplyCondition.yearInvoiced" :min="0"
                                :controls="false" placeholder=""/>
             </el-form-item>
         </div>
         <div class="form-line">
-          <el-form-item label="本年度销售收入最小值" prop="currentYearRevenueMin">
+          <el-form-item label="本年度销售收入最小值(万元)" prop="currentYearRevenueMin">
             <el-input-number v-model="form.productApplyCondition.currentYearRevenueMin" :min="0"
                              :controls="false" placeholder=""/>
           </el-form-item>
-          <el-form-item label="本年度销售收入最大值" prop="currentYearRevenueMax">
+          <el-form-item label="本年度销售收入最大值(万元)" prop="currentYearRevenueMax">
             <el-input-number v-model="form.productApplyCondition.currentYearRevenueMax" :min="0"
                              :controls="false" placeholder=""/>
           </el-form-item>

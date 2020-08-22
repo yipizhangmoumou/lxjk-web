@@ -6,7 +6,7 @@
         <h5>数据列表</h5>
         <div class="table-btn">
 <!--          <el-button size="small" icon="el-icon-upload2">导出</el-button>-->
-          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加产品</el-button>
+          <el-button size="small" icon="el-icon-plus" type="primary" @click="handleAddNew">添加产品货贷机构</el-button>
         </div>
       </div>
       <div class="table">
