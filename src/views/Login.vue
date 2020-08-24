@@ -55,10 +55,12 @@
                     // 登录调试
                   this.loading = true
                     this.$axios.post('/api/mgm/index/login', this.user).then(res => {
-                      window.sessionStorage.setItem('token', res.data.token)
-                      window.sessionStorage.setItem('role', res.data.role)
+                      window.sessionStorage.setItem('token', res.data.token);
+                      window.sessionStorage.setItem('userName', res.data.userName || "");
+                      window.sessionStorage.setItem('role', res.data.role);
                       let userInfo = {
-                        role: res.data.role
+                        role: res.data.role,
+                        userName: res.data.userName
                       }
                       this.$store.commit('setLoginUserInfo', userInfo)
                       this.$router.push("/");

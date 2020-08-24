@@ -4,19 +4,22 @@
 <!--      <input type="text" placeholder="请输入搜索内容" />-->
 <!--      <i class="el-icon-search"></i>-->
 <!--    </div>-->
-<!--    <div class="user-info item">-->
-<!--      <el-dropdown>-->
-<!--        <span class="el-dropdown-link">-->
-<!--          <img src="../assets/images/avatar.png" alt />-->
-<!--          Admin-->
-<!--          <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-<!--        </span>-->
-<!--        <el-dropdown-menu slot="dropdown">-->
-<!--          <el-dropdown-item>修改密码</el-dropdown-item>-->
-<!--          <el-dropdown-item>基本信息</el-dropdown-item>-->
-<!--        </el-dropdown-menu>-->
-<!--      </el-dropdown>-->
-<!--    </div>-->
+    <div class="user-info item">
+        <span>
+            {{ userName }}
+        </span>
+        <!-- <el-dropdown> -->
+            <!-- <span class="el-dropdown-link"> -->
+                <!-- <img src="../assets/images/avatar.png" alt /> -->
+                
+                <!-- <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i> -->
+            <!-- </span> -->
+            <!-- <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>修改密码</el-dropdown-item>
+                <el-dropdown-item>基本信息</el-dropdown-item>
+            </el-dropdown-menu> -->
+        <!-- </el-dropdown> -->
+    </div>
 <!--    <div class="message item">-->
 <!--      <el-badge :value="12" class="item">-->
 <!--        <i class="el-icon-message-solid"></i>-->
@@ -32,18 +35,24 @@
 </template>
 
 <script>
-export default {
-  name: "Header",
-  data() {
-    return {};
-  },
-  methods: {
-    logOut() {
-      // 清token 和用户信息 跳转登录
-      this.$router.push('/login')
-    }
-  }
-};
+    export default {
+        name: "Header",
+        data() {
+            return {
+                userName: ''
+            };
+        },
+        mounted(){
+            console.log( "this.loginUserInfo:::",this.loginUserInfo );
+            this.userName = this.loginUserInfo.userName || "";
+        },
+        methods: {
+            logOut() {
+            // 清token 和用户信息 跳转登录
+                this.$router.push('/login')
+            }
+        }
+    };
 </script>
 
 <style lang="stylus" scoped>
