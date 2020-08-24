@@ -1220,26 +1220,44 @@ export default {
             });
         },
         reviewBtn(){
-          let code ={
-            financingCode:this.$route.params.financingCode
-          }
+            console.log("提交审核。。。。。");
+            this.$confirm('确认进行审核提交？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                
+                let code ={
+                    financingCode:this.$route.params.financingCode
+                }
+                
+                this.$axios.post('/api/mgm/financingPlan/updateChildPlanProductStatus',code)
+                    .then(res => {
+                        if(res.code == 0){
+                            this.$message({
+                                type:'success',
+                                message:'审核成功'
+                            })
+                            this.$router.push({
+                                path: '/serviceAdmin'
+                            })
+                        }else{
+                            console.log(res);
+                        }
+                    })
+                    .catch(err=>{
+                        this.$message({
+                            type: 'error',
+                            message: `审核提交失败！原因：${err}`
+                        });  
+                    })
+
+
+            }).catch(() => {
+                // console.log( "提交审核按钮：", err );
+            });
+
           
-          this.$axios.post('/api/mgm/financingPlan/updateChildPlanProductStatus',code).then(res => {
-              if(res.code == 0){
-                this.$message({
-                    type:'success',
-                    message:'审核成功'
-                })
-                this.$router.push({
-                  path: '/serviceAdmin'
-                })
-              }else{
-                  console.log(res);
-              }
-          })
-          .catch(err=>{
-            console.log(err);
-          })
         }
     }
 };
