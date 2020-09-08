@@ -185,6 +185,14 @@ export default {
                     label: "服务取消",
                     value: 7
                 },
+                {
+                    label: "风控审核不通过",
+                    value: 8
+                },
+                {
+                    label: "机构审核不通过",
+                    value: 9
+                },
             ],
 
             // 简略筛选

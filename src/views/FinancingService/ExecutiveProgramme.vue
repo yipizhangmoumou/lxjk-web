@@ -352,7 +352,7 @@ export default {
             }
             if( !!filterObj && filterObj.type == "simple" ){
                 data.financingPlanCode = !filterObj.financingPlanCode ? null : filterObj.financingPlanCode;
-                data.actionStatus  = filterObj.actionStatus === "" ? null : filterObj.actionStatus;
+                data.status  = filterObj.actionStatus === "" ? null : filterObj.actionStatus;
                 data.actionTime = !filterObj.actionTime ? null : filterObj.actionTime;
             }
             
