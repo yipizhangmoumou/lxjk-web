@@ -21,10 +21,11 @@
                 label="机构名称"
                 prop="name"
                 :rules="[
-                    { required: true, message: '请填写公司名称'}
+                    { required: true, message: '请填写公司名称'},
+          {validator: this.validateBase }
                 ]"
               >
-                <el-input v-model="form.name" placeholder="请填写公司名称"></el-input>
+                <el-input v-model="form.name" placeholder="请填写机构名称"></el-input>
               </el-form-item>
 <!--              <el-form-item-->
 <!--                label="行业类型"-->
@@ -42,7 +43,8 @@
                       label="联系人"
                       prop="leader"
                       :rules="[
-                    { required: true, message: '请填写联系人'}
+                    { required: true, message: '请填写联系人'},
+          {validator: this.validateBase }
                 ]"
               >
                 <el-input v-model="form.leader" placeholder="请填写联系人"></el-input>
@@ -85,7 +87,8 @@
                 label="手机号码"
                 prop="phone"
                 :rules="[
-                    { required: true, message: '请填写手机号码'}
+                    { required: true, message: '请填写手机号码'},
+                    {validator: validatePhone }
                 ]"
               >
                 <el-input v-model="form.phone" placeholder="请填写手机号码"></el-input>
@@ -128,7 +131,8 @@
                   label="详细地址"
                   prop="address"
                   :rules="[
-                    { required: true, message: '请填写详细地址'}
+                    { required: true, message: '请填写详细地址'},
+          {validator: this.validateBase }
                 ]"
                 >
                   <el-input style="margin-right: 50px;" v-model="form.address" placeholder="请填写详细地址"></el-input>
@@ -228,7 +232,8 @@
                 label="机构编号"
                 prop="orgCode"
                 :rules="[
-                    { required: true, message: '请填写机构编号'}
+                    { required: true, message: '请填写机构编号'},
+          {validator: this.validateBase }
                 ]"
               >
                 <el-input v-model="form.orgCode" placeholder="请填写机构编号"></el-input>

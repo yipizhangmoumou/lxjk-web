@@ -7,13 +7,13 @@
             :before-close="handleClose">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
             <el-form-item label="手机号码" prop="phone">
-                <el-input v-model="form.phone" placeholder=""></el-input>
+                <el-input v-model.trim="form.phone" placeholder="" maxlength="11"></el-input>
             </el-form-item>
             <el-form-item label="用户账户(登陆账号)" prop="userAccount">
                 <el-input v-model="form.userAccount" placeholder=""></el-input>
             </el-form-item>
             <el-form-item label="用户密码" prop="password" v-if="isNew">
-                <el-input v-model="form.password" placeholder=""></el-input>
+                <el-input v-model="form.password" placeholder="" show-password></el-input>
             </el-form-item>
             <el-form-item label="用户名(用户真实姓名)" prop="userName">
                 <el-input v-model="form.userName" placeholder=""></el-input>
@@ -22,6 +22,7 @@
                 <el-select v-model="form.userType" placeholder="" class="full-width" :disabled="!!this.form.pkId">
                     <el-option
                             v-for="item in userTypeList"
+                            v-show="item.value !== cfg.USER_TYPE.ENTERPRISE  "
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -58,6 +59,7 @@ export default {
   },
   data () {
     return {
+      cfg,
       loading: false,
       isNew: true,
       form: {
@@ -69,7 +71,10 @@ export default {
         userType: undefined
       },
       rules: {
-        phone: [{required: true, message: ' ', trigger: 'blur'}],
+        phone: [
+          {required: true, message: ' ', trigger: 'blur'},
+          {validator: this.validatePhone }
+          ],
         userAccount: [{required: true, message: ' ', trigger: 'blur'}],
         userType: [{required: true, message: ' ', trigger: 'blur'}],
         password: [{required: true, message: ' ', trigger: 'blur'}]

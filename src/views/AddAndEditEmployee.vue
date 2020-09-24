@@ -49,7 +49,8 @@
             label="手机号码："
             prop="phone"
             :rules="[
-              { required: true, message: '请输入手机号码', trigger: 'blur' }
+              { required: true, message: '请输入手机号码', trigger: 'blur' },
+          {validator: this.validatePhone }
             ]"
           >
             <el-input placeholder="请输入手机号" v-model="form.phone"></el-input>
@@ -58,7 +59,8 @@
                   label="用户姓名："
                   prop="userName"
                   :rules="[
-              { required: true, message: '请输入用户姓名', trigger: 'blur' }
+              { required: true, message: '请输入用户姓名', trigger: 'blur' },
+          {validator: this.validateBase }
             ]"
           >
             <el-input placeholder="请输入用户姓名" v-model="form.userName"></el-input>

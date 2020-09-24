@@ -80,7 +80,8 @@ export default {
       },
       rules: {
         fkCompanyId: [{required: true, message: ' ', trigger: 'blur'}],
-        deptName: [{required: true, message: ' ', trigger: 'blur'}]
+        deptName: [{required: true, message: ' ', trigger: 'blur'},
+          {validator: this.validateBase }]
       },
       adeptList: []
     }

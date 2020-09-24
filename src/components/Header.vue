@@ -11,7 +11,7 @@
         <!-- <el-dropdown> -->
             <!-- <span class="el-dropdown-link"> -->
                 <!-- <img src="../assets/images/avatar.png" alt /> -->
-                
+
                 <!-- <i class="el-icon-arrow-down el-icon&#45;&#45;right"></i> -->
             <!-- </span> -->
             <!-- <el-dropdown-menu slot="dropdown">
@@ -28,8 +28,14 @@
 <!--    <div class="setting item">-->
 <!--      <i class="el-icon-s-tools"></i>-->
 <!--    </div>-->
-    <div class="logout item" @click="logOut">
-      <i class="el-icon-switch-button"></i>
+    <div class="logout item">
+        <el-popconfirm
+            title="是否确认退出？"
+            hideIcon
+            @onConfirm="logOut"
+        >
+            <i class="el-icon-switch-button" slot="reference"/>
+        </el-popconfirm>
     </div>
   </div>
 </template>

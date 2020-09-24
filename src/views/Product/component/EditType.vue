@@ -72,8 +72,10 @@ export default {
         pkId: null
       },
       rules: {
-        code: [{required: true, message: ' ', trigger: 'blur'}],
-        name: [{required: true, message: ' ', trigger: 'blur'}]
+        code: [{required: true, message: ' ', trigger: 'blur'},
+          {validator: this.validateBase }],
+        name: [{required: true, message: ' ', trigger: 'blur'},
+          {validator: this.validateBase }]
       }
     }
   },

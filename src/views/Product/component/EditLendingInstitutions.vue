@@ -46,7 +46,8 @@ export default {
         "status": 0
       },
       rules: {
-        name: [{required: true, message: ' ', trigger: 'blur'}]
+        name: [{required: true, message: ' ', trigger: 'blur'},
+          {validator: this.validateBase }]
       }
     }
   },

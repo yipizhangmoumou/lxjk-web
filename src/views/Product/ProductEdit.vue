@@ -347,7 +347,8 @@ export default {
         }
       },
       rules: {
-        productName: [{required: true, message: ' '}],
+        productName: [{required: true, message: ' '},
+          {validator: this.validateBase }],
         productDescribe: [{required: true, message: ' '}],
         type: [{required: true, message: ' '}],
         financingMethodJson: [{required: true, message: ' '}],

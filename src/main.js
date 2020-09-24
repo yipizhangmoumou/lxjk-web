@@ -14,6 +14,8 @@ import axiosInit from './assets/js/axiosInit.js'
 import VueJsonp from 'vue-jsonp'
 Vue.use(VueJsonp)
 
+import {validateBase, validatePhone} from './assets/js/validate'
+
 Vue.axios = Vue.prototype.$axios = axiosInit
 Vue.msgSuccess = Vue.prototype.$msgSuccess = function (message) {
   Vue.prototype.$message({
@@ -38,6 +40,10 @@ Vue.component("copyright", CopyRight);
 Vue.mixin({
   computed: {
     ...mapState(['loginUserInfo'])
+  },
+  methods: {
+    validateBase,
+    validatePhone
   }
 })
 
