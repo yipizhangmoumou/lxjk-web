@@ -131,15 +131,17 @@ export default {
       this.editObj.visible = true
     },
     handleStatus (row) {
-      let obj = JSON.parse(JSON.stringify(row))
-      obj.status = row.status === 0 ? 1 : 0
-      this.$axios.post('/api/mgm/loanAgencyDept/update', obj)
-      .then(() =>{
-        this.$msgSuccess()
-        this.getTableData()
-      })
-      .catch(err => {
-        this.$msgError(err.message)
+      this.baseConfirm(`确认 ${row.status === 0 ? '停用' : '启用'} 该机构岗位？`).then(() => {
+        let obj = JSON.parse(JSON.stringify(row))
+        obj.status = row.status === 0 ? 1 : 0
+        this.$axios.post('/api/mgm/loanAgencyDept/update', obj)
+                .then(() => {
+                  this.$msgSuccess()
+                  this.getTableData()
+                })
+                .catch(err => {
+                  this.$msgError(err.message)
+                })
       })
     },
     handleDelete (row) {

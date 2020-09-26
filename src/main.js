@@ -37,13 +37,23 @@ Vue.msgError = Vue.prototype.$msgError = function (message) {
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.component("copyright", CopyRight);
+
+const baseConfirm = (type = '') => {
+  type = type || '确认进行此操作'
+  return new Promise((resolve, reject) => {
+    Vue.prototype.$confirm(type, '确认').then(() => {
+      resolve()
+    }).catch(() => {reject()})
+  })
+}
 Vue.mixin({
   computed: {
     ...mapState(['loginUserInfo'])
   },
   methods: {
     validateBase,
-    validatePhone
+    validatePhone,
+    baseConfirm
   }
 })
 

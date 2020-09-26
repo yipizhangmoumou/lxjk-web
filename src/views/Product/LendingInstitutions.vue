@@ -122,20 +122,22 @@ export default {
       }).catch((err) => {console.log(err)})
     },
     handleChangeStatus (row) {
-      let status = row.status === 0 ? -1 : 0
-      this.$axios.post(`/api/mgm/productLendingProvider/update`, {
-        productLendingProvider: {
-          id: row.id,
-          status
-        }
+      this.baseConfirm(`确认 ${row.status === 0 ? '停用' : '启用'} 该产品贷款机构？`).then(() => {
+        let status = row.status === 0 ? -1 : 0
+        this.$axios.post(`/api/mgm/productLendingProvider/update`, {
+          productLendingProvider: {
+            id: row.id,
+            status
+          }
+        })
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+          .catch((err) => {
+            this.$msgError(err.message)
+          })
       })
-        .then(() => {
-          this.$msgSuccess()
-          this.getTableData()
-        })
-        .catch((err) => {
-          this.$msgError(err.message)
-        })
     },
     changeStatus (obj) {
       this.$axios.post(`/api/mgm/user/updateUserStatus`, obj)

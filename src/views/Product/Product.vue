@@ -124,18 +124,20 @@ export default {
       }).catch((err)=>{console.log(err)})
     },
     handleChangeStatus (row) {
-      this.$axios.post(`/api/mgm/product/update`, {
-        product: {
-          pkId: row.id,
-          status: row.status === '上架' ? -1 : 0
-        }
-      })
-      .then(() => {
-        this.$msgSuccess()
-        this.getTableData()
-      })
-      .catch((err) =>{
-        this.$msgError(err.message)
+      this.baseConfirm(`确认 ${row.status === '上架' ? '下架' : '上架'} 该产品？`).then(() => {
+          this.$axios.post(`/api/mgm/product/update`, {
+            product: {
+              pkId: row.id,
+              status: row.status === '上架' ? -1 : 0
+            }
+          })
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+          .catch((err) =>{
+            this.$msgError(err.message)
+          })
       })
     },
     handleAddNew () {

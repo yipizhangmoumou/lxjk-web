@@ -123,17 +123,19 @@ export default {
   mixins: [tableMixin],
   methods: {
     handleStatus (row) {
-      let data = {
-        pkId: row.id,
-        status: row.status === 0 ? -1 : 0
-      }
-      this.$axios.post('/api/mgm/financingType/update', { financingType: data })
-      .then(() => {
-        this.$msgSuccess()
-        this.getTableData()
-      })
-      .catch(err => {
-        this.$msgError(err.message)
+      this.baseConfirm(`确认 ${row.status === 0 ? '停用' : '启用'} 该产品类型？`).then(() => {
+        let data = {
+          pkId: row.id,
+          status: row.status === 0 ? -1 : 0
+        }
+        this.$axios.post('/api/mgm/financingType/update', {financingType: data})
+          .then(() => {
+            this.$msgSuccess()
+            this.getTableData()
+          })
+          .catch(err => {
+            this.$msgError(err.message)
+          })
       })
     },
     getCodeTypeList () {
