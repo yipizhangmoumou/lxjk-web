@@ -2,7 +2,7 @@
   <div id="Customization">
     <!-- <div class="speed-container">
       <div class="speed">
-        
+
       </div>
     </div> -->
     <ElSteps :stepArr='stepArr' :stepActive="stepActive" />
@@ -125,25 +125,25 @@
        <div class=""><i class="redrules">*</i> 上年度开票收入</div>
         <el-button class="pdl10" disabled type="text">{{companyInfo.businessInfo.lastYearInvoiceAmount}}</el-button>
     </el-col>
-  </el-row>  
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
         <el-button class="pdl10" disabled type="text">{{companyInfo.enterpriseAssetInfo.hasRealEstate?"是":"否"}}</el-button>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="8" v-show="!!companyInfo.enterpriseAssetInfo.hasRealEstate">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
         <el-button class="pdl10" disabled type="text">{{realEstateVal[companyInfo.enterpriseAssetInfo.realEstateVal]}}</el-button>
     </el-col>
     <el-col :span="8">
     </el-col>
-  </el-row>    
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
         <el-button class="pdl10" disabled type="text" >{{companyInfo.enterpriseAssetInfo.hasEquipment?"是":"否"}}</el-button>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="8" v-show="!!companyInfo.enterpriseAssetInfo.hasEquipment">
        <div class=""><i class="redrules">*</i> 设备价值</div>
         <el-button class="pdl10" disabled type="text">{{equipmentVal[companyInfo.enterpriseAssetInfo.equipmentVal]}}</el-button>
     </el-col>
@@ -155,11 +155,11 @@
         <div class=""><i class="redrules">*</i> 是否有专利</div>
         <el-button class="pdl10" disabled type="text">{{companyInfo.enterpriseAssetInfo.hasPatent?"是":"否"}}</el-button>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="8" v-show="!!companyInfo.enterpriseAssetInfo.hasPatent">
        <div class=""><i class="redrules">*</i> 专利数</div>
         <el-button class="pdl10" disabled type="text">{{patentVal[companyInfo.enterpriseAssetInfo.patentVal]}}</el-button>
     </el-col>
-  </el-row>    
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
@@ -205,7 +205,7 @@
       </el-form-item>
     </el-col>
     <el-col :span="8">
-      
+
        <div class=""><i class="redrules">*</i> 详细地址</div>
        <el-form-item prop="enterpriseInfo.regAddress">
         <el-input type="text" v-model="companyInfo.enterpriseInfo.regAddress">{{}}</el-input>
@@ -262,12 +262,12 @@
           </el-select>
           </el-form-item>
     </el-col>
-  </el-row>  
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有不动产</div>
           <el-form-item prop="enterpriseAssetInfo.hasRealEstate">
-          
+
           <el-select v-model="companyInfo.enterpriseAssetInfo.hasRealEstate" placeholder="请选择">
             <el-option
               v-for="item in isImmovablesArr"
@@ -279,6 +279,7 @@
           </el-form-item>
     </el-col>
     <el-col :span="8">
+        <div v-show="!!companyInfo.enterpriseAssetInfo.hasRealEstate">
        <div class=""><i class="redrules">*</i> 不动产价值</div>
           <el-form-item prop="enterpriseAssetInfo.realEstateVal">
           <el-select v-model="companyInfo.enterpriseAssetInfo.realEstateVal" placeholder="请选择">
@@ -290,10 +291,11 @@
             </el-option>
           </el-select>
           </el-form-item>
+        </div>
     </el-col>
     <el-col :span="8">
     </el-col>
-  </el-row>    
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有设备</div>
@@ -309,6 +311,7 @@
           </el-form-item>
     </el-col>
     <el-col :span="8">
+        <div v-show="!!companyInfo.enterpriseAssetInfo.hasEquipment">
        <div class=""><i class="redrules">*</i> 设备价值</div>
           <el-form-item prop="enterpriseAssetInfo.equipmentVal">
           <el-select v-model="companyInfo.enterpriseAssetInfo.equipmentVal" placeholder="请选择">
@@ -320,6 +323,7 @@
             </el-option>
           </el-select>
           </el-form-item>
+        </div>
     </el-col>
     <el-col :span="8">
     </el-col>
@@ -339,6 +343,7 @@
           </el-form-item>
     </el-col>
     <el-col :span="8">
+        <div v-show="!!companyInfo.enterpriseAssetInfo.hasPatent">
        <div class=""><i class="redrules">*</i> 专利数</div>
           <el-form-item prop="enterpriseAssetInfo.patentVal">
           <el-select v-model="companyInfo.enterpriseAssetInfo.patentVal" placeholder="请选择">
@@ -350,8 +355,9 @@
             </el-option>
           </el-select>
           </el-form-item>
+        </div>
     </el-col>
-  </el-row>    
+  </el-row>
   <el-row>
     <el-col :span="8">
         <div class=""><i class="redrules">*</i> 是否有股权质押</div>
@@ -393,11 +399,11 @@
        <div class="">法人年龄</div>
         <el-button class="pdl10" disabled type="text">{{age[companyInfo.legalRepresentative.age]}}</el-button>
     </el-col>
-  </el-row>    
+  </el-row>
   <el-row>
     <el-col :span="16">
         <div class=""><i class="redrules">*</i> 法人身份证</div>
-        
+
         <el-image :src="'data:image/png;base64,'+frontIdCardBase64"></el-image>
         <el-image :src="'data:image/png;base64,'+reverseIdCardBase64"></el-image>
     </el-col>
@@ -505,7 +511,7 @@
   </el-form>
   </el-tab-pane>
   <el-tab-pane>
-    
+
     <span slot="label"> 财务账户<i class="el-icon-circle-check"></i></span>
 <div v-if="showwrite" class="j_titleinfo">
   <div>财务账户</div>
@@ -524,7 +530,7 @@
         <el-col :span="8">
           <div class=""><i class="redrules">*</i> 所在区域</div>
         <el-button type="text" disabled>{{areaTextinfoBank}}</el-button>
-          
+
         </el-col>
       </el-row>
       <el-row>
@@ -536,7 +542,7 @@
           <div class=""><i class="redrules">*</i> 税号</div>
             <el-button class="pdl10" disabled type="text">{{companyInfo.financialInformation.taxNumber}}</el-button>
         </el-col>
-        <el-col :span="8"> 
+        <el-col :span="8">
           <div class=""><i class="redrules">*</i> 发票抬头</div>
             <el-button class="pdl10" disabled type="text">{{companyInfo.enterpriseInfo.name}}</el-button>
         </el-col>
@@ -576,14 +582,14 @@
         <el-input type="text" v-model="companyInfo.financialInformation.taxNumber"></el-input>
         </el-form-item>
     </el-col>
-    <el-col :span="8"> 
+    <el-col :span="8">
       <div class=""><i class="redrules">*</i> 发票抬头</div>
       <el-form-item prop="enterpriseInfo.name">
         <el-input type="text" v-model="companyInfo.enterpriseInfo.name"></el-input>
       </el-form-item>
     </el-col>
   </el-row>
-  </el-form>  
+  </el-form>
   </el-tab-pane>
 </el-tabs>
   <div v-show="showwrite" style="text-align:center;margin-top:20px">
@@ -606,7 +612,7 @@ export default {
     name: "Customization",
     data() {
         return {
-        
+
         companyInfo:{
           enterpriseInfo:{},//企业信息
           financialInformation:{},//账户信息
@@ -671,7 +677,7 @@ export default {
           {value:'1',label:'20-40岁'},
         {value:'2',label:'40-60岁'}
         ],
-        
+
         dialogImageUrl: '',
         dialogVisible: false,
         // ------
@@ -740,7 +746,7 @@ export default {
         3:'1000万-3000万',
         4:'3000万以上'
       },
-      areaText:[],   
+      areaText:[],
       areaTextinfo:'',
       industryText:[],
       industryTextinfo:'',
@@ -856,12 +862,12 @@ export default {
         this.industryTypeArr = await this.getIndustryTree();
         this.areaTree = await this.getAreaTree();
         this.baseData = [datas.financingPlan];//基本信息
-          
+
           // ---
           // 企业code要组合 provinceCode cityCode
 
           this.childPlanList = datas.childPlanList||[];//定制的产品
-          
+
           if(this.childPlanList.length>0){
             this.childPlanList.map(item=>{
               this.numAll +=parseInt(item.finalAmount.slice(0,-3));
@@ -917,7 +923,7 @@ export default {
         this.companyInfo.comfinan_areaCode = val;
       },
       initData(){
-        
+
       let planCode = this.$route.params.financingCode;
 
       let url ='/api/mgm/financingPlan/serviceCustomization'
@@ -956,7 +962,7 @@ export default {
             if(type == 2){
                 this.areaTextbank.push(item.name);
                 if(this.areaTextbank.length==1){
-                    
+
                 this.thattreeFn(this.companyInfo.financialInformation.cityCode,item.children,2)
                 }else
                 if(this.areaTextbank.length==2){
@@ -964,10 +970,10 @@ export default {
                 }
                 if(this.areaTextbank.length==3){
                     return
-                }                       
+                }
             }
 
-   
+
         }
       })
       if(type==1){
@@ -978,8 +984,8 @@ export default {
         this.areaTextinfoBank = this.areaTextbank.join('/');
         // this.areaText = [];
       }
-      
-    },  
+
+    },
         thatindustryFn(data){
 
             this.industryTypeArr.map(item=>{
@@ -988,13 +994,13 @@ export default {
                     if(data== item.code){
                         this.industryText.push(item.name)
                         this.companyInfo.industryType = [item.code,item1.code]
-                        return 
+                        return
                     }
                   }else{
                     if(data== item1.code){
                         this.industryText.push(item.name)
                         this.companyInfo.industryType = [item.code,item1.code]
-                        return 
+                        return
                     }
                   }
                 })
@@ -1009,7 +1015,7 @@ export default {
         resolve(this.industryTypeArr)
       })
 
-    },      
+    },
     deleteEmpty (arr) {
       return arr.map(v => {
         if (v.children && v.children.length) {
@@ -1019,7 +1025,7 @@ export default {
         }
         return v
       })
-    },     
+    },
      getAreaTree () {
        return new Promise(resolve=>{
         this.$axios.post('/api/mgm/area/getAreaInfo').then(res => {
@@ -1042,7 +1048,7 @@ export default {
          */
         goProductCustomization(){
             let planCode = this.$route.params.financingCode
-            console.log( "定制融资产品/查看详情", planCode ); 
+            console.log( "定制融资产品/查看详情", planCode );
             this.$router.push({
                 path:`/productCustomization/${planCode}`
             })
@@ -1068,10 +1074,10 @@ export default {
           this.companyInfo.financialInformation.provinceCode = this.companyInfo.comfinan_areaCode[0]
           this.companyInfo.financialInformation.cityCode = this.companyInfo.comfinan_areaCode[1]
           this.companyInfo.financialInformation.regionCode = this.companyInfo.comfinan_areaCode[2]
-          
+
           this.companyInfo.enterpriseInfo.frontIdCard = this.frontIdCard;
           this.companyInfo.enterpriseInfo.reverseIdCard = this.reverseIdCard;
-          
+
           // return false
           this.$delete(this.companyInfo.enterpriseInfo,'frontIdCardBase64')
           this.$delete(this.companyInfo.enterpriseInfo,'reverseIdCardBase64')
@@ -1138,9 +1144,9 @@ export default {
                 this.frontIdCard= res.data.url
             }else{
                 console.log(res);
-                
+
             }
-            
+
     }).catch(err => {
      console.log(err)
     })
@@ -1178,7 +1184,7 @@ export default {
     }).catch(err => {
      console.log(err)
     })
-        },     
+        },
 
         //企业证件
         handleRemoveC(file, fileList) {
@@ -1198,7 +1204,7 @@ export default {
             this.$message.error('上传图片只能是 JPG、JPEG、PNG 格式!');
           }
           return isImage;
-        },        
+        },
         uploadC(file){
             console.log(file);
             let fd = new FormData();
@@ -1242,11 +1248,11 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                
+
                 let code ={
                     financingCode:this.$route.params.financingCode
                 }
-                
+
                 this.$axios.post('/api/mgm/financingPlan/updateChildPlanProductStatus',code)
                     .then(res => {
                         if(res.code == 0){
@@ -1265,7 +1271,7 @@ export default {
                         this.$message({
                             type: 'error',
                             message: `审核提交失败！原因：${err}`
-                        });  
+                        });
                     })
 
 
@@ -1273,7 +1279,7 @@ export default {
                 // console.log( "提交审核按钮：", err );
             });
 
-          
+
         }
     }
 };
@@ -1309,7 +1315,7 @@ export default {
       .divColor span
         font-weight: 400;
         font-style: normal;
-        color: #666666;  
+        color: #666666;
     .table-body
       background-color #fff
       color #333
@@ -1327,7 +1333,7 @@ export default {
         .total
             width 100%
             line-height 70px
-            text-align right 
+            text-align right
             background-color #f9f9f9
             border 1px solid #e9e9e9
             border-top 0
@@ -1344,7 +1350,7 @@ export default {
   >>> #CopyRight
     copyRight()
 .red
-  color #F04844  
+  color #F04844
 .redrules
   color #f04844
 .pdl10
@@ -1354,7 +1360,7 @@ export default {
 .el-form .el-col .el-button,.el-form .el-col .el-image,.el-form .el-col .el-input
   margin 10px 0
 .el-form .el-col .el-input,.el-form .el-col .el-select ,.el-form .el-col .el-date-editor,.el-form .el-col .el-cascader
-  width 250px  
+  width 250px
   margin 10px 0
   margin-left 10px
 .el-image
@@ -1363,10 +1369,10 @@ export default {
   margin-right 40px !important
   img
     width 100%
-    height 100%    
+    height 100%
 .form-margin
-  padding 0 20px    
-.j_titleinfo 
+  padding 0 20px
+.j_titleinfo
   display flex
   justify-content space-between
   border-bottom 1px solid #e9e9e9
@@ -1374,7 +1380,7 @@ export default {
   line-height 50px
   padding 0 20px
 .ml_10
-  margin-left 0px !important  
+  margin-left 0px !important
 </style>
 <style lang="stylus">
 .j_tabs
@@ -1383,10 +1389,10 @@ export default {
   color #67C23A
 .pd20
   padding 20px
-.j_customtabs .el-tabs__content  
+.j_customtabs .el-tabs__content
   padding 0px
 .j_customtabs .el-form
-  padding 15px  
+  padding 15px
 .el-form-item__error
   left 10px !important
 .ml_0
