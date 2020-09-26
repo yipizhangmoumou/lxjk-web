@@ -50,7 +50,7 @@
                 <el-form-item label="贷款利息：" prop="interestRate">
                     <samp class="laebl-info">{{ data.loanInterest }}</samp>
                     <el-input 
-                        v-model.number="proCustData.interestRate" 
+                        v-model="proCustData.interestRate" 
                         placeholder="请输入贷款利息数字">
                         <i slot="suffix" class="unit" style="font-size: 18px">%</i>
                     </el-input>
@@ -72,7 +72,7 @@
                 <el-form-item label="申请额度：" prop="finalAmount">
                     <samp class="laebl-info">{{ data.amountRegin }}</samp>
                     <el-input 
-                        v-model.number="proCustData.finalAmount" 
+                        v-model="proCustData.finalAmount" 
                         placeholder="请输入申请额度数字">
                         <i slot="suffix" class="unit"  style="font-size: 18px">万</i>
                     </el-input>
@@ -118,8 +118,9 @@
                     </el-select>
                 </el-form-item>
                 
-                <el-form-item prop="guaranteeMethod" v-if="proCustData.guaranteeMethod==2">
-                </el-form-item>
+                <div class="el-form-item" v-if="proCustData.guaranteeMethod==2"></div>
+                <!-- <el-form-item prop="" v-if="proCustData.guaranteeMethod==2">
+                </el-form-item> -->
 
                 <el-form-item label="担保人：" prop="guarantorName" v-if="proCustData.guaranteeMethod!=2">
                     <el-input
@@ -198,23 +199,29 @@ export default {
          * @Date Changed: 2020-08-20
          */  
         let checkFinalAmount = (rule, value, callback) => {
+            const isNumbeReg = /^[0-9]+\.?[0-9]*$/;
 
             try{
                 
-                let rangleString = this.data.amountRegin;
+                let rangleString = this.data.amountRegin.replace(/[A-Za-z]+|%+|[\u4e00-\u9fa5]+/g,"");
                 let minRagle = rangleString.split("-")[0];
-                let maxRagle = rangleString.split("-")[1].split("万元")[0];
+                let maxRagle = rangleString.split("-")[1];
 
-                // console.log(  "最小值，最大值",  minRagle  +"  " + maxRagle );
 
-                if( value < minRagle ){
+                if(!isNumbeReg.test(value)){
 
-                    callback(new Error(`申请额度最小值为：${minRagle}`));
+                    return callback(new Error("请输入数字！"));
 
-                }else if( value > maxRagle ){
+                }else if( Number(value) < Number(minRagle) ){
+
+                    return callback(new Error(`申请额度最小值为：${minRagle}`));
+
+                }else if( Number(value) > Number(maxRagle) ){
                     
-                    callback(new Error(`申请额度最大值为：${maxRagle}`));
+                    return callback(new Error(`申请额度最大值为：${maxRagle}`));
                 }
+
+                callback();
 
             }catch(err){
                 console.error( "后台数据异常,字段【amountRegin】有误！" );
@@ -265,13 +272,14 @@ export default {
                 loanCycle: [{required: true, message: '请选择期数', trigger: 'blur'}],
                 interestRate: [
                     {required: true, message: '请输入贷款利息数字', trigger: 'blur'},
-                    {type: 'number', message: '贷款利息必须为数字值', trigger: 'blur'},
+                    // {type: 'number', message: '贷款利息必须为数字值', trigger: 'blur'},
+                    {validator: this.validateInterestRate,trigger: 'blur' }
                     // {type: 'number', min: 7, max: 9, message: '贷款利息7%~9%', trigger: 'blur' }
                 ],
                 repayment: [{required: true, message: '请选择还款方式', trigger: 'blur'}],
                 finalAmount: [
                     {required: true, message: '请输入申请额度数字', trigger: 'blur'},
-                    {type: 'number', message: '申请额度必须为数字值', trigger: 'blur'},
+                    // {type: 'number', message: '申请额度必须为数字值', trigger: 'blur'},
                     { validator: checkFinalAmount, trigger: 'blur'},
                 ],
                 qzCharge: [
@@ -286,15 +294,17 @@ export default {
                     {required: true, message: '请选择担保方式', trigger: 'blur'}
                 ],
                 guarantorName: [
-                    {required: true, message: '请输入担保人姓名', trigger: 'blur'},
-                    {type: 'string', min: 1, max: 10, message: '姓名1~10位', trigger: 'blur'}
+                    {required: true, message: '请输入担保人姓名'},
+                    {type: 'string', min: 1, max: 10, message: '姓名1~10位', trigger: 'blur'},
+                    {validator: this.validateBase}
                 ],
                 guarantorIdNum: [
                     {required: true, message: '请输入担保人证件号', trigger: 'blur'},
                     {type: 'string', min: 18, max: 18, message: '身份证号码18位', trigger: 'blur'},
                 ],
                 guarantorPhone: [
-                    {required: true, message: '请输入担保人电话', trigger: 'blur'}
+                    {required: true, message: '请输入担保人电话', trigger: 'blur'},
+                    {validator: this.validatePhone}
                 ],
                 guarantorInfo: [
                     {required: true, message: '请输入担保人其他信息', trigger: 'blur'},
@@ -346,7 +356,30 @@ export default {
             this.getEnuDataMethods("repayment_method");
             // 【担保方式】枚举
             this.getEnuDataMethods("guarantee_method");
-        },   
+        },
+        
+        /**
+         * @description: 贷款利息失焦校验
+         * @Date Changed: 
+         */
+        validateInterestRate(rules, value, cb){
+            // console.log("贷款利息失焦校验rules：：", rules );
+            // console.log("贷款利息失焦校验value：：", value );
+            // console.log("贷款利息失焦校验cb：：", cb );
+            const isNumbeReg = /^[0-9]+\.?[0-9]*$/;
+            const rang = this.data.loanInterest.replace(/[A-Za-z]+|%+|[\u4e00-\u9fa5]+/g,"");
+            let min = rang.split("-")[0];
+            let max = rang.split("-")[1];
+            // const min = 
+            if( !isNumbeReg.test(value) ){
+                return cb(new Error('请输入数字！'))
+            }else if( Number(value) < Number(min) || Number(value) >  Number(max)){
+                return cb(new Error("贷款利息范围："+this.data.loanInterest))
+            }
+
+
+            cb();
+        },
 
         /**
          * @description: 弹窗【清除】按钮
@@ -372,7 +405,10 @@ export default {
          * @Date Changed: 
          */
         handleSave (formName) {
+            console.log("产品定制：：提交~",formName);
+            console.log( "this::",  this.$refs);
             this.$refs[formName].validate((valid) => {
+                console.log( valid );
                 if (valid) {
                     // let requiredParam = JSON.parse(JSON.stringify(this.proCustData));
                     let requiredParam = {
@@ -441,6 +477,7 @@ export default {
 
 
                 } else {
+                    console.log("校验失败！！", valid);
                     return false;
                 }
             });  

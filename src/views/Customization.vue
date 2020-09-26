@@ -756,7 +756,8 @@ export default {
             { required: true, message: '请选择行业类型', trigger: 'change' }
           ],
           [`enterpriseInfo.regAddress`]: [
-            { required: true, message: '请输入详细地址', trigger: 'blur' }
+            { required: true, message: '请输入详细地址', trigger: 'blur' },
+            { validator: this.validateBase, trigger: 'blur'},
           ],
           area_code:[
             { required: true, message: '请选择所在区域', trigger: 'change' }
@@ -794,11 +795,26 @@ export default {
           [`enterpriseAssetInfo.hasSharePledge`]:[
             { required: true, message: '请选择是否有股权质押', trigger: 'change' }
           ],
-          [`legalRepresentative.name`]:[{ required: true, message: '请输入法人姓名', trigger: 'blur' }],
-          [`financialInformation.bankName`]:[{ required: true, message: '请输入开户银行', trigger: 'blur' }],
-          [`financialInformation.cardNum`]:[{ required: true, message: '请输入银行账号', trigger: 'blur' }],
-          [`financialInformation.depositBank`]:[{ required: true, message: '请输入开户支行', trigger: 'blur' }],
-          [`financialInformation.taxNumber`]:[{ required: true, message: '请输入税号', trigger: 'blur' }],
+          [`legalRepresentative.name`]:[
+              { required: true, message: '请输入法人姓名', trigger: 'blur' },
+              { validator: this.validateBase, trigger: 'blur'}
+          ],
+          [`financialInformation.bankName`]:[
+              { required: true, message: '请输入开户银行', trigger: 'blur' },
+              { validator: this.validateBase, trigger: 'blur'}
+            ],
+          [`financialInformation.cardNum`]:[
+              { required: true, message: '请输入银行账号', trigger: 'blur' },
+              { validator: this.validateBase, trigger: 'blur'}
+            ],
+          [`financialInformation.depositBank`]:[
+              { required: true, message: '请输入开户支行', trigger: 'blur' },
+              { validator: this.validateBase, trigger: 'blur'}
+            ],
+          [`financialInformation.taxNumber`]:[
+              { required: true, message: '请输入税号', trigger: 'blur' },
+              { validator: this.validateBase, trigger: 'blur'}
+            ],
       },
       stepArr:[
         {name:'融资顾问服务',time:''},
